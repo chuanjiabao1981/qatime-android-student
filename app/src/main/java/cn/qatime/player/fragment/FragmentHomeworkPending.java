@@ -69,8 +69,8 @@ public class FragmentHomeworkPending extends BaseFragment {
             public void convert(ViewHolder holder, StudentHomeWorksBean.DataBean item, int position) {
                 long time = item.getHomework().getCreated_at() * 1000L;
                 holder.setText(R.id.name, item.getTitle())
-                        .setText(R.id.course_name,"相关课程 "+ item.getCourse_name())
-                        .setText(R.id.time,"创建时间 "+ parse.format(new Date(time)));
+                        .setText(R.id.course_name, "相关课程 " + item.getCourse_name())
+                        .setText(R.id.time, "创建时间 " + parse.format(new Date(time)));
             }
         };
         listView.setAdapter(adapter);
@@ -97,12 +97,13 @@ public class FragmentHomeworkPending extends BaseFragment {
             }
         });
     }
+
     public void onShow() {
-            if (initOver) {
-                initData(1);
-            } else {
-                super.onShow();
-            }
+        if (initOver) {
+            initData(1);
+        } else {
+            super.onShow();
+        }
     }
 
     /**
@@ -124,7 +125,12 @@ public class FragmentHomeworkPending extends BaseFragment {
                         if (type == 1) {
                             list.clear();
                         }
-
+                        String label = null;
+                        if (getActivity() != null) {
+                            label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        }
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
 
                         try {
                             StudentHomeWorksBean data = JsonUtils.objectFromJson(response.toString(), StudentHomeWorksBean.class);

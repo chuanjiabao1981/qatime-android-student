@@ -161,11 +161,11 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if(error.getInt("code")==3002){
+                            if (error.getInt("code") == 3002) {
                                 Toast.makeText(QuestionEditActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                              e.printStackTrace();
                         }
                     }
 
@@ -181,6 +181,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     private String getContentString(QuestionsBean.DataBean.AnswerBean answerBean) {
         StringBuilder sb = new StringBuilder("[");
         for (AttachmentsBean attachment : answerBean.getAttachments()) {
@@ -188,10 +189,15 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                     .append(attachment.id)
                     .append("\"},");
         }
-        sb.setCharAt(sb.length() - 1, ']');
-        Logger.e(sb.toString());
-        return sb.toString();
+        if (sb.length() > 1) {
+            sb.setCharAt(sb.length() - 1, ']');
+            Logger.e(sb.toString());
+            return sb.toString();
+        } else {
+            return "";
+        }
     }
+
     private void initView() {
 
         control = (ImageView) findViewById(R.id.control);
@@ -209,14 +215,14 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         adapter.setOnEventListener(new QuestionEditAdapter.OnEventListener() {
             @Override
             public void onDelete(int position) {
-                if (list.get(position).status == ImageItem.Status.SUCCESS||list.get(position).status == ImageItem.Status.ERROR) {
+                if (list.get(position).status != ImageItem.Status.UPLOADING) {
                     ImageItem remove = list.remove(position);
                     adapter.notifyDataSetChanged();
                     AttachmentsBean removeItem = new AttachmentsBean();
-                    removeItem.file_url=remove.imagePath;
-                    removeItem.id="";
+                    removeItem.file_url = remove.imagePath;
+                    removeItem.id = "";
                     imageAttachmentList.remove(removeItem);
-                }else {
+                } else {
                     Toast.makeText(QuestionEditActivity.this, "正在上传，请稍候", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -276,7 +282,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                     imageItem.thumbnailPath = url;
                     imageItem.imageId = "";
                     AttachmentsBean attachment = new AttachmentsBean();
-                    attachment.file_url =  imageItem.imagePath;
+                    attachment.file_url = imageItem.imagePath;
                     attachment.file_type = "image";
                     addAttachments(attachment);
                     list.add(imageItem);
@@ -285,6 +291,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
             }
         }
     }
+
     private void addAttachments(final AttachmentsBean attachment) {
         final String path = attachment.file_url;
         File file = new File(path);
@@ -321,14 +328,13 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                                 }
                             } else {
                                 Toast.makeText(QuestionEditActivity.this, "语音上传失败，点击重试", Toast.LENGTH_SHORT).show();
-                                audioAttachment.id=null;
+                                audioAttachment.id = null;
                             }
                             super.onError(e);
                         }
 
                         @Override
                         public void onSuccess(String o) {
-                            play.setImageResource(R.mipmap.question_play);
                             try {
                                 JSONObject response = new JSONObject(o);
                                 String id = response.getJSONObject("data").getString("id");
@@ -343,6 +349,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                                     imageAttachmentList.add(attachment);
                                 } else {
                                     audioAttachment.id = id;
+                                    play.setImageResource(R.mipmap.question_play);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -365,10 +372,11 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                 }
             } else {
                 audioAttachment.id = null;
-                audioAttachment.file_url=null;
+                audioAttachment.file_url = null;
             }
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -594,8 +602,8 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 //            mRecorder.release();
 //            mRecorder = null;
 //        }
-         if (recorderUtil != null) {
-             recorderUtil.stopRawRecording();
+        if (recorderUtil != null) {
+            recorderUtil.stopRawRecording();
         }
         if (mediaPlayer != null) {
             mediaPlayer.stop();
