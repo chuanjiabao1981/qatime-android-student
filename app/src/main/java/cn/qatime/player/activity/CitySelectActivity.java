@@ -106,7 +106,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                                     return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                                 }
                             });
-                            int position = 2;
+                            int position = 3;
                             for (CityBean.Data item : list) {
                                 if (!letterMap.containsKey(item.getFirstLetter())) {
                                     letterMap.put(item.getFirstLetter(), position);
@@ -231,7 +231,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
             listLately = lately;
         }
         refreshLately(BaseApplication.getInstance().getCurrentCity());
-        adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
+        adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately,R.layout.item_city_hot,R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
                 setCityAndHistory(data);
@@ -245,8 +245,10 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 textDialog.setText(s);
                 if (s.equals("最近")) {
                     listView.setSelection(0);
-                } else if (s.equals("全国")) {
+                } else if (s.equals("推荐")) {
                     listView.setSelection(1);
+                }else if (s.equals("全国")) {
+                    listView.setSelection(2);
                 } else {
                     int position = adapter.getPositionByLetter(s);
                     if (position >= 0) {

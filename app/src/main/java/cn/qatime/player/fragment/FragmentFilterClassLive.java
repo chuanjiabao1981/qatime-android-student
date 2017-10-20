@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,9 +65,9 @@ public class FragmentFilterClassLive extends BaseFragment {
     private String sellType = null;//课程类型
     private String endTime = null;
     private String startTime = null;
-    private List<LabelBean.DataBean> labelData;
-    private CommonAdapter<LabelBean.DataBean> labelAdapter;
-    private TextView label;
+//    private List<LabelBean.DataBean> labelData;
+//    private CommonAdapter<LabelBean.DataBean> labelAdapter;
+//    private TextView label;
 
     public BaseFragment setArguments(String grade, String subject) {
         this.grade = grade;
@@ -252,8 +250,8 @@ public class FragmentFilterClassLive extends BaseFragment {
                 getData(0);
             }
         });
-        label = (TextView) view.findViewById(R.id.label);
-        View labelLayout = view.findViewById(R.id.label_layout);
+//        label = (TextView) view.findViewById(R.id.label);
+//        View labelLayout = view.findViewById(R.id.label_layout);
         View screen = view.findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) view.findViewById(R.id.listview);
@@ -297,46 +295,46 @@ public class FragmentFilterClassLive extends BaseFragment {
                 getData(1);
             }
         });
-        labelData = new ArrayList<>();
-        initLabel();
-        labelAdapter = new CommonAdapter<LabelBean.DataBean>(getActivity(), labelData, R.layout.item_screening_condition) {
-            @Override
-            public void convert(ViewHolder holder, LabelBean.DataBean item, int position) {
-                holder.setText(R.id.text, item.getName());
-                if (label.getText().toString().equals(item.getName())) {
-                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
-                } else {
-                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
-                }
-            }
-        };
-        labelLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //标签
-                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_grid, null);
-                GridView gridView = (GridView) view.findViewById(R.id.grid);
-                gridView.setAdapter(labelAdapter);
-                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        label.setText(labelData.get(position).getName());
-                        if (labelData.get(position).equals("不限")) {
-                            tag = null;
-                        } else {
-                            tag = labelData.get(position).getName();
-                        }
-                        getData(0);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(view);
-                dialog.show();
-            }
-        });
+//        labelData = new ArrayList<>();
+//        initLabel();
+//        labelAdapter = new CommonAdapter<LabelBean.DataBean>(getActivity(), labelData, R.layout.item_screening_condition) {
+//            @Override
+//            public void convert(ViewHolder holder, LabelBean.DataBean item, int position) {
+//                holder.setText(R.id.text, item.getName());
+//                if (label.getText().toString().equals(item.getName())) {
+//                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
+//                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
+//                } else {
+//                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
+//                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
+//                }
+//            }
+//        };
+//        labelLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //标签
+//                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+//                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_grid, null);
+//                GridView gridView = (GridView) view.findViewById(R.id.grid);
+//                gridView.setAdapter(labelAdapter);
+//                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        label.setText(labelData.get(position).getName());
+//                        if (labelData.get(position).equals("不限")) {
+//                            tag = null;
+//                        } else {
+//                            tag = labelData.get(position).getName();
+//                        }
+//                        getData(0);
+//                        dialog.dismiss();
+//                    }
+//                });
+//                dialog.setView(view);
+//                dialog.show();
+//            }
+//        });
 
         screen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -365,7 +363,7 @@ public class FragmentFilterClassLive extends BaseFragment {
             protected void onSuccess(JSONObject response) {
                 LabelBean labelBean = JsonUtils.objectFromJson(response.toString(), LabelBean.class);
                 if (labelBean != null && labelBean.getData() != null) {
-                    labelData.addAll(labelBean.getData());
+//                    labelData.addAll(labelBean.getData());
                     adapter.notifyDataSetChanged();
                 }
 
