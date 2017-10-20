@@ -14,6 +14,8 @@ import android.view.SurfaceView;
 
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.im.doodle.action.Action;
 import cn.qatime.player.im.doodle.action.MyFillCircle;
 import cn.qatime.player.im.doodle.action.MyPath;
@@ -250,7 +253,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     public int convertRGBToARGB(int rgb) {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
-        int b = (rgb >> 0) & 0xFF;
+        int b = (rgb) & 0xFF;
 
         return 0xff000000 | (r << 16) | (g << 8) | b;
     }
@@ -448,20 +451,20 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 //                    Logger.e(TAG, "receive flip msg");
 //                    flipListener.onFlipPage(t);
                 }
-//                else if (t.isSwitchTeacher()) {
-//                    if (t.getId() <= lastBoardMessage) {
-//                        return;
-//                    }
-//                    lastBoardMessage = t.getId();
-//                    if (t.getStatus().equals("board")) {
-//                        EventBus.getDefault().post(BusEvent.board);
-//                    } else if (t.getStatus().equals("desktop")) {
-//                        EventBus.getDefault().post(BusEvent.desktop);
-//                    }
-//                    List<Transaction> response = new ArrayList<>(1);
-//                    response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
-//                    TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
-//                }
+                else if (t.isSwitchTeacher()) {
+                    if (t.getId() <= lastBoardMessage) {
+                        return;
+                    }
+                    lastBoardMessage = t.getId();
+                    if (t.getStatus().equals("board")) {
+                        EventBus.getDefault().post(BusEvent.board);
+                    } else if (t.getStatus().equals("desktop")) {
+                        EventBus.getDefault().post(BusEvent.desktop);
+                    }
+                    List<Transaction> response = new ArrayList<>(1);
+                    response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
+                    TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
+                }
             }
         }
 

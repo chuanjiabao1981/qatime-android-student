@@ -57,6 +57,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,7 +235,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void getAnnouncementsData() {
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             return;
         }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
@@ -1177,7 +1178,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 zoom.setImageResource(R.mipmap.enlarge);
             }
-        }else{
+        } else {
             if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 zoom.setImageResource(R.mipmap.narrow);
