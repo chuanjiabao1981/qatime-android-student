@@ -147,7 +147,9 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("body", content.getText().toString().trim());
-        map.put("quotes_attributes", getContentString(answerBean));
+        if (answerBean.getAttachments().size() > 0) {
+            map.put("quotes_attributes", getContentString(answerBean));
+        }
         JSONObject obj = new JSONObject(map);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlGroups + courseId + "/questions", obj,
                 new VolleyListener(this) {
@@ -165,7 +167,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                                 Toast.makeText(QuestionEditActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
-                              e.printStackTrace();
+                            e.printStackTrace();
                         }
                     }
 
