@@ -37,6 +37,7 @@ import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.LogCatHelper;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -121,10 +122,11 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
         public void onEvent(CustomNotification customNotification) {
             String content = customNotification.getContent();
             if (!StringUtils.isNullOrBlanK(content)) {
-                if (content.equals(InteractiveDeskShareStatus.desktop))//desktop board
+                if (content.equals(InteractiveDeskShareStatus.desktop)) {//desktop board
                     EventBus.getDefault().post(BusEvent.desktop);
-                else if (content.equals(InteractiveDeskShareStatus.board))
+                } else if (content.equals(InteractiveDeskShareStatus.board)) {
                     EventBus.getDefault().post(BusEvent.board);
+                }
             }
         }
     };
@@ -175,7 +177,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
      */
 
     private void requestTeamInfo() {
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             return;
         }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
