@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.qatime.player"
-    android:versionCode="28"
-    android:versionName="1.4.3">
+    android:versionCode="29"
+    android:versionName="1.4.4">
 
     <!--<uses-sdk-->
     <!--android:minSdkVersion="17"-->
@@ -335,14 +335,16 @@
 
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
             android:name=".activity.PersonalMyWalletActivity"

@@ -8,7 +8,7 @@ import libraryextra.bean.AppPayParamsBean;
  * @date 2016/9/28 16:46
  * @Description:
  */
-public class RechargeBean{
+public class RechargeBean {
 
     /**
      * status : 1
@@ -48,7 +48,7 @@ public class RechargeBean{
         this.data = data;
     }
 
-    public static class DataBean{
+    public static class DataBean {
         private String id;
         private String amount;
         private String pay_type;
@@ -68,7 +68,7 @@ public class RechargeBean{
          * noncestr : FGMsCO63cyoKCpH1
          * sign : ECE6B302C06704E0606B061B168B388A
          */
-
+        private String app_pay_str;
         private AppPayParamsBean app_pay_params;
 
         public String getId() {
@@ -159,5 +159,12 @@ public class RechargeBean{
             this.app_pay_params = app_pay_params;
         }
 
+        public String getApp_pay_str() {
+            return app_pay_str;
+        }
+
+        public void setApp_pay_str(String app_pay_str) {
+            this.app_pay_str = app_pay_str;
+        }
     }
 }

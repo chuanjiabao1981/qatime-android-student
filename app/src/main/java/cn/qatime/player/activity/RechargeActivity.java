@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -60,20 +61,17 @@ public class RechargeActivity extends BaseActivity {
     private Button rechargeNow;
     private AlertDialog alertDialog;
     private static final int DECIMAL_DIGITS = 2;//小数的位数
-    private View wechatLayout;
-    private View alipayLayout;
     private String payType = "weixin";
-    private TextView phone;
     private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
-        wechatLayout = findViewById(R.id.wechat_layout);
-        alipayLayout = findViewById(R.id.alipay_layout);
+        View wechatLayout = findViewById(R.id.wechat_layout);
+        View alipayLayout = findViewById(R.id.alipay_layout);
         wechatPay = (ImageView) findViewById(R.id.wechat_pay);
         alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-        phone = (TextView) findViewById(R.id.phone);
+        TextView phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +97,7 @@ public class RechargeActivity extends BaseActivity {
         });
 
     }
+
     private void callPhone() {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
         if (ActivityCompat.checkSelfPermission(RechargeActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -106,22 +105,24 @@ public class RechargeActivity extends BaseActivity {
         }
         startActivity(intent);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 callPhone();
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     private void dialogPhone() {
         if (alertDialogPhone == null) {
             View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
             TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
+            text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
             Button cancel = (Button) view.findViewById(R.id.cancel);
             Button confirm = (Button) view.findViewById(R.id.confirm);
             cancel.setOnClickListener(new View.OnClickListener() {
@@ -210,13 +211,13 @@ public class RechargeActivity extends BaseActivity {
                     }
                 } else if (s.length() > 5) {//整数不超过5位
                     s = s.toString().subSequence(0,
-                           5);
+                            5);
                     rechargeNum.setText(s);
                     rechargeNum.setSelection(5);
                 }
 
 
-                if (s.toString().trim().substring(0).equals(".")) {
+                if (s.toString().trim().equals(".")) {
                     s = "0" + s;
                     rechargeNum.setText(s);
                     rechargeNum.setSelection(2);
@@ -226,7 +227,6 @@ public class RechargeActivity extends BaseActivity {
                     if (!s.toString().substring(1, 2).equals(".")) {
                         rechargeNum.setText(s.subSequence(0, 1));
                         rechargeNum.setSelection(1);
-                        return;
                     }
                 }
             }
@@ -260,9 +260,10 @@ public class RechargeActivity extends BaseActivity {
                         Toast.makeText(RechargeActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                } else if (payType.equals("alipay")) {
-                    return;
                 }
+//                else if (payType.equals("alipay")) {
+//                    return;
+//                }
 
                 if (amount.endsWith(".")) amount += "0";
                 rechargeNow.setEnabled(false);
@@ -286,8 +287,11 @@ public class RechargeActivity extends BaseActivity {
                             intent.putExtra("amount", data.getAmount());
                             intent.putExtra("pay_type", data.getPay_type());
                             intent.putExtra("created_at", data.getCreated_at());
-                            // TODO: 2016/10/9  判断是微信还是支付宝
-                            intent.putExtra("app_pay_params", data.getApp_pay_params());
+                            if (TextUtils.equals(payType, "weixin")) {
+                                intent.putExtra("app_pay_params", data.getApp_pay_params());
+                            } else if (TextUtils.equals(payType, "alipay")) {
+                                intent.putExtra("app_pay_params", data.getApp_pay_str());
+                            }
                             startActivity(intent);
                             SPUtils.put(RechargeActivity.this, "RechargeId", data.getId());
                             SPUtils.put(RechargeActivity.this, "amount", data.getAmount());
@@ -339,8 +343,9 @@ public class RechargeActivity extends BaseActivity {
 //
 //            finish();
 //        }
-            finish();
+        finish();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -352,6 +357,7 @@ public class RechargeActivity extends BaseActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
