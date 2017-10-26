@@ -72,6 +72,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private AlertDialog alertDialog;
     private PopupWindow pop;
     private ExclusiveLessonPlayInfoBean playInfo;
+    private TextView joinCheap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +137,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         fragBaseFragments.add(new FragmentExclusiveLessonTeacherInfo());
         fragBaseFragments.add(new FragmentExclusiveLessonClassList());
 
+
+        joinCheap = (TextView) findViewById(R.id.join_cheap);
         refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
         couponFree = (TextView) findViewById(R.id.coupon_free);
         progress = (TextView) findViewById(R.id.progress);
@@ -327,6 +330,9 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 if (!data.getData().getCustomized_group().getIcons().isCoupon_free()) {
                     couponFree.setVisibility(View.GONE);
+                }
+                if (!data.getData().getCustomized_group().getIcons().isJoin_cheap()) {
+                    joinCheap.setVisibility(View.GONE);
                 }
             }
             ((FragmentExclusiveLessonClassInfo) fragBaseFragments.get(0)).setData(data);
