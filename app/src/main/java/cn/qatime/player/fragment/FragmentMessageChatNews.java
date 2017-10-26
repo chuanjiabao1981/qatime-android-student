@@ -65,9 +65,9 @@ import libraryextra.utils.VolleyListener;
 /**
  * @author luntify
  * @date 2016/8/15 20:05
- * @Description 直播课消息
+ * @Description 消息
  */
-public class   FragmentMessageChatNews extends BaseFragment {
+public class FragmentMessageChatNews extends BaseFragment {
 
     private ArrayList<MessageListBean> items;
     private CommonAdapter<MessageListBean> adapter;
@@ -293,7 +293,7 @@ public class   FragmentMessageChatNews extends BaseFragment {
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void param) {
-                                    if(StringUtils.isNullOrBlanK(items.get(position-1).getContactId())){
+                                    if (StringUtils.isNullOrBlanK(items.get(position - 1).getContactId())) {
                                         return;
                                     }
                                     Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());

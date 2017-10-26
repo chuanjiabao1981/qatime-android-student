@@ -115,9 +115,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    WindowManager.LayoutParams lp = getWindow().getAttributes();
-                    lp.alpha = 1f;
-                    getWindow().setAttributes(lp);
+                    backgroundAlpha(1);
                 }
             });
         }
@@ -252,10 +250,12 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             status.setText(getStatus(data.getData().getCustomized_group().getStatus()));
             name.setText(data.getData().getCustomized_group().getName());
             setTitles(data.getData().getCustomized_group().getName());
-            studentNumber.setText(getString(R.string.student_number, data.getData().getCustomized_group().getView_tickets_count()));
+            studentNumber.setText(String.format("报名人数 %1$d/%2$d",
+                    data.getData().getCustomized_group().getUsers_count() > data.getData().getCustomized_group().getMax_users() ? data.getData().getCustomized_group().getMax_users() : data.getData().getCustomized_group().getUsers_count(),
+                    data.getData().getCustomized_group().getMax_users()));
 
             if (Constant.CourseStatus.published.equals(data.getData().getCustomized_group().getStatus())) {
-                int value = DateUtils.daysBetween(Long.valueOf(data.getData().getCustomized_group().getStart_at()) * 1000, System.currentTimeMillis());
+                int value = DateUtils.daysBetween(data.getData().getCustomized_group().getStart_at() * 1000, System.currentTimeMillis());
                 progress.setVisibility(View.GONE);
                 if (value > 0) {
                     timeToStart.setVisibility(View.VISIBLE);
@@ -298,9 +298,16 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                         handleLayout.setVisibility(View.GONE);
                         price.setText("已下架");
                     } else {
-                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
-                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
-                        startStudy.setText("立即报名");
+                        if (data.getData().getCustomized_group().getUsers_count() < data.getData().getCustomized_group().getMax_users()) {
+                            startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                            startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                            startStudy.setText("立即报名");
+                        } else {
+                            startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                            startStudy.setTextColor(R.drawable.text_selector_white_red);
+                            startStudy.setEnabled(false);
+                            startStudy.setText("已经报满");
+                        }
                     }
                 }
             } else if (data.getData().getCustomized_group().getSell_type().equals("free")) {
@@ -317,9 +324,16 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                         price.setText("已下架");
                         handleLayout.setVisibility(View.GONE);
                     } else {
-                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
-                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
-                        startStudy.setText("立即报名");
+                        if (data.getData().getCustomized_group().getUsers_count() < data.getData().getCustomized_group().getMax_users()) {
+                            startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                            startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                            startStudy.setText("立即报名");
+                        } else {
+                            startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                            startStudy.setTextColor(R.drawable.text_selector_white_red);
+                            startStudy.setEnabled(false);
+                            startStudy.setText("已经报满");
+                        }
                     }
                 }
             }
