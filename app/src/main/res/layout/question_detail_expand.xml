@@ -34,33 +34,29 @@
 
         <LinearLayout
             android:id="@+id/audio_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:background="@drawable/chatfrom_bg_normal"
+            android:visibility="visible">
 
             <ImageView
-                android:id="@+id/play"
+                android:id="@+id/audio_animation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/question_play" />
-
-            <ProgressBar
-                android:id="@+id/progress"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1" />
+                android:layout_gravity="center_vertical|left"
+                android:background="@mipmap/audio_animation_list_left_3" />
 
             <TextView
                 android:id="@+id/time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:textColor="#999" />
+                android:gravity="right"
+                android:paddingLeft="2dip"
+                android:textColor="#666"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

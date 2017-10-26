@@ -4,6 +4,7 @@ import android.animation.IntEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,8 +41,6 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
 
     private boolean mIsExpand;
     private TextView time;
-    private ProgressBar progress;
-    private ImageView play;
     private TextView content;
     private String audioFileName;
     private Disposable d;
@@ -50,6 +48,8 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
     private List<ImageItem> list;
     private int initHeight;
     private CommonAdapter<ImageItem> adapter;
+    private View audioPlay;
+    private ImageView audioAnim;
 
     public ExpandView(Context context) {
         this(context, null);
@@ -133,7 +133,7 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
         this.audioFileName = audioUrl;
         this.list = imageList;
 
-        if (this.list == null) {
+        if (this.list == null) {//不管有没有都要加载  否则复用会造成下边空白
             this.list = new ArrayList<>();
         }
         GridViewForScrollView grid = (GridViewForScrollView) findViewById(R.id.grid);
@@ -158,29 +158,11 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
                 getContext().startActivity(intent);
             }
         });
-        if (audioUrl != null) {
-            findViewById(R.id.audio_layout).setVisibility(VISIBLE);
-        } else {
-            findViewById(R.id.audio_layout).setVisibility(GONE);
-        }
         time = (TextView) findViewById(R.id.time);
-        progress = (ProgressBar) findViewById(R.id.progress);
-        play = (ImageView) findViewById(R.id.play);
-        play.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.play:
-                playOrPause();
-                break;
-        }
-    }
-
-    private void playOrPause() {
-        if (mediaPlayer == null) {
+        audioAnim = (ImageView) findViewById(R.id.audio_animation);
+        audioPlay = findViewById(R.id.audio_layout);
+        if (audioUrl != null) {
+            audioPlay.setVisibility(VISIBLE);
             mediaPlayer = new MediaPlayer();
             try {
                 mediaPlayer.setDataSource(audioFileName);
@@ -191,11 +173,32 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    mediaPlayer.start();
+                    time.setText((mediaPlayer.getDuration() / 1000) + "\"");
                 }
             });
+        } else {
+            audioPlay.setVisibility(GONE);
+        }
+        audioPlay.setOnClickListener(this);
+    }
 
-            play.setImageResource(R.mipmap.question_stop);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.audio_layout:
+                playOrPause();
+                break;
+        }
+    }
+
+    private void playOrPause() {
+        if (!mediaPlayer.isPlaying()) {
+            audioAnim.setBackgroundResource(R.drawable.audio_animation_list_left);
+            if (audioAnim.getBackground() instanceof AnimationDrawable) {
+                AnimationDrawable animation = (AnimationDrawable) audioAnim.getBackground();
+                animation.start();
+            }
+            mediaPlayer.start();
             Observable.interval(1, TimeUnit.SECONDS)
                     .takeWhile(new Predicate<Long>() {
                         @Override
@@ -219,8 +222,6 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
                         @Override
                         public void onNext(Long aLong) {
                             time.setText((int) (aLong / 1000) + "\"");
-                            progress.setMax(mediaPlayer.getDuration());
-                            progress.setProgress(mediaPlayer.getCurrentPosition());
                         }
 
                         @Override
@@ -230,24 +231,24 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
 
                         @Override
                         public void onComplete() {
-                            releaseMediaPlayer();
+                            resetMediaPlayer();
                         }
                     });
         } else {
             d.dispose();
-            releaseMediaPlayer();
+            resetMediaPlayer();
         }
     }
 
-    private void releaseMediaPlayer() {
-        time.setText(mediaPlayer.getDuration() / 1000 + "\"");
-        play.setImageResource(R.mipmap.question_play);
+    private void resetMediaPlayer() {
+        if (audioAnim.getBackground() instanceof AnimationDrawable) {
+            AnimationDrawable animation = (AnimationDrawable) audioAnim.getBackground();
+            animation.stop();
+            audioAnim.setBackgroundResource(R.mipmap.audio_animation_list_left_3);
+        }
         d = null;
-        progress.setMax(60);
-        progress.setProgress(0);
         mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+        mediaPlayer.prepareAsync();
     }
 
     @Override
