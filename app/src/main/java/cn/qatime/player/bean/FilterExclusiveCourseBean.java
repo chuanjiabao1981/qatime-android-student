@@ -69,6 +69,24 @@ public class FilterExclusiveCourseBean implements Serializable {
         private String suit_crowd;
         private String description;
         private String sell_type;
+        private int users_count;
+        private int max_users;
+
+        public int getUsers_count() {
+            return users_count;
+        }
+
+        public void setUsers_count(int users_count) {
+            this.users_count = users_count;
+        }
+
+        public int getMax_users() {
+            return max_users;
+        }
+
+        public void setMax_users(int max_users) {
+            this.max_users = max_users;
+        }
 
         public String getSell_type() {
             return sell_type;
