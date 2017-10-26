@@ -107,6 +107,8 @@ public class ExclusiveLessonDetailBean implements Serializable {
             private List<ScheduledLessonsBean> scheduled_lessons;
             private String sell_type;
             private boolean off_shelve;
+            private int users_count;
+            private int max_users;
 
             public boolean isOff_shelve() {
                 return off_shelve;
@@ -274,6 +276,22 @@ public class ExclusiveLessonDetailBean implements Serializable {
 
             public String getSell_type() {
                 return sell_type;
+            }
+
+            public int getUsers_count() {
+                return users_count;
+            }
+
+            public void setUsers_count(int users_count) {
+                this.users_count = users_count;
+            }
+
+            public int getMax_users() {
+                return max_users;
+            }
+
+            public void setMax_users(int max_users) {
+                this.max_users = max_users;
             }
 
             public static class OfflineLessonsBean {

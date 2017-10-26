@@ -75,6 +75,7 @@
                     android:text=" 随时可退"
                     android:textColor="#109f10"
                     android:textSize="11dp" />
+
                 <TextView
                     android:id="@+id/join_cheap"
                     android:layout_width="wrap_content"
@@ -85,6 +86,7 @@
                     android:text=" 插班优惠"
                     android:textColor="#109f10"
                     android:textSize="11dp" />
+
                 <TextView
                     android:id="@+id/coupon_free"
                     android:layout_width="wrap_content"
@@ -156,7 +158,6 @@
         android:layout_height="48dp"
         android:background="#fff"
         android:visibility="gone">
-
 
         <Button
             android:id="@+id/start_study"

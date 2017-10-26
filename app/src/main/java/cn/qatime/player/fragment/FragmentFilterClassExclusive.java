@@ -252,7 +252,7 @@ public class FragmentFilterClassExclusive extends BaseFragment {
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getCurrent_price()))
                         .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.buy_count, item.getView_tickets_count() + "");
+                        .setText(R.id.buy_count, (item.getUsers_count() > item.getMax_users() ? item.getMax_users() : item.getUsers_count()) + "/" + item.getMax_users());
             }
         };
         listview.setAdapter(adapter);
