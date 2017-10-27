@@ -13,6 +13,7 @@ import com.umeng.analytics.MobclickAgent;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.utils.SPUtils;
 
 /**
@@ -49,40 +50,29 @@ public class NotifyMessageActivity extends BaseActivity implements CompoundButto
         setContentView(R.layout.activity_notify_message);
         setTitles(getResourceString(R.string.notify_message));
         assignViews();
-        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-        shake.setChecked(shakeStatus);
-        boolean voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-        voice.setChecked(voiceStatus);
-        boolean nofityStatus = (boolean) SPUtils.get(this, "notify_status", true);
-        notifyStatus.setChecked(nofityStatus);
+        shake.setChecked(UserPreferences.getVibrateToggle());
+        voice.setChecked(UserPreferences.getRingToggle());
+        notifyStatus.setChecked(UserPreferences.getNotificationToggle());
         initOver = true;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(!initOver){//避免重复设置
+        if (!initOver) {//避免重复设置
             return;
         }
         switch (buttonView.getId()) {
             case R.id.voice:
-                SPUtils.put(this, "voice_status", isChecked);
-                BaseApplication.setOptions(isChecked, (boolean) SPUtils.get(this, "shake_status", true));
+                UserPreferences.setRingToggle(isChecked);
+                BaseApplication.setOptions(isChecked, UserPreferences.getVibrateToggle());
                 break;
             case R.id.shake:
-                SPUtils.put(this, "shake_status", isChecked);
-                BaseApplication.setOptions((boolean) SPUtils.get(this, "voice_status", true), isChecked);
+                UserPreferences.setVibrateToggle(isChecked);
+                BaseApplication.setOptions(UserPreferences.getRingToggle(), isChecked);
                 break;
             case R.id.notify_status://消息提醒开关
-                BaseApplication.getInstance().setChatMessageNotifyStatus(isChecked);
-                /**
-                 * 设置最近联系人的消息为已读
-                 *
-                 * @param account,    聊天对象帐号，或者以下两个值：
-                 *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
-                 *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
-                 */
-                NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus()?MsgService.MSG_CHATTING_ACCOUNT_NONE:MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
-                SPUtils.put(this, "notify_status", isChecked);
+                UserPreferences.setNotificationToggle(isChecked);
+                NIMClient.toggleNotification(isChecked);
                 break;
         }
     }

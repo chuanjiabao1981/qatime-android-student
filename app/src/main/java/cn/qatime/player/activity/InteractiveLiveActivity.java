@@ -1215,7 +1215,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (inputPanel != null)
             inputPanel.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
     @Override

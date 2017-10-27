@@ -67,23 +67,9 @@ public class BaseApplication extends MultiDexApplication {
     public boolean newVersion;
     private CityBean.Data currentCity;
     private PushAgent mPushAgent;
-    private boolean voiceStatus;
-    private boolean shakeStatus;
     private CashAccountBean cashAccount;
-    /**
-     * 是否进行聊天消息通知栏提醒
-     */
-    public boolean chatMessageNotifyStatus;
     private boolean tokenOut = false;//账号已过期
 //    public List<Activity> topActivity = new ArrayList<>();
-
-    public boolean isChatMessageNotifyStatus() {
-        return chatMessageNotifyStatus;
-    }
-
-    public void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
-        this.chatMessageNotifyStatus = chatMessageNotifyStatus;
-    }
 
     public RequestQueue getRequestQueue() {
         if (Queue == null) {
@@ -126,14 +112,12 @@ public class BaseApplication extends MultiDexApplication {
 
         profile = SPUtils.getObject(this, "profile", Profile.class);
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
-        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-        chatMessageNotifyStatus = (boolean) SPUtils.get(this, "notify_status", true);
+
 //        CrashHandler.getInstance().init(this);
         //y友盟统计
         MobclickAgent.setDebugMode(Configure.isDebug);
-        initUmengPush();
         initYunxin();
+        initUmengPush();
 
         StorageUtil.init(context, null);
         initRx();
@@ -161,9 +145,9 @@ public class BaseApplication extends MultiDexApplication {
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(Configure.isDebug);
 
-        mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        mPushAgent.setNotificationPlaySound(UserPreferences.getRingToggle() ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
-        mPushAgent.setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        mPushAgent.setNotificationPlayVibrate(UserPreferences.getVibrateToggle() ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
 
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
@@ -286,8 +270,8 @@ public class BaseApplication extends MultiDexApplication {
 
         config.notificationSound = "android.resource://cn.qatime.player/raw/msg";
         options.statusBarNotificationConfig = config;
-        config.ring = voiceStatus;
-        config.vibrate = shakeStatus;
+        config.ring = UserPreferences.getRingToggle();
+        config.vibrate = UserPreferences.getVibrateToggle();
 
         UserPreferences.setStatusConfig(config);
         // 配置保存图片，文件，log 等数据的目录
