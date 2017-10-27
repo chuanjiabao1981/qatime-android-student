@@ -277,7 +277,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     private void getAnnouncementsData() {
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             return;
         }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
@@ -605,7 +605,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 

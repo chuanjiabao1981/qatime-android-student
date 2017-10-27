@@ -1,6 +1,7 @@
 package cn.qatime.player.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ public class FragmentNEVideoPlayerAdapter extends CommonAdapter<ChatTeamBean.Acc
         ((TextView) holder.getView(R.id.role)).setText(R.string.student_translate);
 //        }
 
-        holder.setText(R.id.name, item.getName());
+        holder.setText(R.id.name, TextUtils.isEmpty(item.getName()) ? "无名" : item.getName());
         Glide.with(context).load(item.getIcon()).placeholder(R.mipmap.error_header).fitCenter().crossFade().transform(new GlideCircleTransform(context)).dontAnimate().into((ImageView) holder.getView(R.id.image));
 //        if (position == 0) {
 //            ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);

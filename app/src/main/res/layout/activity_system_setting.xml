@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +6,8 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
-    <View
 
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
@@ -30,7 +29,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-
         <ImageView
             style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
@@ -38,13 +36,10 @@
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
-
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
 
     <LinearLayout
         android:id="@+id/check_update"
@@ -150,7 +145,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
 
 
     <Button

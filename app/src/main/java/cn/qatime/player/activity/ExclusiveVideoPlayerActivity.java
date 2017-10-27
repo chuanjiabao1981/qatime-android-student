@@ -275,7 +275,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
 
     private void getAnnouncementsData() {
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             return;
         }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
@@ -584,17 +584,17 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     protected void onPause() {
         hd.removeCallbacks(runnable);//停止查询播放状态
         if (video1 != null)
-        video1.pause();
+            video1.pause();
         if (video2 != null)
-        video2.pause();
+            video2.pause();
         if (floatFragment != null)
-        floatFragment.setPlaying(false);
+            floatFragment.setPlaying(false);
         if (inputPanel != null) {
             inputPanel.onPause();
         }
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 
