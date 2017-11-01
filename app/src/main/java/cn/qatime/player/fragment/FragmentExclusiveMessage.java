@@ -65,7 +65,7 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
     };
     private MessageListPanel messageListPanel;
     private View view;
-    private String owner;
+//    private String owner;
 
     @Nullable
     @Override
@@ -255,21 +255,21 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
         requestTeamInfo();
         Container container = new Container(getActivity(), sessionId, this);
         messageListPanel = new MessageListPanel(container, view);
-        if (!StringUtils.isNullOrBlanK(owner)) {
-            messageListPanel.setOwner(owner);
-        }
+//        if (!StringUtils.isNullOrBlanK(owner)) {
+//            messageListPanel.setOwner(owner);
+//        }
     }
 
     public void setChatCallBack(Callback c) {
         this.chatCallback = c;
     }
 
-    public void setOwner(String owner) {
-        if (messageListPanel != null) {
-            messageListPanel.setOwner(owner);
-        } else
-            this.owner = owner;
-    }
+//    public void setOwner(String owner) {
+//        if (messageListPanel != null) {
+//            messageListPanel.setOwner(owner);
+//        } else
+//            this.owner = owner;
+//    }
 
     public void onMsgSend(IMMessage message) {
         if (messageListPanel != null) {
