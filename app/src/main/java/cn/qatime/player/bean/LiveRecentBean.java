@@ -9,7 +9,7 @@ import java.util.List;
  * @Describe
  */
 
-public class LiveTodayBean implements Serializable {
+public class LiveRecentBean implements Serializable {
     private int status;
     private List<DataBean> data;
 
@@ -30,16 +30,26 @@ public class LiveTodayBean implements Serializable {
     }
 
     public static class DataBean {
+
+        /**
+         * id : 602
+         * model_name : LiveStudio::Lesson
+         * name : 8
+         * course_id : 182
+         * course_model_name : LiveStudio::Course
+         * status : init
+         * publicizes : {"info":{"url":"http://testing.qatime.cn/assets/courses/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"list":{"url":"http://testing.qatime.cn/assets/courses/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png"},"small":{"url":"http://testing.qatime.cn/assets/courses/mathematics/small_default-812233594daef82c95313ab4bfb99bd6.png"},"app_info":{"url":"http://testing.qatime.cn/assets/courses/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png"}}
+         * start_at : 1510251000
+         */
+
         private int id;
+        private String model_name;
         private String name;
-        private String grade;
-        private String subject;
+        private int course_id;
+        private String course_model_name;
         private String status;
         private PublicizesBean publicizes;
-        private int course_id;
-        private String course_name;
-        private String model_name;
-        private String live_time;
+        private long start_at;
 
         public int getId() {
             return id;
@@ -47,6 +57,14 @@ public class LiveTodayBean implements Serializable {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getModel_name() {
+            return model_name;
+        }
+
+        public void setModel_name(String model_name) {
+            this.model_name = model_name;
         }
 
         public String getName() {
@@ -57,20 +75,20 @@ public class LiveTodayBean implements Serializable {
             this.name = name;
         }
 
-        public String getGrade() {
-            return grade;
+        public int getCourse_id() {
+            return course_id;
         }
 
-        public void setGrade(String grade) {
-            this.grade = grade;
+        public void setCourse_id(int course_id) {
+            this.course_id = course_id;
         }
 
-        public String getSubject() {
-            return subject;
+        public String getCourse_model_name() {
+            return course_model_name;
         }
 
-        public void setSubject(String subject) {
-            this.subject = subject;
+        public void setCourse_model_name(String course_model_name) {
+            this.course_model_name = course_model_name;
         }
 
         public String getStatus() {
@@ -89,32 +107,12 @@ public class LiveTodayBean implements Serializable {
             this.publicizes = publicizes;
         }
 
-        public int getCourse_id() {
-            return course_id;
+        public long getStart_at() {
+            return start_at;
         }
 
-        public void setCourse_id(int course_id) {
-            this.course_id = course_id;
-        }
-
-        public String getCourse_name() {
-            return course_name;
-        }
-
-        public void setCourse_name(String course_name) {
-            this.course_name = course_name;
-        }
-
-        public String getModel_name() {
-            return model_name;
-        }
-
-        public void setModel_name(String model_name) {
-            this.model_name = model_name;
-        }
-
-        public String getLive_time() {
-            return live_time;
+        public void setStart_at(long start_at) {
+            this.start_at = start_at;
         }
 
         public static class PublicizesBean {

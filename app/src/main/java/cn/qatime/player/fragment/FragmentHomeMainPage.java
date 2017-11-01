@@ -41,7 +41,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,7 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.FreeCourseBean;
 import cn.qatime.player.bean.LatestCourseBean;
-import cn.qatime.player.bean.LiveTodayBean;
+import cn.qatime.player.bean.LiveRecentBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.utils.AMapLocationUtils;
@@ -111,8 +113,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private List<String> gradeList;
     private RecyclerView.Adapter gradeAdapter;
     private RecyclerView recyclerToday;
-    private RecyclerView.Adapter todayAdapter;
-    private List<LiveTodayBean.DataBean> todayList;
+    private RecyclerView.Adapter recentAdapter;
+    private List<LiveRecentBean.DataBean> recentList;
     private ListViewForScrollView listViewFree;//近期开课
     private ListViewForScrollView listViewPublishedRank;//最新发布
     private List<LatestCourseBean.DataBean> listPublishedRank = new ArrayList<>();
@@ -184,7 +186,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         initBanner();
         initGrade();
-        initToady();
+        initRecent();
         initEssence();
 
         initTeacher();
@@ -204,7 +206,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         initBannerData();
         initEssenceData();//精选内容
-        initToadyData();//今日直播
+        initRecentData();//今日直播
         initTeacherData();
         initRecentPublished();//最新发布,近期开课
         initFreeCourseData();
@@ -361,8 +363,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         return result;
     }
 
-    private void initToady() {
-        todayList = new ArrayList<>();
+    private SimpleDateFormat recentParse = new SimpleDateFormat("MM-dd HH:mm");
+    private void initRecent() {
+        recentList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerToday.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -375,12 +378,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                 if (parent.getChildPosition(view) == 0)
                     outRect.left = 0;
-                if (parent.getChildAdapterPosition(view) == todayList.size())
+                if (parent.getChildAdapterPosition(view) == recentList.size())
                     outRect.right = 0;
             }
         });
         recyclerToday.setLayoutManager(layoutManager);
-        todayAdapter = new RecyclerView.Adapter<BaseViewHolder>() {
+        recentAdapter = new RecyclerView.Adapter<BaseViewHolder>() {
             @Override
             public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View item = View.inflate(getActivity(), R.layout.item_home_today, null);
@@ -389,23 +392,23 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void onBindViewHolder(BaseViewHolder holder, final int position) {
-                if (todayList.size() > 0) {
-                    LiveTodayBean.DataBean item = todayList.get(position);
+                if (recentList.size() > 0) {
+                    LiveRecentBean.DataBean item = recentList.get(position);
                     holder.setText(R.id.teaching_name, item.getName())
-                            .setImageByUrl(R.id.image, item.getPublicizes().getList().getUrl(), R.mipmap.photo)
-                            .setText(R.id.time, item.getLive_time())
+                            .setImageByUrl(R.id.image, item.getPublicizes().getSmall().getUrl(), R.mipmap.photo)
+                            .setText(R.id.time,recentParse.format(new Date(item.getStart_at()*1000)))
                             .setText(R.id.status, getTodayStatusText(item.getStatus()))
                             .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             //今日直播只有直播课和专属课
-                            int courseId = todayList.get(position).getCourse_id();
-                            if ("LiveStudio::Lesson".equals(todayList.get(position).getModel_name())) {
+                            int courseId = recentList.get(position).getCourse_id();
+                            if ("LiveStudio::Lesson".equals(recentList.get(position).getModel_name())) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                                 intent.putExtra("id", courseId);
                                 startActivity(intent);
-                            } else if ("LiveStudio::ScheduledLesson".equals(todayList.get(position).getModel_name())) {
+                            } else if ("LiveStudio::ScheduledLesson".equals(recentList.get(position).getModel_name())) {
                                 Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                                 intent.putExtra("id", courseId);
                                 startActivity(intent);
@@ -416,19 +419,19 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 }
             }
 
-            //             > 0 ? todayList.size() : 1;
+            //             > 0 ? recentList.size() : 1;
             @Override
             public int getItemCount() {
-                return todayList.size();
+                return recentList.size();
             }
         };
         ViewGroup parent = (ViewGroup) recyclerToday.getParent();
         emptyViewToday = View.inflate(getActivity(), R.layout.empty_view, null);
         emptyViewToday.setBackgroundColor(0xffffffff);
         parent.addView(emptyViewToday, parent.indexOfChild(recyclerToday) + 1);
-        todayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        recentAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             private void checkIfEmpty() {
-                if (todayAdapter.getItemCount() == 0) {
+                if (recentAdapter.getItemCount() == 0) {
                     emptyViewToday.setVisibility(View.VISIBLE);
                     recyclerToday.setVisibility(View.GONE);
                 } else {
@@ -456,7 +459,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
 
         });
-        recyclerToday.setAdapter(todayAdapter);
+        recyclerToday.setAdapter(recentAdapter);
 
     }
 
@@ -548,18 +551,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     /**
      * 今日直播数据
      */
-    private void initToadyData() {
+    private void initRecentData() {
 
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlToady, null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlRecentLessons, null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        LiveTodayBean data = JsonUtils.objectFromJson(response.toString(), LiveTodayBean.class);
-                        todayList.clear();
+                        LiveRecentBean data = JsonUtils.objectFromJson(response.toString(), LiveRecentBean.class);
+                        recentList.clear();
                         if (data != null && data.getData() != null) {
-                            todayList.addAll(data.getData());
+                            recentList.addAll(data.getData());
                         }
-                        todayAdapter.notifyDataSetChanged();
+                        recentAdapter.notifyDataSetChanged();
                     }
 
                     @Override
