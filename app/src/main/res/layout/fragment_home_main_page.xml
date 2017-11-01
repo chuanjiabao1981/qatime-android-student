@@ -224,7 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="今日直播"
+                    android:text="近期直播"
                     android:textColor="#000"
                     android:textSize="16sp" />
 

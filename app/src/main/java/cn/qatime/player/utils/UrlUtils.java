@@ -61,6 +61,8 @@ public class UrlUtils {
     public static String urlLiveStudioFree = baseUrl + "api/v2/live_studio/courses/free";
     //今日直播
     public static String urlToady = baseUrl + "api/v2/live_studio/lessons/today";
+    //近期直播
+    public static String urlRecentLessons = baseUrl + "api/v1/home/recent_lessons";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
