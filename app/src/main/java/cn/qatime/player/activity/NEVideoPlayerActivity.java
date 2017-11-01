@@ -342,7 +342,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initSessionId() {
 
-// TODO: 2017/8/15 初始化
         getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {

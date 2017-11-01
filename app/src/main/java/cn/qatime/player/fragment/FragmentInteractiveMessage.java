@@ -37,7 +37,6 @@ import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.utils.LogCatHelper;
 import libraryextra.utils.StringUtils;
 
 /**

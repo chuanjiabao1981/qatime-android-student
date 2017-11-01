@@ -1,6 +1,5 @@
 package cn.qatime.player.bean;
 
-import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -110,9 +109,7 @@ public class MessageListPanel {
                 }
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        }
+        messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         // adapter
         items = new ArrayList<>();
         adapter = new MsgAdapter(messageListView, items);
@@ -177,9 +174,9 @@ public class MessageListPanel {
         }
     };
 
-    public void setOwner(String owner) {
-        adapter.setOwner(owner);
-    }
+//    public void setOwner(String owner) {
+//        adapter.setOwner(owner);
+//    }
 
     public void onResume() {
         setEarPhoneMode(UserPreferences.isEarPhoneModeEnable());
