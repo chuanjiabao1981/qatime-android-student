@@ -810,22 +810,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private int getTodayStatusColor(String status) {
-        if ("ready".equals(status)) {
+        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
             return 0xff4873ff;
-        } else if ("closed".equals(status)) {
-            return 0xff999999;
-        } else {
+        } else if ("teaching".equals(status)||"paused".equals(status)) {
             return 0xffff5842;
+        } else {
+            return 0xff999999;
         }
     }
 
     private String getTodayStatusText(String status) {
-        if ("ready".equals(status)) {
+        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
             return "尚未直播";
-        } else if ("closed".equals(status)) {
-            return "直播结束";
-        } else {
+        } else if ("teaching".equals(status)||"paused".equals(status)) {
             return "正在直播";
+        } else {
+            return "直播结束";
         }
     }
 
