@@ -36,7 +36,9 @@ public class StudentHomeWorksBean implements Serializable {
         private String status;
         private int user_id;
         private String user_name;
-        private int created_at;
+        private long created_at;
+        private long published_at;
+        private long resolved_at;
         private String model_name;
         private CorrectionBean correction;
         private MyHomeWorksBean.DataBean homework;
@@ -126,12 +128,28 @@ public class StudentHomeWorksBean implements Serializable {
             this.user_name = user_name;
         }
 
-        public int getCreated_at() {
+        public long getCreated_at() {
             return created_at;
         }
 
-        public void setCreated_at(int created_at) {
+        public void setCreated_at(long created_at) {
             this.created_at = created_at;
+        }
+
+        public long getPublished_at() {
+            return published_at;
+        }
+
+        public void setPublished_at(long published_at) {
+            this.published_at = published_at;
+        }
+
+        public long getResolved_at() {
+            return resolved_at;
+        }
+
+        public void setResolved_at(long resolved_at) {
+            this.resolved_at = resolved_at;
         }
 
         public String getModel_name() {
@@ -206,7 +224,9 @@ public class StudentHomeWorksBean implements Serializable {
         }
 
         public static class CorrectionBean implements Serializable {
-            private int created_at;
+            private long created_at;
+            private long published_at;
+            private long resolved_at;
             private int id;
             private String model_name;
             private int parent_id;
@@ -215,12 +235,28 @@ public class StudentHomeWorksBean implements Serializable {
             private String user_name;
             private List<ItemsBean> items;
 
-            public int getCreated_at() {
+            public long getCreated_at() {
                 return created_at;
             }
 
-            public void setCreated_at(int created_at) {
+            public void setCreated_at(long created_at) {
                 this.created_at = created_at;
+            }
+
+            public long getPublished_at() {
+                return published_at;
+            }
+
+            public void setPublished_at(long published_at) {
+                this.published_at = published_at;
+            }
+
+            public long getResolved_at() {
+                return resolved_at;
+            }
+
+            public void setResolved_at(long resolved_at) {
+                this.resolved_at = resolved_at;
             }
 
             public int getId() {

@@ -92,10 +92,15 @@ public class ExclusiveQuestionsActivity extends BaseActivity implements View.OnC
 
             @Override
             public void convert(ViewHolder holder, QuestionsBean.DataBean item, int position) {
-                long time = item.getCreated_at() * 1000L;
+                if ("pending".equals(item.getStatus())) {
+                    long time = item.getCreated_at() * 1000L;
+                    holder.setText(R.id.create_time, "创建时间" + parse.format(new Date(time)));
+                } else {
+                    long time = item.getAnswer().getCreated_at()* 1000L;
+                    holder.setText(R.id.create_time, "回复时间" + parse.format(new Date(time)));
+                }
                 holder.setText(R.id.question_name, item.getTitle())
                         .setText(R.id.author, item.getUser_name())
-                        .setText(R.id.create_time, "创建时间" + parse.format(new Date(time)))
                         .setText(R.id.status, getStatus(item.getStatus()));
             }
         };

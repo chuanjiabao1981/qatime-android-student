@@ -69,10 +69,18 @@ public class ExclusiveStudentHomeWorksActivity extends BaseActivity implements V
         adapter = new CommonAdapter<StudentHomeWorksBean.DataBean>(this, list, R.layout.item_exclusive_homeworks) {
             @Override
             public void convert(ViewHolder holder, StudentHomeWorksBean.DataBean item, int position) {
-                long time = item.getHomework().getCreated_at() * 1000L;
+                if ("pending".equals(item.getStatus())) {
+                    long time = item.getCreated_at() * 1000L;
+                    holder.setText(R.id.time, "创建时间" + parse.format(new Date(time)));
+                } else if ("submitted".equals(item.getStatus())) {
+                    long time = item.getPublished_at() * 1000L;
+                    holder.setText(R.id.time, "提交时间" + parse.format(new Date(time)));
+                } else {
+                    long time = item.getResolved_at() * 1000L;
+                    holder.setText(R.id.time, "批改时间" + parse.format(new Date(time)));
+                }
                 holder.setText(R.id.name, item.getTitle())
-                        .setText(R.id.time,"创建时间"+parse.format(new Date(time)))
-                        .setText(R.id.status,getStatus(item.getStatus()));
+                        .setText(R.id.status, getStatus(item.getStatus()));
             }
         };
 //        adapter.setSelectListener(new ListViewSelectAdapter.SelectChangeListener<StudentHomeWorksBean.DataBean>() {
