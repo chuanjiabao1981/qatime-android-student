@@ -38,7 +38,9 @@ public class QuestionsBean implements Serializable {
         private int course_id;
         private String course_name;
         private String course_model_name;
-        private int created_at;
+        private long created_at;
+        private long published_at;
+        private long resolved_at;
         private String model_name;
         private String body;
         private AnswerBean answer;
@@ -124,12 +126,28 @@ public class QuestionsBean implements Serializable {
             this.course_model_name = course_model_name;
         }
 
-        public int getCreated_at() {
+        public long getCreated_at() {
             return created_at;
         }
 
-        public void setCreated_at(int created_at) {
+        public void setCreated_at(long created_at) {
             this.created_at = created_at;
+        }
+
+        public long getPublished_at() {
+            return published_at;
+        }
+
+        public void setPublished_at(long published_at) {
+            this.published_at = published_at;
+        }
+
+        public long getResolved_at() {
+            return resolved_at;
+        }
+
+        public void setResolved_at(long resolved_at) {
+            this.resolved_at = resolved_at;
         }
 
         public String getModel_name() {
@@ -166,7 +184,9 @@ public class QuestionsBean implements Serializable {
             private int course_id;
             private String course_name;
             private String course_model_name;
-            private int created_at;
+            private long created_at;
+            private long published_at;
+            private long resolved_at;
             private String model_name;
             private String body;
             private List<AttachmentsBean> attachments;
@@ -243,12 +263,28 @@ public class QuestionsBean implements Serializable {
                 this.course_model_name = course_model_name;
             }
 
-            public int getCreated_at() {
+            public long getCreated_at() {
                 return created_at;
             }
 
-            public void setCreated_at(int created_at) {
+            public void setCreated_at(long created_at) {
                 this.created_at = created_at;
+            }
+
+            public long getPublished_at() {
+                return published_at;
+            }
+
+            public void setPublished_at(long published_at) {
+                this.published_at = published_at;
+            }
+
+            public long getResolved_at() {
+                return resolved_at;
+            }
+
+            public void setResolved_at(long resolved_at) {
+                this.resolved_at = resolved_at;
             }
 
             public String getModel_name() {

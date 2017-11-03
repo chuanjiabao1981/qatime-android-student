@@ -36,6 +36,8 @@ public class MyHomeWorksBean implements Serializable {
         private String tasks_count;
         private String user_name;
         private long created_at;
+        private long published_at;
+        private long resolved_at;
         private String model_name;
         private List<ItemsBean> items;
 
@@ -101,6 +103,22 @@ public class MyHomeWorksBean implements Serializable {
 
         public void setCreated_at(long created_at) {
             this.created_at = created_at;
+        }
+
+        public long getPublished_at() {
+            return published_at;
+        }
+
+        public void setPublished_at(long published_at) {
+            this.published_at = published_at;
+        }
+
+        public long getResolved_at() {
+            return resolved_at;
+        }
+
+        public void setResolved_at(long resolved_at) {
+            this.resolved_at = resolved_at;
         }
 
         public String getModel_name() {

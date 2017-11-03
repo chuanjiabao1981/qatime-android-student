@@ -67,10 +67,10 @@ public class FragmentHomeworkResolved extends BaseFragment {
         adapter = new CommonAdapter<StudentHomeWorksBean.DataBean>(getActivity(), list, R.layout.item_my_homeworks) {
             @Override
             public void convert(ViewHolder holder, StudentHomeWorksBean.DataBean item, int position) {
-                long time = item.getHomework().getCreated_at() * 1000L;
+                long time = item.getResolved_at() * 1000L;
                 holder.setText(R.id.name, item.getTitle())
                         .setText(R.id.course_name,"相关课程 "+ item.getCourse_name())
-                        .setText(R.id.time,"创建时间 "+ parse.format(new Date(time)));
+                        .setText(R.id.time,"批改时间 "+ parse.format(new Date(time)));
             }
         };
         listView.setAdapter(adapter);

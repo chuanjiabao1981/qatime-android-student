@@ -83,7 +83,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if(error.getInt("code")==3002){
+                            if (error.getInt("code") == 3002) {
                                 Toast.makeText(HomeWorkDetailActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
@@ -143,7 +143,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                     .append(",\"body\":\"")
                     .append(homeWorkItemBean.content)
                     .append("\"");
-            if (homeWorkItemBean.audioAttachment != null || (homeWorkItemBean.imageItems!=null&&homeWorkItemBean.imageItems.size() > 0)) {
+            if (homeWorkItemBean.audioAttachment != null || (homeWorkItemBean.imageItems != null && homeWorkItemBean.imageItems.size() > 0)) {
                 sb.append(",")
                         .append("\"quotes_attributes\":[");
                 for (AttachmentsBean attachment : homeWorkItemBean.imageItems) {
@@ -200,8 +200,16 @@ public class HomeWorkDetailActivity extends BaseActivity {
                 }
                 homeworkTitle.setText(item.getTitle());
                 setTitles(item.getTitle());
-                long time = item.getHomework().getCreated_at() * 1000L;
-                createTime.setText("创建时间" + parse.format(new Date(time)));
+                if ("pending".equals(item.getStatus())) {
+                    long time = item.getCreated_at() * 1000L;
+                    createTime.setText("创建时间" + parse.format(new Date(time)));
+                } else if ("submitted".equals(item.getStatus())) {
+                    long time = item.getPublished_at() * 1000L;
+                    createTime.setText("提交时间" + parse.format(new Date(time)));
+                } else {
+                    long time = item.getResolved_at() * 1000L;
+                    createTime.setText("批改时间" + parse.format(new Date(time)));
+                }
                 //融合
                 List<MyHomeWorksBean.DataBean.ItemsBean> homeworks = item.getHomework().getItems();
                 List<StudentHomeWorksBean.DataBean.ItemsBean> items = item.getItems();
@@ -264,7 +272,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                 doingItem.answer = new StudentHomeWorksBean.DataBean.ItemsBean();
                 doingItem.answer.setBody(item.content);
                 List<AttachmentsBean> attachments = new ArrayList<>();
-                if (item.imageItems!=null&&item.imageItems.size() > 0) {
+                if (item.imageItems != null && item.imageItems.size() > 0) {
                     attachments.addAll(item.imageItems);
                 }
                 if (!StringUtils.isNullOrBlanK(item.audioAttachment)) {
@@ -296,7 +304,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                 List<AttachmentsBean> homeworkAttachments = item.homework.getAttachments();
                 AttachmentsBean audioAttachments = new AttachmentsBean();
                 List<ImageItem> imageAttachments = new ArrayList<>();
-                if (homeworkAttachments!=null&&homeworkAttachments.size() > 0) {
+                if (homeworkAttachments != null && homeworkAttachments.size() > 0) {
                     for (AttachmentsBean homeworkAttachment : homeworkAttachments) {
                         if ("mp3".equals(homeworkAttachment.file_type)) {
                             audioAttachments = homeworkAttachment;
@@ -320,7 +328,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                             List<AttachmentsBean> answerAttachments = item.answer.getAttachments();
                             AttachmentsBean answerAudioAttachments = new AttachmentsBean();
                             List<ImageItem> answerImageAttachments = new ArrayList<>();
-                            if (answerAttachments!=null&&answerAttachments.size() > 0) {
+                            if (answerAttachments != null && answerAttachments.size() > 0) {
                                 for (AttachmentsBean answerAttachment : answerAttachments) {
                                     if ("mp3".equals(answerAttachment.file_type)) {
                                         answerAudioAttachments = answerAttachment;
@@ -349,7 +357,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                                 List<AttachmentsBean> correctionAttachments = item.correction.getAttachments();
                                 AttachmentsBean correctionAudioAttachments = new AttachmentsBean();
                                 List<ImageItem> correctionImageAttachments = new ArrayList<>();
-                                if (correctionAttachments!=null&&correctionAttachments.size() > 0) {
+                                if (correctionAttachments != null && correctionAttachments.size() > 0) {
                                     for (AttachmentsBean correctionAttachment : correctionAttachments) {
                                         if ("mp3".equals(correctionAttachment.file_type)) {
                                             correctionAudioAttachments = correctionAttachment;
@@ -380,7 +388,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                             List<AttachmentsBean> answerAttachments = item.answer.getAttachments();
                             AttachmentsBean answerAudioAttachments = new AttachmentsBean();
                             List<ImageItem> answerImageAttachments = new ArrayList<>();
-                            if (answerAttachments!=null&&answerAttachments.size() > 0) {
+                            if (answerAttachments != null && answerAttachments.size() > 0) {
                                 for (AttachmentsBean answerAttachment : answerAttachments) {
                                     if ("mp3".equals(answerAttachment.file_type)) {
                                         answerAudioAttachments = answerAttachment;
