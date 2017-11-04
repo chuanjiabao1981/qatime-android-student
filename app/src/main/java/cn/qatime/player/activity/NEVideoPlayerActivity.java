@@ -507,7 +507,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) { // 横屏
             floatFragment.setPortrait(false);
 
-            inputPanel.clearInputValue();
+            if (inputPanel!=null) {
+            	inputPanel.clearInputValue();
+            }
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             ViewGroup.LayoutParams param = mainVideo.getLayoutParams();
@@ -650,7 +652,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      * @param videoState
      */
     private void setVideoState(VideoState videoState) {
-        Logger.e("videoState" + videoState.toString());
+//        Logger.e("videoState" + videoState.toString());
 //        if (videoState == VideoState.INIT) {//初始化状态下查询状态
 //            hd.removeCallbacks(runnable);
 //            if (this.videoState == videoState) {
