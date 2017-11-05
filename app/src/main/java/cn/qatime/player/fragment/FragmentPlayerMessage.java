@@ -134,8 +134,8 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                 }
                 if (isMyMessage(message)) {
                     addedListItems.add(message);
+                    needRefresh = true;
                 }
-                needRefresh = true;
             }
 
             if (needRefresh) {
@@ -150,7 +150,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     };
 
     public boolean isMyMessage(IMMessage message) {
-        return message.getSessionType() == SessionTypeEnum.Team && message.getSessionId() != null && StringUtils.isNullOrBlanK(sessionId) && message.getSessionId().equals(sessionId);
+        return message.getSessionType() == SessionTypeEnum.Team && !StringUtils.isNullOrBlanK(sessionId) && message.getSessionId().equals(sessionId);
     }
 
     /**

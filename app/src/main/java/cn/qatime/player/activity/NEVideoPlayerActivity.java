@@ -507,9 +507,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) { // 横屏
             floatFragment.setPortrait(false);
 
-            if (inputPanel!=null) {
-            	inputPanel.clearInputValue();
-            }
+            inputPanel.clearInputValue();
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             ViewGroup.LayoutParams param = mainVideo.getLayoutParams();

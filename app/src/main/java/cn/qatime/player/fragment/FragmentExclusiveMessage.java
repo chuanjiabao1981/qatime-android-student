@@ -15,6 +15,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -131,8 +132,10 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
                         }
                     }
                 }
-                addedListItems.add(message);
-                needRefresh = true;
+                if (isMyMessage(message)) {
+                    addedListItems.add(message);
+                    needRefresh = true;
+                }
             }
 
             if (needRefresh) {
@@ -145,6 +148,10 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
             }
         }
     };
+
+    public boolean isMyMessage(IMMessage message) {
+        return message.getSessionType() == SessionTypeEnum.Team && !StringUtils.isNullOrBlanK(sessionId) && message.getSessionId().equals(sessionId);
+    }
 
     /**
      * 请求群基本信息
