@@ -22,6 +22,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +46,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
@@ -63,13 +65,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
     private TextView name;
-    //    private TextView title;
     private LiveLessonDetailBean data;
     private ViewPager mViewPager;
     private int pager = 0;
     TextView price;
     TextView studentnumber;
-    //    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
@@ -87,7 +87,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView timeToStart;
     private View layoutView;
     private RelativeLayout auditionLayout;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +177,22 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(pager);
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(RemedialClassDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(RemedialClassDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/courses/" + id, name.getText().toString(), "直播课课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     private void initData() {

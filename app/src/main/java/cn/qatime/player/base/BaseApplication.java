@@ -34,6 +34,9 @@ import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -78,6 +81,10 @@ public class BaseApplication extends MultiDexApplication {
         return Queue;
     }
 
+    static {
+        PlatformConfig.setWeixin("wxf2dfbeb5f641ce40", "7eb546caee5844cc6893449287be3b1b");
+    }
+
     public CityBean.Data getCurrentCity() {
         if (currentCity == null) {
             currentCity = new CityBean.Data("全国");
@@ -103,6 +110,7 @@ public class BaseApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = this;
+        UMShareAPI.get(this);
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
