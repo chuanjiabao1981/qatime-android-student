@@ -325,10 +325,11 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     protected void setCustomMatchParent() {
         LinearLayout bodyContainer = (LinearLayout) view.findViewById(R.id.message_item_body);
         ViewGroup.LayoutParams layoutParams1 = contentContainer.getLayoutParams();
-        layoutParams1.width=ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;
         ViewGroup.LayoutParams layoutParams2 = bodyContainer.getLayoutParams();
-        layoutParams2.width=ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams2.width = ViewGroup.LayoutParams.MATCH_PARENT;
     }
+
     private void setHeadImageView() {
         ImageView show = isReceivedMessage() ? avatarLeft : avatarRight;
         ImageView hide = isReceivedMessage() ? avatarRight : avatarLeft;
