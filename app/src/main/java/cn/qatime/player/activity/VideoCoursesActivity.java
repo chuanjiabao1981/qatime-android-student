@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +35,7 @@ import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
 import cn.qatime.player.fragment.FragmentVideoCoursesTeacherInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
@@ -120,7 +122,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                     if (data.getData().getVideo_course().isOff_shelve()) {
                                         price.setText("已下架");
                                         handleLayout.setVisibility(View.GONE);
-                                    }else {
+                                    } else {
                                         startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
                                         startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
                                         startStudy.setText("立即学习");
@@ -220,6 +222,22 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         });
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(VideoCoursesActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(VideoCoursesActivity.this, UrlUtils.getBaseUrl() + "live_studio/video_courses/" + id, name.getText().toString(), "视频课课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     @Override

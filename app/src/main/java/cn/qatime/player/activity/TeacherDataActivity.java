@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -15,6 +16,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.TeacherDataBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -105,6 +108,22 @@ public class TeacherDataActivity extends BaseActivity {
         videoLayout = findViewById(R.id.video_layout);
         exclusiveGrid = (GridViewForScrollView) findViewById(R.id.exclusive_grid);
         exclusiveLayout = findViewById(R.id.exclusive_layout);
+        setRightImage(R.mipmap.share, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (teacherId == 0) {
+                    Toast.makeText(TeacherDataActivity.this, "老师id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(TeacherDataActivity.this, UrlUtils.getBaseUrl() + "teachers/" + teacherId + "/profile", name.getText().toString(), category.getText().toString() + subject.getText().toString() + "老师", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     @Override
@@ -135,7 +154,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
                 }
             }
         };
@@ -201,7 +220,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
                 }
             }
         };
@@ -233,7 +252,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
                 }
             }
         };

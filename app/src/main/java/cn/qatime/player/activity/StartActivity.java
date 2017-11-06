@@ -110,7 +110,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
      */
     private void removeOldApk() {
         File fileName = new File(Environment.getExternalStorageDirectory() + "/qatime.apk");
-        if (fileName != null && fileName.exists() && fileName.isFile()) {
+        if (fileName.exists() && fileName.isFile()) {
             fileName.delete();
         }
     }

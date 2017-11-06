@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +35,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
@@ -60,7 +62,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     TextView price;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
-    private Button startStudy;
     private View startStudyView;
     private View handleLayout;
     private TextView refundAnyTime;
@@ -98,7 +99,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         price = (TextView) findViewById(R.id.price);
         handleLayout = findViewById(R.id.handle_layout);
         Button pay = (Button) findViewById(R.id.pay);
-        startStudy = (Button) findViewById(R.id.start_study);
+        Button startStudy = (Button) findViewById(R.id.start_study);
         startStudyView = findViewById(R.id.start_study_view);
 
 
@@ -147,6 +148,23 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(pager);
+
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(InteractCourseDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(InteractCourseDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/interactive_courses/" + id, name.getText().toString(), "一对一课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     private void initData() {

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,7 @@ import cn.qatime.player.fragment.FragmentExclusiveLessonClassList;
 import cn.qatime.player.fragment.FragmentExclusiveLessonTeacherInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
@@ -190,6 +192,23 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         });
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
+
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(ExclusiveLessonDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(ExclusiveLessonDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/customized_groups/" + id, name.getText().toString(), "专属课课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     private void initData() {

@@ -71,6 +71,7 @@ import cn.qatime.player.bean.LatestCourseBean;
 import cn.qatime.player.bean.LiveRecentBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.holder.BaseViewHolder;
+import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.MPermission;
@@ -852,13 +853,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         ActivityCompat.requestPermissions(getActivity(), new String[]{
                                 android.Manifest.permission.CAMERA}, 2);
                     } else {
-//                        intent = new Intent(getActivity(), CaptureActivity.class);
-                        intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
+                        intent = new Intent(getActivity(), CaptureActivity.class);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
                 } else {
-//                    intent = new Intent(getActivity(), CaptureActivity.class);
-                    intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
+                    intent = new Intent(getActivity(), CaptureActivity.class);
                     mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 }
                 break;
