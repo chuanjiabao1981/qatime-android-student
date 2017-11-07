@@ -136,9 +136,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    WindowManager.LayoutParams lp = getWindow().getAttributes();
-                    lp.alpha = 1f;
-                    getWindow().setAttributes(lp);
+                    backgroundAlpha(1);
                 }
             });
         }
