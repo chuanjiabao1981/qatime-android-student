@@ -136,9 +136,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    WindowManager.LayoutParams lp = getWindow().getAttributes();
-                    lp.alpha = 1f;
-                    getWindow().setAttributes(lp);
+                    backgroundAlpha(1);
                 }
             });
         }
@@ -284,6 +282,11 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 return;
             }
             messageListPanel.onIncomingMessage(messages);
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+                inputpanel.setMute(isMute);
+            }
         }
     };
 
@@ -293,7 +296,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
      */
 
     private void requestTeamInfo() {
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             return;
         }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
@@ -440,8 +443,8 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 pop.dismiss();
                 break;
             case R.id.menu_3:
-                intent = new Intent(this,ExclusiveQuestionsActivity.class);
-                intent.putExtra("courseId",courseId);
+                intent = new Intent(this, ExclusiveQuestionsActivity.class);
+                intent.putExtra("courseId", courseId);
                 startActivity(intent);
                 pop.dismiss();
                 break;
@@ -452,7 +455,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 pop.dismiss();
                 break;
             case R.id.menu_5:
-                intent = new Intent(this,MembersActivity.class);
+                intent = new Intent(this, MembersActivity.class);
                 intent.putExtra("courseId", courseId);
                 startActivity(intent);
                 pop.dismiss();

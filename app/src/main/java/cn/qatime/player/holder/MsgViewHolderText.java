@@ -50,7 +50,7 @@ public class MsgViewHolderText extends MsgViewHolderBase {
                         bodyTextView.postInvalidateDelayed(100);
                     }
                 }));
-        bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
+//        bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
         bodyTextView.setOnLongClickListener(longClickListener);
     }
 
