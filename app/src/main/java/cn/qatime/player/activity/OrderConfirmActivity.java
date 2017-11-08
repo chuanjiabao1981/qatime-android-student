@@ -363,7 +363,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (price.startsWith(".")) {
                             price = "0" + price;
                         }
-                        OrderConfirmActivity.this.price.setText(getResourceString(R.string.order_price) + price);
+                        OrderConfirmActivity.this.price.setText(price+"元");
                         payprice.setText(" " + price + " ");
 
                     }
