@@ -1,9 +1,12 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 21
-    buildToolsVersion '25.0.0'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
-
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -20,7 +23,4 @@ android {
     lintOptions {
         abortOnError false
     }
-}
-
-dependencies {
 }
