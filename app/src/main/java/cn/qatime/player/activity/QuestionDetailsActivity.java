@@ -39,7 +39,7 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
     private QuestionsBean.DataBean question;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private TextView replyTime;
-    private QuestionsBean.DataBean.AnswerBean answerBean;
+//    private QuestionsBean.DataBean.AnswerBean answerBean;
 
 
     @Override
