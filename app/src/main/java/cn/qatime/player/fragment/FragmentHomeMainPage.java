@@ -51,7 +51,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
-import cn.qatime.player.activity.ExclusiveQuestionsActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -396,7 +395,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (recentList.size() > 0) {
                     LiveRecentBean.DataBean item = recentList.get(position);
                     holder.setText(R.id.teaching_name, item.getName())
-                            .setImageByUrl(R.id.image, item.getPublicizes().getSmall().getUrl(), R.mipmap.photo)
+                            .setImageByUrl(R.id.image, item.getPublicizes().getApp_info().getUrl(), R.mipmap.photo)
                             .setText(R.id.time,recentParse.format(new Date(item.getStart_at()*1000)))
                             .setText(R.id.status, getTodayStatusText(item.getStatus()))
                             .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
