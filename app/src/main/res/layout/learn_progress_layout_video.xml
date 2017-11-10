@@ -57,8 +57,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="一次性购买\n即可享受不限制次数观看"
                 android:textColor="#666"
@@ -157,7 +157,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="学习须知"
+        android:text="上课须知"
         android:textColor="#333"
         android:textSize="20sp" />
 
@@ -171,7 +171,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.视频课是以学生自主观看视频进行独立学习的课程模式。\n2.视频课一经购买后永久有效，不限观看时间和观看次数；方便学生进行重复学习。\n3.视频课属一次性销售课程，不能重复购买，亦不支持（暂时）退款。\n4.视频课禁止下载或转录！"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -182,6 +183,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="1.视频课观看无需使用客户端，网页即可播放。\n2.上课途中如突遇屏幕卡顿，视频缓冲等情况，请检查网络状态后刷新页面。\n3.观看过程中请做好笔记，能够帮助学生快速掌握视频中的知识。\n4.学习结束后请尽量关闭视频，以免过多占用网络资源影响您浏览其他内容。"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 </LinearLayout>

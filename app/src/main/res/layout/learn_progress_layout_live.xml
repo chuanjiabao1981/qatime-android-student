@@ -38,12 +38,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="在线直播\n随时随地观看直播\n即可上课"
                 android:textColor="#666"
-                android:text="在线直播\n随时随地观看直播\n即可上课" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,12 +57,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="直播自动生成回放\n自由观看,多次学习"
                 android:textColor="#666"
-                android:text="直播自动生成回放\n自由观看,多次学习" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,9 +78,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="随时可以申请退费\n免除后顾之忧"
                 android:textColor="#666"
-                android:text="随时可以申请退费\n免除后顾之忧" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,12 +102,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="老师实时沟通\n答疑解惑,感受真实\n课堂"
                 android:textColor="#666"
-                android:text="老师实时沟通\n答疑解惑,感受真实\n课堂" />
+                android:textSize="12sp" />
 
 
             <TextView
@@ -122,12 +122,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="支持插班价购买\n少花钱也能学"
                 android:textColor="#666"
-                android:text="支持插班价购买\n少花钱也能学" />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -143,9 +143,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:text="跟踪式客服\n第一时间解决问题"
                 android:textColor="#666"
-                android:text="跟踪式客服\n第一时间解决问题" />
+                android:textSize="12sp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -163,9 +163,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,7 +178,7 @@
                 android:gravity="center"
                 android:text="1.购买课程"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -209,7 +207,7 @@
                 android:gravity="center"
                 android:text="2.准时上课"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -237,7 +235,7 @@
                 android:gravity="center"
                 android:text="3.在线授课"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -266,7 +264,7 @@
                 android:gravity="center"
                 android:text="4.上课结束"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -286,7 +284,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="学习须知"
+        android:text="上课须知"
         android:textColor="#333"
         android:textSize="20sp" />
 
@@ -295,28 +293,32 @@
         android:layout_height="wrap_content"
         android:text="上课前"
         android:textColor="#333" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.做好课程预习，预先了解本课所讲内容，更好的吸收课程精华；\n2.准备好相关的学习工具（如：纸、笔等）并在上课前调试好电脑，使用手机请保持电量充足。\n3.选择安静的学习环境，并将与学习无关的事物置于远处；选择安静的环境避免影响听课。 \n4.三年级以下的同学请在家长帮助下学习。\n5.遇到网页不能打开或者不能登录等情况请及时联系客服。"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="上课中"
-
         android:textColor="#333" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.时刻保持注意力集中，认真听讲才能更好的提升学习；\n2.课程中遇到听不懂的问题及时通过聊天或互动申请向老师提问，老师收到后会给予解答；\n3.积极响应老师的授课，完成老师布置的课上任务；\n4.禁止在上课中闲聊或发送一切与本课无关的内容，如有发现，一律禁言；\n5.上课途中如突遇屏幕卡顿，直播中断等特殊情况，请刷新后等待直播恢复；超过15分钟未恢复请致电客服；"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="上课后"
         android:textColor="#333" />
 
@@ -324,7 +326,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.直播结束后大家仍可以在直播教室内进行聊天和讨论，老师也会适时解答；\n2.请同学按时完成老师布置的作业任务。"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -339,9 +342,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="13sp"
         android:text="1.购买课程后方可观看回放；\n2.直播课回放学生可以免费观看最多10天，同一天不限定观看次数；\n3.直播结束后最晚于24小时内上传回放；\n4.回放内容不完全等于直播内容，请尽量观看直播进行学习；\n5.回放内容仅供学生学习使用，未经允许不得进行录制。"
-        android:textColor="#666" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
