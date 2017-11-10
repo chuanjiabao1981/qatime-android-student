@@ -177,13 +177,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="观看"
         android:textColor="#333" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="1.视频课观看无需使用客户端，网页即可播放。\n2.上课途中如突遇屏幕卡顿，视频缓冲等情况，请检查网络状态后刷新页面。\n3.观看过程中请做好笔记，能够帮助学生快速掌握视频中的知识。\n4.学习结束后请尽量关闭视频，以免过多占用网络资源影响您浏览其他内容。"
         android:textColor="#666"
         android:textSize="13sp" />
