@@ -183,5 +183,6 @@
             android:background="#00000000"
             tools:ignore="WebViewLayout" />
 
+        <include layout="@layout/learn_progress_layout_video" />
     </LinearLayout>
 </ScrollView>

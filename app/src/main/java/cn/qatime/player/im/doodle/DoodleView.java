@@ -253,7 +253,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     public int convertRGBToARGB(int rgb) {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
-        int b = (rgb >> 0) & 0xFF;
+        int b = (rgb) & 0xFF;
 
         return 0xff000000 | (r << 16) | (g << 8) | b;
     }
@@ -450,7 +450,8 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     // 收到翻页消息。先清空白板，然后做翻页操作。
 //                    Logger.e(TAG, "receive flip msg");
 //                    flipListener.onFlipPage(t);
-                } else if (t.isSwitchTeacher()) {
+                }
+                else if (t.isSwitchTeacher()) {
                     if (t.getId() <= lastBoardMessage) {
                         return;
                     }

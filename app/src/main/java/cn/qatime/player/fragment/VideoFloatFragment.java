@@ -84,8 +84,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private TextView viewCount;
 
 
-    public VideoFloatFragment(String sessionId) {
-        this.sessionId = sessionId;
+    public VideoFloatFragment() {
     }
 
     public void setSessionId(String sessionId) {

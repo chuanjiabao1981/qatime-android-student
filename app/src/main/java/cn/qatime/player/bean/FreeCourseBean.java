@@ -1,7 +1,5 @@
 package cn.qatime.player.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
@@ -10,11 +8,6 @@ import java.util.List;
  * @Description:
  */
 public class FreeCourseBean {
-    /**
-     * status : 1
-     * data : [{"product_type":"LiveStudio::VideoCourse","product":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":3,"status":"published","lesson_count":3,"video_lessons_count":3,"preset_lesson_count":3,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}},{"product_type":"LiveStudio::VideoCourse","product":{"id":12,"name":"测试测试测试","subject":"数学","grade":"一年级","teacher_name":"HZH11","teacher":{"id":2479,"name":"HZH11","nick_name":"答疑时间_客服","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/fbb9b57027c5731b7670a85bd93a9fa6.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_fbb9b57027c5731b7670a85bd93a9fa6.jpg","login_mobile":"18535307198","email":"kuangyizhonggaoyi@163.com","is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":null,"birthday":null,"province":1,"city":1,"school":4,"school_id":4,"desc":""},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":2,"status":"published","lesson_count":5,"video_lessons_count":5,"preset_lesson_count":5,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"赶紧换感觉很怪高科技更健康韩国开个，好个， ","suit_crowd":"交话费vhjjhkh 孤鸿寡鹄","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":12771,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}}]
-     */
-
     private int status;
     private List<DataBean> data;
 
@@ -35,133 +28,185 @@ public class FreeCourseBean {
     }
 
     public static class DataBean {
-        /**
-         * product_type : LiveStudio::VideoCourse
-         * product : {"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":3,"status":"published","lesson_count":3,"video_lessons_count":3,"preset_lesson_count":3,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}
-         */
+        private int id;
+        private String name;
+        private String grade;
+        private String subject;
+        private String status;
+        private PublicizesBean publicizes;
+        private String published_at;
+        private String model_name;
+        private String teacher_name;
 
-        private String product_type;
-        private ProductBean product;
-
-        public String getProduct_type() {
-            return product_type;
+        public int getId() {
+            return id;
         }
 
-        public void setProduct_type(String product_type) {
-            this.product_type = product_type;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public ProductBean getProduct() {
-            return product;
+        public String getName() {
+            return name;
         }
 
-        public void setProduct(ProductBean product) {
-            this.product = product;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public static class ProductBean {
-            /**
-             * id : 131
-             * name : 试听课测试
-             * subject : 物理
-             * grade : 高三
-             * teacher_name : 王志成
-             * price : 100
-             * current_price : 100
-             * chat_team_id : 50481553
-             * chat_team_owner : 07b7c43a854ed44d36c2941f1fc5ad00
-             * buy_tickets_count : 0
-             * status : teaching
-             * preset_lesson_count : 4
-             * completed_lesson_count : 0
-             * taste_count : 3
-             * completed_lessons_count : 0
-             * closed_lessons_count : 0
-             * started_lessons_count : 0
-             * live_start_time : 2017-06-06 16:00
-             * live_end_time : 2017-06-09 08:30
-             * objective : 试听课测试
-             * suit_crowd : 试听课测试
-             * teacher_percentage : 5
-             * publicize : http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png
-             * icons : {"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true}
-             * off_shelve : false
-             */
+        public String getGrade() {
+            return grade;
+        }
 
-            private int id;
-            private String name;
-            private String subject;
-            @SerializedName(value = "publicize", alternate = "publicize_url")
-            private String publicize;
-            private String grade;
-            private String teacher_name;
-//                private String price;
-//                private String current_price;
-//                private String chat_team_id;
-//                private String chat_team_owner;
-//                private int buy_tickets_count;
-//                private String status;
-//                private int preset_lesson_count;
-//                private int completed_lesson_count;
-//                private int taste_count;
-//                private int completed_lessons_count;
-//                private int closed_lessons_count;
-//                private int started_lessons_count;
-//                private String live_start_time;
-//                private String live_end_time;
-//                private String objective;
-//                private String suit_crowd;
-//                private int teacher_percentage;
-//                private IconsBean icons;
-//                private boolean off_shelve;
+        public void setGrade(String grade) {
+            this.grade = grade;
+        }
 
+        public String getSubject() {
+            return subject;
+        }
 
-            public int getId() {
-                return id;
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public PublicizesBean getPublicizes() {
+            return publicizes;
+        }
+
+        public void setPublicizes(PublicizesBean publicizes) {
+            this.publicizes = publicizes;
+        }
+
+        public String getPublished_at() {
+            return published_at;
+        }
+
+        public void setPublished_at(String published_at) {
+            this.published_at = published_at;
+        }
+
+        public String getModel_name() {
+            return model_name;
+        }
+
+        public void setModel_name(String model_name) {
+            this.model_name = model_name;
+        }
+
+        public String getTeacher_name() {
+            return teacher_name;
+        }
+
+        public static class PublicizesBean {
+
+            private InfoBean info;
+            private ListBean list;
+            private SmallBean small;
+            private AppInfoBean app_info;
+
+            public InfoBean getInfo() {
+                return info;
             }
 
-            public void setId(int id) {
-                this.id = id;
+            public void setInfo(InfoBean info) {
+                this.info = info;
             }
 
-            public String getName() {
-                return name;
+            public ListBean getList() {
+                return list;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setList(ListBean list) {
+                this.list = list;
             }
 
-            public String getSubject() {
-                return subject;
+            public SmallBean getSmall() {
+                return small;
             }
 
-            public void setSubject(String subject) {
-                this.subject = subject;
+            public void setSmall(SmallBean small) {
+                this.small = small;
             }
 
-            public String getGrade() {
-                return grade;
+            public AppInfoBean getApp_info() {
+                return app_info;
             }
 
-            public void setGrade(String grade) {
-                this.grade = grade;
+            public void setApp_info(AppInfoBean app_info) {
+                this.app_info = app_info;
             }
 
-            public String getTeacher_name() {
-                return teacher_name;
+            public static class InfoBean {
+                /**
+                 * url : http://testing.qatime.cn/assets/courses/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png
+                 */
+
+                private String url;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
             }
 
-            public void setTeacher_name(String teacher_name) {
-                this.teacher_name = teacher_name;
+            public static class ListBean {
+                /**
+                 * url : http://testing.qatime.cn/assets/courses/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png
+                 */
+
+                private String url;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
             }
 
-            public String getPublicize() {
-                return publicize;
+            public static class SmallBean {
+                /**
+                 * url : http://testing.qatime.cn/assets/courses/mathematics/small_default-812233594daef82c95313ab4bfb99bd6.png
+                 */
+
+                private String url;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
             }
 
-            public void setPublicize(String publicize) {
-                this.publicize = publicize;
+            public static class AppInfoBean {
+                /**
+                 * url : http://testing.qatime.cn/assets/courses/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png
+                 */
+
+                private String url;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
             }
         }
     }

@@ -275,7 +275,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
                 try {
                     mDrawMonitor.wait(200);
                 } catch (InterruptedException e) {
-                    if (mDanmakuVisible == false || handler == null || handler.isStop()) {
+                    if (!mDanmakuVisible || handler == null || handler.isStop()) {
                         break;
                     } else {
                         Thread.currentThread().interrupt();

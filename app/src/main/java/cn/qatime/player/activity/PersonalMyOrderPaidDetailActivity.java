@@ -147,6 +147,29 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
             refund.setVisibility(View.GONE);
             findViewById(R.id.tip).setVisibility(View.VISIBLE);
+        }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+            classid = data.getProduct_customized_group().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_customized_group().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getGrade())) {
+                grade.setText("专属课/" + getResourceString(R.string.grade));
+            } else {
+                grade.setText("专属课/" + data.getProduct_customized_group().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_customized_group().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getTeacher_name())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_customized_group().getTeacher_name());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_customized_group().getEvents_count()));
         }
 
         ordernumber.setText(data.getId());
@@ -189,9 +212,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             refund.setTextColor(0xffff5842);
             refund.setBackgroundResource(R.drawable.button_background_normal);
             if (data.getStatus().equals("paid")) {//正在交易
-                status.setImageResource(R.mipmap.paying);
+                status.setImageResource(R.mipmap.complete_pay);
             } else if (data.getStatus().equals("shipped")) {//正在交易
-                status.setImageResource(R.mipmap.paying);
+                status.setImageResource(R.mipmap.complete_pay);
             } else {//交易完成
                 status.setImageResource(R.mipmap.complete_pay);
             }
@@ -238,6 +261,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                     intent.setClass(PersonalMyOrderPaidDetailActivity.this, InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderPaidDetailActivity.this, VideoCoursesActivity.class);
+                }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
@@ -257,6 +282,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
             return;
         } else if ("LiveStudio::Course".equals(data.getProduct_type()) && data.getProduct().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
+        }else if ("LiveStudio::Group".equals(data.getProduct_type()) && data.getProduct_customized_group().getStatus().equals(Constant.CourseStatus.completed)) {
             Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -289,6 +317,10 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
                             intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getStarted_lessons_count());
+                        }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                            intent.putExtra("name", data.getProduct_customized_group().getName());
+                            intent.putExtra("preset_lesson_count", data.getProduct_customized_group().getEvents_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct_customized_group().getClosed_events_count());
                         } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
 //                            intent.putExtra("name", data.getProduct_video_course().getName());
 //                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());

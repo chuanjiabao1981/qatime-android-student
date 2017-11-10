@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingBottom="1px"
+    android:background="#ccc"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tab_text1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="待回复"
+            android:layout_height="36dp"
+            android:textSize="14.0sp"
+            android:textColor="#333333" />
+
+
+
+        <TextView
+            android:id="@+id/tab_text2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="已回复"
+            android:layout_height="36dp"
+            android:textSize="14.0sp"
+            android:textColor="#999999" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -45,11 +45,12 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
-import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
+import cn.qatime.player.fragment.FragmentAnnouncements;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
 import cn.qatime.player.fragment.FragmentPlayerMembers;
 import cn.qatime.player.fragment.FragmentPlayerMessage;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -57,7 +58,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
@@ -70,7 +70,7 @@ import libraryextra.view.FragmentLayoutWithLine;
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener, InputPanel.InputPanelListener {
 
     private boolean isSubBig = true;//副窗口是否是大的
-    private boolean ismain = true;//video1 是否在主显示view上
+    private boolean isMain = true;//video1 是否在主显示view上
     //    private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
     public List<IMMessage> limitMessage = new ArrayList<>();//用于限制2s内发送消息
@@ -114,7 +114,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private InputPanel inputPanel;
     private String camera;
     private String board;
-    private boolean isResume = false;
+    private boolean canLoop = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -190,7 +190,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideo = (RelativeLayout) findViewById(R.id.sub_video);
         //控制框
         VideoControlPresenter controlPresenter = new VideoControlPresenter(this);
-        floatFragment = new VideoFloatFragment(sessionId);
+        floatFragment = new VideoFloatFragment();
         floatFragment.setCallback(controlPresenter);
         getSupportFragmentManager().beginTransaction().replace(R.id.control, floatFragment).commit();
 
@@ -226,7 +226,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         EventBus.getDefault().register(this);
         assignViews();
         initView();
-        getAnnouncementsData();
         initData();
 
     }
@@ -278,45 +277,35 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     private void getAnnouncementsData() {
-        if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
-                    new VolleyListener(NEVideoPlayerActivity.this) {
-                        @Override
-                        protected void onSuccess(JSONObject response) {
-                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
-                            if (data != null) {
-                                if (data.getData() != null) {
-                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).setOwner(data.getData().getOwner());
-                                    if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(1)).setData(data.getData().getAnnouncements());
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        protected void onError(JSONObject response) {
-                        }
-
-                        @Override
-                        protected void onTokenOut() {
-                            tokenOut();
-                        }
-                    }, new VolleyErrorListener() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            return;
+        }
+        Team team = TeamDataCache.getInstance().getTeamById(sessionId);
+        if (team != null) {
+            updateTeamInfo(team);
+        } else {
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-            addToRequestQueue(request);
         }
+    }
+
+    private void updateTeamInfo(Team result) {
+        String announcement = result.getAnnouncement();
+        ((FragmentAnnouncements) fragBaseFragments.get(1)).setAnnouncements(announcement);
     }
 
     private void initView() {
 
         fragBaseFragments.add(new FragmentPlayerMessage());
-        fragBaseFragments.add(new FragmentPlayerAnnouncements());
+        fragBaseFragments.add(new FragmentAnnouncements());
         fragBaseFragments.add(new FragmentPlayerLiveDetails());
         fragBaseFragments.add(new FragmentPlayerMembers());
 
@@ -352,6 +341,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initSessionId() {
+
+        getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
@@ -395,7 +386,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         fragment2.setSessionId(sessionId);
 
-
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
             public void OnInputShow() {
@@ -408,18 +398,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 fragment2.scrollToBottom();
             }
         });
-
-//        inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
-//            @Override
-//            public void audioRecordStart() {
-//                screenSwitchUtils.stop();
-//            }
-//
-//            @Override
-//            public void audioRecordStop() {
-//                screenSwitchUtils.start(NEVideoPlayerActivity.this);
-//            }
-//        });
 
     }
 
@@ -451,7 +429,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/play_info", null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/play_info", null,
                     new VolleyListener(NEVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -459,9 +437,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
                                 if (data.getData() != null) {
+                                    if (data.getData().getChat_team() != null) {
+                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+                                    }
                                     camera = data.getData().getCamera();
                                     board = data.getData().getBoard();
-//                                    setVideoState(VideoState.INIT);
+                                    canLoop = true;
                                     hd.post(runnable);
                                 }
                                 sessionId = data.getData().getChat_team_id();
@@ -471,7 +452,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
                         @Override
                         protected void onError(JSONObject response) {
-
                             initSessionId();
                         }
 
@@ -496,7 +476,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onResume() {
         super.onResume();
-        isResume = true;
+        if (canLoop) {
+            hd.removeCallbacks(runnable);
+            hd.post(runnable);
+        }
         video1.start();
         video2.start();
         hd.postDelayed(new Runnable() {
@@ -532,7 +515,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             param.height = ViewGroup.LayoutParams.MATCH_PARENT;
             mainVideo.setLayoutParams(param);
             mainView.setLayoutParams(param);
-            if (ismain) {
+            if (isMain) {
                 whole.removeView(danmuView);
                 mainVideo.addView(danmuView, 1);
             } else {
@@ -571,7 +554,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             param.height = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16;
             mainView.setLayoutParams(param);
             mainVideo.setLayoutParams(param);
-            if (ismain) {
+            if (isMain) {
                 RelativeLayout.LayoutParams danmuParam = null;
                 mainVideo.removeView(danmuView);
                 whole.addView(danmuView);
@@ -610,30 +593,36 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     protected void onPause() {
-        isResume = false;
-        video1.pause();
-        video2.pause();
-        floatFragment.setPlaying(false);
-        inputPanel.onPause();
+        hd.removeCallbacks(runnable);//停止查询播放状态
+        if (video1 != null)
+            video1.pause();
+        if (video2 != null)
+            video2.pause();
+        if (floatFragment != null)
+            floatFragment.setPlaying(false);
+        if (inputPanel != null)
+            inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 
     @Override
     protected void onDestroy() {
-        hd.removeCallbacks(runnable);//停止查询播放状态
 //        Logger.e("退出轮询");
-        video1.release_resource();
-        video2.release_resource();
+        if (video1 != null)
+            video1.release_resource();
+        if (video2 != null)
+            video2.release_resource();
         video1 = null;
         video2 = null;
 
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        danMuController.destroy();
+        if (danMuController != null)
+            danMuController.destroy();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -648,7 +637,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 //            }
             return;
         }
-        if (inputPanel.isEmojiShow()) {
+        if (inputPanel != null && inputPanel.isEmojiShow()) {
             inputPanel.closeEmojiAndInput();
             return;
         }
@@ -661,7 +650,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      * @param videoState
      */
     private void setVideoState(VideoState videoState) {
-        Logger.e("videoState" + videoState.toString());
+//        Logger.e("videoState" + videoState.toString());
 //        if (videoState == VideoState.INIT) {//初始化状态下查询状态
 //            hd.removeCallbacks(runnable);
 //            if (this.videoState == videoState) {
@@ -749,7 +738,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
             @Override
             protected void onSuccess(JSONObject response) {
-                if (!isResume) return;
 //              JSONObject data = response.getJSONObject("data");
                 LiveStatusBean data = JsonUtils.objectFromJson(response.toString(), LiveStatusBean.class);
                 if (data != null && data.getData() != null && data.getData().getLive_info() != null) {
@@ -761,11 +749,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                         floatFragment.setNameAndCount("", 1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
-                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+//                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
-                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+//                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
 
@@ -788,6 +776,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Subscribe
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
+            if (StringUtils.isNullOrBlanK(sessionId)) return;
             getAnnouncementsData();
         }
     }
@@ -851,7 +840,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         } else {
             danmuView.setVisibility(View.VISIBLE);
         }
-        if (ismain) {
+        if (isMain) {
             subVideo.removeView(window2);
             video2.setZOrderOnTop(true);
             floatingWindow.addView(window2);
@@ -873,7 +862,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     public void changeSubBig() {
         inputPanel.closeEmojiAndInput();
         isSubBig = true;
-        if (ismain) {
+        if (isMain) {
             floatingWindow.removeView(window2);
             video2.setZOrderOnTop(false);
             subVideo.addView(window2);
@@ -890,7 +879,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeFloating2Main() {
-        ismain = true;
+        isMain = true;
         mainView.removeView(window2);
         floatingWindow.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -915,7 +904,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeMain2Sub() {
-        ismain = false;
+        isMain = false;
         mainView.removeView(window1);
         subVideo.removeView(window2);
         video1.setZOrderOnTop(false);
@@ -929,7 +918,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeMain2Floating() {
-        ismain = false;
+        isMain = false;
         mainView.removeView(window1);
         floatingWindow.removeView(window2);
         video2.setZOrderOnTop(false);
@@ -947,7 +936,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeSub2Main() {
-        ismain = true;
+        isMain = true;
         mainView.removeView(window2);
         subVideo.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -976,7 +965,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.VISIBLE);
                 subVideo.setVisibility(View.VISIBLE);
             } else {
-                if (ismain) {
+                if (isMain) {
                     video2.setVisibility(View.VISIBLE);
                     window2.setVisibility(View.VISIBLE);
                 } else {
@@ -990,7 +979,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.GONE);
                 subVideo.setVisibility(View.GONE);
             } else {
-                if (ismain) {
+                if (isMain) {
                     video2.setVisibility(View.GONE);
                     window2.setVisibility(View.GONE);
                 } else {

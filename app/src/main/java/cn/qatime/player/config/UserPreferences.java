@@ -170,7 +170,7 @@ public class UserPreferences {
         editor.commit();
     }
 
-    static SharedPreferences getSharedPreferences() {
+    private static SharedPreferences getSharedPreferences() {
         return SPUtils.getSharedPreferences(BaseApplication.getInstance().getAccount());
     }
 }

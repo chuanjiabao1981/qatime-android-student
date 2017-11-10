@@ -15,6 +15,7 @@ import android.widget.TextView;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import libraryextra.utils.DateUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -84,6 +85,7 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         subject.setText((StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getSubject()) ? "" : bean.getData().getVideo_course().getSubject()));
         grade.setText((bean.getData().getVideo_course().getGrade() == null ? "" : bean.getData().getVideo_course().getGrade()));
         totalClass.setText(getString(R.string.lesson_count, bean.getData().getVideo_course().getVideo_lessons_count()));
+        timeLength.setText("总时长"+ DateUtils.stringForTime_s(bean.getData().getVideo_course().getTotal_duration()));
         if (!StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getObjective())) {
             target.setText(bean.getData().getVideo_course().getObjective());
         }
@@ -93,17 +95,6 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         String header = "<style>* {color:#666666;margin:0;padding:0;}p {margin-bottom:3}</style>";//默认color段落间距
         String body = StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getDescription()) ? getString(R.string.no_desc) : bean.getData().getVideo_course().getDescription();
         body = body.replace("\r\n", "<br>");
-        String footer = "<p style='margin-top:20'><font style='font-size:15;color:#333333'>学习须知</font></p> \n" +
-                "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>购买</font></p> \n" +
-                "<p><font>1.视频课是以学生自主观看视频进行独立学习的课程模式。<br> \n" +
-                "2.视频课一经购买后永久有效，不限观看时间和观看次数；方便学生进行重复学习。<br> \n" +
-                "3.视频课属一次性销售课程，不能重复购买，亦不支持（暂时）退款。<br> \n" +
-                "4.视频课禁止下载或转录！</font></p> \n" +
-                "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>观看</font></p> \n" +
-                "<p><font >1.视频课观看无需使用客户端，网页即可播放。<br> \n" +
-                "2.上课途中如突遇屏幕卡顿，视频缓冲等情况，请检查网络状态后刷新页面。<br> \n" +
-                "3.观看过程中请做好笔记，能够帮助学生快速掌握视频中的知识。<br> \n" +
-                "4.学习结束后请尽量关闭视频，以免过多占用网络资源影响您浏览其他内容。</font></p> ";
-        webView.loadDataWithBaseURL(null, header + body + footer, "text/html", "UTF-8", null);
+        webView.loadDataWithBaseURL(null, header + body, "text/html", "UTF-8", null);
     }
 }

@@ -22,6 +22,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.LiveLessonDetailBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.StringUtils;
 
 import static cn.qatime.player.R.id.status;
 
@@ -78,7 +79,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
-                    holder.getView(R.id.view_playback).setVisibility(data.getTicket() != null && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.view_playback).setVisibility(data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -96,8 +97,9 @@ public class FragmentClassDetailClassList extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LiveLessonDetailBean.DataBean.CourseBean.LessonsBean item = list.get(position);
                 if (isFinished(item)) {
-                    if (data.getTicket() != null && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
                         if (!item.isReplayable()) {
+                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (item.getLeft_replay_times() <= 0) {
@@ -106,6 +108,8 @@ public class FragmentClassDetailClassList extends BaseFragment {
                         }
                         Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
                         intent.putExtra("id", item.getId());
+                        intent.putExtra("name", item.getName());
+                        intent.putExtra("type","live");
                         startActivity(intent);
                     }
                 }

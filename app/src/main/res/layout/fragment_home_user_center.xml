@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#f7f7f7"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="144dp"
@@ -38,6 +39,7 @@
         </LinearLayout>
 
     </RelativeLayout>
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -46,7 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
 
             <View
@@ -62,11 +63,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_wallet"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_my_wallet" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/my_wallet" />
@@ -109,11 +112,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_order"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_my_order" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/my_order" />
@@ -132,8 +137,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:id="@+id/my_course"
@@ -142,11 +146,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_live"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_my_live" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="我的直播课" />
@@ -175,11 +181,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_interact"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_my_interact" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/my_interact" />
@@ -200,6 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+
             <LinearLayout
                 android:id="@+id/my_video"
                 android:layout_width="match_parent"
@@ -207,44 +216,16 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_video"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_my_video" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/my_video" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>  <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-            <LinearLayout
-                android:id="@+id/my_taste"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="18dp"
-                    android:src="@mipmap/center_my_tasted"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/my_taste" />
 
                 <View
                     android:layout_width="0dp"
@@ -262,15 +243,176 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+
+            <LinearLayout
+                android:id="@+id/my_exclusive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_my_exclusive" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/my_exclusive" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/my_taste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_my_tasted" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/my_taste" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/my_homework"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_my_homework" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/my_homework" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/my_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_my_question" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/my_question" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/download_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_download_manager" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/download_manager" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
             <LinearLayout
                 android:id="@+id/security"
                 android:layout_width="match_parent"
@@ -278,11 +420,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_security"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_security" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/security_management" />
@@ -311,11 +455,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_setting"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/center_setting" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/setting" />
@@ -354,11 +500,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/about_us"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="18dp" />
+                    android:src="@mipmap/about_us" />
+
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/about_us" />

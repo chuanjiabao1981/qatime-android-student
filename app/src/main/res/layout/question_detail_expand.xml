@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#666"
+            android:textSize="13sp" />
+
+        <libraryextra.view.GridViewForScrollView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:cacheColorHint="@null"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:horizontalSpacing="4dp"
+            android:listSelector="@color/transparent"
+            android:numColumns="2"
+            android:scrollbars="none"
+            android:verticalSpacing="4dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/audio_layout"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/chatfrom_bg_normal"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/audio_animation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:background="@mipmap/audio_animation_list_left_3" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingLeft="2dip"
+                android:textColor="#666"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

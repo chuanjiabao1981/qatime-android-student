@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f7f7"
@@ -19,7 +20,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="6dp">
-
 
             <TextView
                 android:id="@+id/name"
@@ -47,7 +47,7 @@
                     android:textSize="11dp" />
 
                 <TextView
-                    android:id="@+id/join_cheap"
+                    android:id="@+id/coupon_free"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/identification_light"
@@ -56,16 +56,17 @@
                     android:text=" 报名立减"
                     android:textColor="#109f10"
                     android:textSize="11dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/identification_light"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:visibility="invisible"
                     android:text=""
                     android:textColor="#109f10"
-                    android:textSize="11dp" />
+                    android:textSize="11dp"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <LinearLayout
@@ -110,7 +111,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <libraryextra.view.SimpleViewPagerIndicator
+        <cn.qatime.player.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"
             style="@style/tab_item_height"
             android:layout_width="match_parent"
@@ -122,64 +123,81 @@
             android:layout_height="match_parent" />
     </libraryextra.view.StickyNavLayout>
 
-    <RelativeLayout
-        android:id="@+id/handle_layout"
+    <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:visibility="invisible">
+        android:background="#fff">
 
+        <TextView
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/share_dark"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text=" 分 享 "
+            android:textColor="#000" />
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/handle_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            custom:layout_widthPercent="50%w">
 
-            <Button
-                android:id="@+id/pay"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_red_with_stork"
-                android:clickable="true"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="立即报名"
-                android:textColor="@drawable/text_selector_white_red"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/start_study_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
+                <Button
+                    android:id="@+id/pay"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_bg_selector_red_with_stork"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="立即报名"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/start_study"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_red"
-                android:clickable="true"
+            <LinearLayout
+                android:id="@+id/start_study_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fff"
                 android:gravity="center"
-                android:text="开始学习"
-                android:textColor="#fff"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:visibility="gone">
 
+                <Button
+                    android:id="@+id/start_study"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_bg_selector_red"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="开始学习"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#f2f2f2" />
-    </RelativeLayout>
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+
 
 </LinearLayout>

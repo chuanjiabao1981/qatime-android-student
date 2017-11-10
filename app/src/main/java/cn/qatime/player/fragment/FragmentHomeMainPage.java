@@ -41,13 +41,16 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -63,8 +66,8 @@ import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.FreeCourseBean;
-import cn.qatime.player.bean.LiveTodayBean;
-import cn.qatime.player.bean.RecentPublishedBean;
+import cn.qatime.player.bean.LatestCourseBean;
+import cn.qatime.player.bean.LiveRecentBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
@@ -96,7 +99,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ListViewForScrollView listViewEssenceContent;
     private List<EssenceContentBean.DataBean> listEssenceContent = new ArrayList<>();
     private CommonAdapter<EssenceContentBean.DataBean> essenceContentAdapter;
-    private CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean> publisheRankAdapter;
+    private CommonAdapter<LatestCourseBean.DataBean> publisheRankAdapter;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private TextView cityName;
@@ -110,11 +113,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private List<String> gradeList;
     private RecyclerView.Adapter gradeAdapter;
     private RecyclerView recyclerToday;
-    private RecyclerView.Adapter todayAdapter;
-    private List<LiveTodayBean.DataBean> todayList;
+    private RecyclerView.Adapter recentAdapter;
+    private List<LiveRecentBean.DataBean> recentList;
     private ListViewForScrollView listViewFree;//近期开课
     private ListViewForScrollView listViewPublishedRank;//最新发布
-    private List<RecentPublishedBean.DataBean.AllPublishedRankBean> listPublishedRank = new ArrayList<>();
+    private List<LatestCourseBean.DataBean> listPublishedRank = new ArrayList<>();
     private View cashAccountSafe;
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
@@ -183,7 +186,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         initBanner();
         initGrade();
-        initToady();
+        initRecent();
         initEssence();
 
         initTeacher();
@@ -195,6 +198,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initCashAccountSafe();
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+    }
+
+
+    private void setCity() {
+        cityName.setText(BaseApplication.getInstance().getCurrentCity().getName());
+
+        initBannerData();
+        initEssenceData();//精选内容
+        initRecentData();//今日直播
+        initTeacherData();
+        initRecentPublished();//最新发布,近期开课
+        initFreeCourseData();
     }
 
     @Subscribe
@@ -218,13 +233,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initPublishedRank() {
         //最新发布
-        publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
+        publisheRankAdapter = new CommonAdapter<LatestCourseBean.DataBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
             @Override
-            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.AllPublishedRankBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
-                        .setText(R.id.title, item.getProduct().getName())
-                        .setText(R.id.teacher, item.getProduct().getTeacher_name())
-                        .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
+            public void convert(ViewHolder holder, LatestCourseBean.DataBean item, int position) {
+                holder.setImageByUrl(R.id.image, item.getPublicizes().getList().getUrl(), R.mipmap.photo)
+                        .setText(R.id.title, item.getName())
+                        .setText(R.id.teacher, item.getTeacher_name())
+                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
             }
         };
         listViewPublishedRank.setAdapter(publisheRankAdapter);
@@ -236,14 +251,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewPublishedRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listPublishedRank.get(position).getProduct().getId();
+                int courseId = listPublishedRank.get(position).getId();
                 Intent intent = null;
-                if ("LiveStudio::Course".equals(listPublishedRank.get(position).getProduct_type())) {
+                if ("LiveStudio::Course".equals(listPublishedRank.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                } else if ("LiveStudio::InteractiveCourse".equals(listPublishedRank.get(position).getProduct_type())) {
+                } else if ("LiveStudio::InteractiveCourse".equals(listPublishedRank.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                } else if ("LiveStudio::VideoCourse".equals(listPublishedRank.get(position).getProduct_type())) {
+                } else if ("LiveStudio::VideoCourse".equals(listPublishedRank.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                } else if ("LiveStudio::CustomizedGroup".equals(listPublishedRank.get(position).getModel_name())) {
+                    intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
@@ -252,14 +269,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initFreeCourse() {
-        //近期开课
+        //免费课程
         freeCourrseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
             @Override
             public void convert(ViewHolder holder, FreeCourseBean.DataBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
-                        .setText(R.id.title, item.getProduct().getName())
-                        .setText(R.id.teacher, item.getProduct().getTeacher_name())
-                        .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
+                holder.setImageByUrl(R.id.image, item.getPublicizes().getList().getUrl(), R.mipmap.photo)
+                        .setText(R.id.title, item.getName())
+                        .setText(R.id.teacher, item.getTeacher_name())
+                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
             }
         };
         listViewFree.setAdapter(freeCourrseAdapter);
@@ -271,14 +288,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewFree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listFree.get(position).getProduct().getId();
+                int courseId = listFree.get(position).getId();
                 Intent intent = null;
-                if ("LiveStudio::Course".equals(listFree.get(position).getProduct_type())) {
+                if ("LiveStudio::Course".equals(listFree.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                } else if ("LiveStudio::InteractiveCourse".equals(listFree.get(position).getProduct_type())) {
+                } else if ("LiveStudio::InteractiveCourse".equals(listFree.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                } else if ("LiveStudio::VideoCourse".equals(listFree.get(position).getProduct_type())) {
+                } else if ("LiveStudio::VideoCourse".equals(listFree.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                } else if ("LiveStudio::CustomizedGroup".equals(listFree.get(position).getModel_name())) {
+                    intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
@@ -290,23 +309,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         essenceContentAdapter = new CommonAdapter<EssenceContentBean.DataBean>(getContext(), listEssenceContent, R.layout.item_essence_content) {
             @Override
             public void convert(ViewHolder holder, EssenceContentBean.DataBean item, int position) {
-                if ("LiveStudio::Course".equals(item.getTarget_type())) {
-                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                            .setText(R.id.course_title, item.getLive_studio_course().getName())
-                            .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
-                            .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
-                } else if ("LiveStudio::InteractiveCourse".equals(item.getTarget_type())) {
-                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                            .setText(R.id.course_title, item.getLive_studio_interactive_course().getName())
-                            .setText(R.id.grade_subject, item.getLive_studio_interactive_course().getGrade() + item.getLive_studio_interactive_course().getSubject())
-                            .setText(R.id.teacher, item.getLive_studio_interactive_course().getTeachers().get(0).getName());
-                } else if ("LiveStudio::VideoCourse".equals(item.getTarget_type())) {
-                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                            .setText(R.id.course_title, item.getLive_studio_video_course().getName())
-                            .setText(R.id.grade_subject, item.getLive_studio_video_course().getGrade() + item.getLive_studio_video_course().getSubject())
-                            .setText(R.id.teacher, item.getLive_studio_video_course().getTeacher_name());
-                }
-
+                holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                        .setText(R.id.course_title, item.getEssenceCourse().getName())
+                        .setText(R.id.grade_subject, item.getEssenceCourse().getGrade() + item.getEssenceCourse().getSubject())
+                        .setText(R.id.teacher, item.getEssenceCourse().getTeacher_name());
                 holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.reason1, getTags(item.getTag_one()));
             }
@@ -320,17 +326,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = 0;
+                int courseId = listEssenceContent.get(position).getEssenceCourse().getId();
                 Intent intent = null;
                 if ("LiveStudio::Course".equals(listEssenceContent.get(position).getTarget_type())) {
-                    courseId = listEssenceContent.get(position).getLive_studio_course().getId();
                     intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                 } else if ("LiveStudio::InteractiveCourse".equals(listEssenceContent.get(position).getTarget_type())) {
-                    courseId = listEssenceContent.get(position).getLive_studio_interactive_course().getId();
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(listEssenceContent.get(position).getTarget_type())) {
-                    courseId = listEssenceContent.get(position).getLive_studio_video_course().getId();
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                } else if ("LiveStudio::Group".equals(listEssenceContent.get(position).getTarget_type())) {
+                    intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
@@ -358,8 +363,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         return result;
     }
 
-    private void initToady() {
-        todayList = new ArrayList<>();
+    private SimpleDateFormat recentParse = new SimpleDateFormat("MM-dd HH:mm");
+    private void initRecent() {
+        recentList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerToday.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -372,12 +378,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                 if (parent.getChildPosition(view) == 0)
                     outRect.left = 0;
-                if (parent.getChildAdapterPosition(view) == todayList.size())
+                if (parent.getChildAdapterPosition(view) == recentList.size())
                     outRect.right = 0;
             }
         });
         recyclerToday.setLayoutManager(layoutManager);
-        todayAdapter = new RecyclerView.Adapter<BaseViewHolder>() {
+        recentAdapter = new RecyclerView.Adapter<BaseViewHolder>() {
             @Override
             public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View item = View.inflate(getActivity(), R.layout.item_home_today, null);
@@ -386,38 +392,46 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void onBindViewHolder(BaseViewHolder holder, final int position) {
-                if (todayList.size() > 0) {
-                    LiveTodayBean.DataBean item = todayList.get(position);
+                if (recentList.size() > 0) {
+                    LiveRecentBean.DataBean item = recentList.get(position);
                     holder.setText(R.id.teaching_name, item.getName())
-                            .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
-                            .setText(R.id.time, item.getLive_time())
+                            .setImageByUrl(R.id.image, item.getPublicizes().getApp_info().getUrl(), R.mipmap.photo)
+                            .setText(R.id.time,recentParse.format(new Date(item.getStart_at()*1000)))
                             .setText(R.id.status, getTodayStatusText(item.getStatus()))
                             .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            int courseId = todayList.get(position).getCourse().getId();
-                            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                            intent.putExtra("id", courseId);
-                            startActivity(intent);
+                            //今日直播只有直播课和专属课
+                            int courseId = recentList.get(position).getCourse_id();
+                            if ("LiveStudio::Lesson".equals(recentList.get(position).getModel_name())) {
+                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("id", courseId);
+                                startActivity(intent);
+                            } else if ("LiveStudio::ScheduledLesson".equals(recentList.get(position).getModel_name())) {
+                                Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
+                                intent.putExtra("id", courseId);
+                                startActivity(intent);
+                            }
+
                         }
                     });
                 }
             }
 
-            //             > 0 ? todayList.size() : 1;
+            //             > 0 ? recentList.size() : 1;
             @Override
             public int getItemCount() {
-                return todayList.size();
+                return recentList.size();
             }
         };
         ViewGroup parent = (ViewGroup) recyclerToday.getParent();
         emptyViewToday = View.inflate(getActivity(), R.layout.empty_view, null);
         emptyViewToday.setBackgroundColor(0xffffffff);
         parent.addView(emptyViewToday, parent.indexOfChild(recyclerToday) + 1);
-        todayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        recentAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             private void checkIfEmpty() {
-                if (todayAdapter.getItemCount() == 0) {
+                if (recentAdapter.getItemCount() == 0) {
                     emptyViewToday.setVisibility(View.VISIBLE);
                     recyclerToday.setVisibility(View.GONE);
                 } else {
@@ -445,7 +459,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
 
         });
-        recyclerToday.setAdapter(todayAdapter);
+        recyclerToday.setAdapter(recentAdapter);
 
     }
 
@@ -496,17 +510,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
 
-    private void setCity() {
-        cityName.setText(BaseApplication.getInstance().getCurrentCity().getName());
-
-        initBannerData();
-        initEssenceData();//精选内容
-        initToadyData();//今日直播
-        initTeacherData();
-        initRecentPublished();//最新发布,近期开课
-        initFreeCourseData();
-    }
-
     private void initEssenceData() {
         Map<String, String> map = new HashMap<>();
         try {
@@ -548,18 +551,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     /**
      * 今日直播数据
      */
-    private void initToadyData() {
+    private void initRecentData() {
 
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.lessons + "today", null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlRecentLessons, null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        LiveTodayBean data = JsonUtils.objectFromJson(response.toString(), LiveTodayBean.class);
-                        todayList.clear();
+                        LiveRecentBean data = JsonUtils.objectFromJson(response.toString(), LiveRecentBean.class);
+                        recentList.clear();
                         if (data != null && data.getData() != null) {
-                            todayList.addAll(data.getData());
+                            recentList.addAll(data.getData());
                         }
-                        todayAdapter.notifyDataSetChanged();
+                        recentAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -587,14 +590,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("count", "2");
         map.put("city_id", BaseApplication.getInstance().getCurrentCity().getId());
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublishedAll, map), null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudioLatest, map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        RecentPublishedBean data = JsonUtils.objectFromJson(response.toString(), RecentPublishedBean.class);
+                        LatestCourseBean data = JsonUtils.objectFromJson(response.toString(), LatestCourseBean.class);
                         listPublishedRank.clear();
                         if (data != null && data.getData() != null) {
-                            listPublishedRank.addAll(data.getData().getAll_published_rank());
+                            listPublishedRank.addAll(data.getData());
                             publisheRankAdapter.notifyDataSetChanged();
                         }
                     }
@@ -618,7 +621,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     /**
-     * 最新发布,近期开课
+     * 免费课程
      */
     private void initFreeCourseData() {
         Map<String, String> map = new HashMap<>();
@@ -732,6 +735,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         ViewGroup parent = (ViewGroup) gridviewTeacher.getParent();
         View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
         inflate.setBackgroundColor(0xffffffff);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                (int) (ScreenUtils.getScreenWidth(getActivity()) - ScreenUtils.getDensity(getActivity()) * 10 * 2), LinearLayout.LayoutParams.MATCH_PARENT);
+        inflate.setLayoutParams(params);
         parent.addView(inflate, parent.indexOfChild(gridviewTeacher) + 1);
         gridviewTeacher.setEmptyView(inflate);
         gridviewTeacher.setAdapter(teacherAdapter);
@@ -743,7 +749,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
                     startActivity(intent);
                 }
-
             }
         });
     }
@@ -757,18 +762,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         int screenWidth = ScreenUtils.getScreenWidth(getActivity());
         int itemWidth = (int) ((screenWidth - density * 10 * 2) / 5);
         int allWidth = itemWidth * size;
-        if (size > 0) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-            gridviewTeacher.setLayoutParams(params);// 设置GirdView布局参数
-            gridviewTeacher.setColumnWidth(itemWidth);// 列表项宽
-            gridviewTeacher.setStretchMode(GridView.NO_STRETCH);
-            gridviewTeacher.setNumColumns(size);//总长度
-        } else {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    (int) (screenWidth - density * 10 * 2), LinearLayout.LayoutParams.MATCH_PARENT);
-            gridviewTeacher.getEmptyView().setLayoutParams(params);
-        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+        gridviewTeacher.setLayoutParams(params);// 设置GirdView布局参数
+        gridviewTeacher.setColumnWidth(itemWidth);// 列表项宽
+        gridviewTeacher.setStretchMode(GridView.NO_STRETCH);
+        gridviewTeacher.setNumColumns(size);//总长度}
     }
 
     private void initTeacherData() {
@@ -811,22 +810,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private int getTodayStatusColor(String status) {
-        if ("ready".equals(status)) {
+        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
             return 0xff4873ff;
-        } else if ("closed".equals(status)) {
-            return 0xff999999;
-        } else {
+        } else if ("teaching".equals(status)||"paused".equals(status)) {
             return 0xffff5842;
+        } else {
+            return 0xff999999;
         }
     }
 
     private String getTodayStatusText(String status) {
-        if ("ready".equals(status)) {
+        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
             return "尚未直播";
-        } else if ("closed".equals(status)) {
-            return "直播结束";
-        } else {
+        } else if ("teaching".equals(status)||"paused".equals(status)) {
             return "正在直播";
+        } else {
+            return "直播结束";
         }
     }
 

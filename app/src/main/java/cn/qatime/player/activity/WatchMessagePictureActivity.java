@@ -410,7 +410,7 @@ public class WatchMessagePictureActivity extends BaseActivity {
         String extension = TextUtils.isEmpty(attachment.getExtension()) ? "jpg" : attachment.getExtension();
         srcFilename += ("." + extension);
 
-        String picPath = Constant.CACHEPATH;
+        String picPath = Constant.CACHEIMAGEPATH;
         String dstPath = picPath + "/" + srcFilename;
         if (AttachmentStore.copy(path, dstPath) != -1) {
             try {

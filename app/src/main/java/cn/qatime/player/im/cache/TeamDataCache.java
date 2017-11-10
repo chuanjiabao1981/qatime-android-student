@@ -212,8 +212,7 @@ public class TeamDataCache {
 
     public String getTeamName(String teamId) {
         Team team = getTeamById(teamId);
-        return team == null ? teamId : TextUtils.isEmpty(team.getName()) ? team.getId() : team
-                .getName();
+        return team == null ? teamId : TextUtils.isEmpty(team.getName()) ? team.getId() : team.getName();
     }
 
     public List<Team> getAllTeams() {

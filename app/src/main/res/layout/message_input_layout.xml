@@ -9,16 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:visibility="gone"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="gone">
 
         <FrameLayout
             android:id="@+id/switchLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp">
 
             <ImageView
@@ -51,6 +51,8 @@
                 android:background="@drawable/shape_input_radius"
                 android:maxLines="3"
                 android:minHeight="40dp"
+                android:paddingLeft="5dp"
+                android:textColorHint="#FF0000"
                 android:textSize="14sp" />
 
             <Button

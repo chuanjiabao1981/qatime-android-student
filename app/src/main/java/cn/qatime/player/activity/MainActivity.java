@@ -115,8 +115,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
-        } else if (requestCode == 2) {
+        if (requestCode == 2) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "未取得相机权限", Toast.LENGTH_SHORT).show();
             } else {
@@ -149,7 +148,7 @@ public class MainActivity extends BaseFragmentActivity {
         refreshUnreadNum();
         refreshMedia();
 
-        File file = new File(Constant.CACHEPATH);
+        File file = new File(Constant.CACHEIMAGEPATH);
         FileUtils.deleteDir(file);
 
         parseIntent();
@@ -225,7 +224,7 @@ public class MainActivity extends BaseFragmentActivity {
                     message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
-                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -417,6 +416,17 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
+        if (fragmentlayout != null && fragmentlayout.getCurrentPosition() == 3) {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        } else {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         /**
          * 设置最近联系人的消息为已读
          *
@@ -424,13 +434,7 @@ public class MainActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
         MobclickAgent.onPause(this);
     }
 
@@ -511,6 +515,7 @@ public class MainActivity extends BaseFragmentActivity {
     /**
      * 当用户没有云信账号,第一次直接购买后,需从后台获取一次云信账号
      */
+
     private void getAccount() {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,

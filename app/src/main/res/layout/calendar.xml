@@ -60,11 +60,11 @@
         android:background="#eee"
         android:orientation="vertical">
 
-        <libraryextra.view.WeekDayView
+        <cn.qatime.player.view.WeekDayView
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 
-        <libraryextra.view.MonthDateView
+        <cn.qatime.player.view.MonthDateView
             android:id="@+id/monthDateView"
             android:layout_width="fill_parent"
             android:layout_height="160dp" />

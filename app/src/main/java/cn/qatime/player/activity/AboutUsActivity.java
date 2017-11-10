@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.ShareUtil;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.AppUtils;
 
 /**
@@ -81,7 +84,18 @@ public class AboutUsActivity extends BaseActivity {
                 alertDialog.setContentView(view);
             }
         });
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareUtil.getInstance(AboutUsActivity.this, UrlUtils.getBaseUrl().substring(0, UrlUtils.getBaseUrl().length() - 1), "答疑时间-K12在线教育平台", "智造互联乐享教育-答疑时间与您公主梦想！", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
 
+                    }
+
+                }).open();
+            }
+        });
     }
 
     private void callPhone() {

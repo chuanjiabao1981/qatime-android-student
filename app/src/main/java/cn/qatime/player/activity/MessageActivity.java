@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +19,6 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.umeng.analytics.MobclickAgent;
@@ -46,7 +48,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/30 12:25
  * @Description 聊天
  */
-public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy {
+public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy, View.OnClickListener {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
     private Team team;
@@ -57,6 +59,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     private View rootView;
     private InputPanel inputpanel;
     private MessageListPanel messageListPanel;
+    private PopupWindow pop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,36 +81,81 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         if (StringUtils.isNullOrBlanK(type)) {
             findViewById(R.id.right).setVisibility(View.GONE);
         }
-        setRightImage(R.mipmap.online_room, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("custom".equals(type)) {
-                    Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("id", courseId);
-                    startActivityForResult(intent, Constant.REQUEST);
-                } else if ("interactive".equals(type)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
-                            requestLivePermission();
+        if ("exclusive".equals(type)) {
+            initMenu();
+        } else {
+            setRightImage(R.mipmap.online_room, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ("custom".equals(type)) {
+                        Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                        intent.putExtra("id", courseId);
+                        startActivityForResult(intent, Constant.REQUEST);
+                    } else if ("interactive".equals(type)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
+                                requestLivePermission();
+                            } else {
+                                toNext();
+                            }
                         } else {
                             toNext();
                         }
-                    } else {
-                        toNext();
                     }
                 }
-            }
-        });
+            });
+        }
         registerObservers(true);
         registerTeamUpdateObserver(true);
         initView();
     }
+
+    private void initMenu() {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+
+            menu1.setVisibility(View.GONE);
+            menu1.setOnClickListener(this);
+            menu2.setOnClickListener(this);
+            menu3.setOnClickListener(this);
+            menu4.setOnClickListener(this);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1);
+                }
+            });
+        }
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
 
     private void toNext() {
         Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
         intent.putExtra("id", courseId);
         startActivity(intent);
     }
+
     private void requestLivePermission() {
         MPermission.with(this)
                 .addRequestCode(100)
@@ -161,6 +209,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
         });
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -173,6 +222,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     /**
      * 收起输入法等
      */
@@ -232,6 +282,11 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 return;
             }
             messageListPanel.onIncomingMessage(messages);
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+                inputpanel.setMute(isMute);
+            }
         }
     };
 
@@ -241,6 +296,9 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
      */
 
     private void requestTeamInfo() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -268,7 +326,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         }
         team = d;
         inputpanel.setTeam(team);
-        tipText.setText(team.getType() == TeamTypeEnum.Normal ? getResourceString(R.string.you_have_quit_the_group) : getResourceString(R.string.you_have_quit_the_group));
+        tipText.setText(getResourceString(R.string.you_have_quit_the_group));
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
     }
 
@@ -370,4 +428,38 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         messageListPanel.onDestroy();
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.menu_1:
+                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+                pop.dismiss();
+                break;
+            case R.id.menu_2:
+                intent = new Intent(this, ExclusiveFilesActivity.class);
+                intent.putExtra("id", courseId);
+                startActivity(intent);
+                pop.dismiss();
+                break;
+            case R.id.menu_3:
+                intent = new Intent(this, ExclusiveQuestionsActivity.class);
+                intent.putExtra("courseId", courseId);
+                startActivity(intent);
+                pop.dismiss();
+                break;
+            case R.id.menu_4:
+                intent = new Intent(this, ExclusiveStudentHomeWorksActivity.class);
+                intent.putExtra("courseId", courseId);
+                startActivity(intent);
+                pop.dismiss();
+                break;
+            case R.id.menu_5:
+                intent = new Intent(this, MembersActivity.class);
+                intent.putExtra("courseId", courseId);
+                startActivity(intent);
+                pop.dismiss();
+                break;
+        }
+    }
 }

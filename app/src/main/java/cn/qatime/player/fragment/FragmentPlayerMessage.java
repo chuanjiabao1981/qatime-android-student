@@ -15,9 +15,9 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
-import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
@@ -43,8 +43,6 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     public List<IMMessage> items = new ArrayList<>();
 
     private Team team;
-
-
     private String sessionId = "";
     private Callback chatCallback;
 
@@ -55,7 +53,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         public void run() {
             if (hasLoad) {
                 if (tipText != null) {
-                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? R.string.you_have_quit_the_group : R.string.you_have_quit_the_group);
+                    tipText.setText(R.string.you_have_quit_the_group);
                     tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
                     hd.removeCallbacks(this);
                 } else {
@@ -68,7 +66,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     };
     private MessageListPanel messageListPanel;
     private View view;
-    private String owner;
+//    private String owner;
 
     @Nullable
     @Override
@@ -134,8 +132,10 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                         }
                     }
                 }
-                addedListItems.add(message);
-                needRefresh = true;
+                if (isMyMessage(message)) {
+                    addedListItems.add(message);
+                    needRefresh = true;
+                }
             }
 
             if (needRefresh) {
@@ -149,11 +149,18 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         }
     };
 
+    public boolean isMyMessage(IMMessage message) {
+        return message.getSessionType() == SessionTypeEnum.Team && !StringUtils.isNullOrBlanK(sessionId) && message.getSessionId().equals(sessionId);
+    }
+
     /**
      * 请求群基本信息
      */
 
     private void requestTeamInfo() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -255,21 +262,21 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         requestTeamInfo();
         Container container = new Container(getActivity(), sessionId, this);
         messageListPanel = new MessageListPanel(container, view);
-        if (!StringUtils.isNullOrBlanK(owner)) {
-            messageListPanel.setOwner(owner);
-        }
+//        if (!StringUtils.isNullOrBlanK(owner)) {
+//            messageListPanel.setOwner(owner);
+//        }
     }
 
     public void setChatCallBack(Callback c) {
         this.chatCallback = c;
     }
 
-    public void setOwner(String owner) {
-        if (messageListPanel != null) {
-            messageListPanel.setOwner(owner);
-        } else
-            this.owner = owner;
-    }
+//    public void setOwner(String owner) {
+//        if (messageListPanel != null) {
+//            messageListPanel.setOwner(owner);
+//        } else
+//            this.owner = owner;
+//    }
 
     public void onMsgSend(IMMessage message) {
         if (messageListPanel != null) {
@@ -296,7 +303,8 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        messageListPanel.onDestroy();
+        if (messageListPanel != null)
+            messageListPanel.onDestroy();
         registerTeamUpdateObserver(false);
     }
 }

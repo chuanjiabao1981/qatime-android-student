@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import libraryextra.bean.AppPayParamsBean;
+import libraryextra.bean.TeacherBean;
 
 
 public class MyOrderBean implements Serializable {
@@ -70,7 +71,16 @@ public class MyOrderBean implements Serializable {
         private Product product;
         private ProductInteractiveCourseBean product_interactive_course;
         private ProductVideoCourseBean product_video_course;
+        private ProductCustomizedGroupBean product_customized_group;
         private String coupon_code;
+
+        public ProductCustomizedGroupBean getProduct_customized_group() {
+            return product_customized_group;
+        }
+
+        public void setProduct_customized_group(ProductCustomizedGroupBean product_customized_group) {
+            this.product_customized_group = product_customized_group;
+        }
 
         public ProductVideoCourseBean getProduct_video_course() {
             return product_video_course;
@@ -208,5 +218,348 @@ public class MyOrderBean implements Serializable {
             this.coupon_code = coupon_code;
         }
 
+
+        public static class Product implements Serializable {
+
+            private int id;
+            private String name;
+            private String subject;
+            private String grade;
+            private String teacher_name;
+            private String status;
+            private int preset_lesson_count;
+            private int started_lessons_count;
+            private boolean off_shelve;
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
+
+            public int getStarted_lessons_count() {
+                return started_lessons_count;
+            }
+
+            public void setStarted_lessons_count(int started_lessons_count) {
+                this.started_lessons_count = started_lessons_count;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public int getId() {
+                return this.id;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getName() {
+                return this.name;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+            public String getSubject() {
+                return this.subject;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+
+            public String getGrade() {
+                return this.grade;
+            }
+
+            public void setTeacher_name(String teacher_name) {
+                this.teacher_name = teacher_name;
+            }
+
+            public String getTeacher_name() {
+                return this.teacher_name;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String getStatus() {
+                return this.status;
+            }
+
+            public void setPreset_lesson_count(int preset_lesson_count) {
+                this.preset_lesson_count = preset_lesson_count;
+            }
+
+            public int getPreset_lesson_count() {
+                return this.preset_lesson_count;
+            }
+
+        }
+
+        public static class ProductInteractiveCourseBean implements Serializable {
+            private int id;
+            private String name;
+            private String subject;
+            private String grade;
+            private String status;
+            private List<TeacherBean> teachers;
+            private int lessons_count;
+            private int started_lessons_count;
+            private boolean off_shelve;
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
+
+            public int getStarted_lessons_count() {
+                return started_lessons_count;
+            }
+
+            public void setStarted_lessons_count(int started_lessons_count) {
+                this.started_lessons_count = started_lessons_count;
+            }
+
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public int getLessons_count() {
+                return lessons_count;
+            }
+
+            public void setLessons_count(int lessons_count) {
+                this.lessons_count = lessons_count;
+            }
+
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+
+            public List<TeacherBean> getTeachers() {
+                return teachers;
+            }
+
+            public void setTeachers(List<TeacherBean> teachers) {
+                this.teachers = teachers;
+            }
+
+        }
+
+        public static class ProductVideoCourseBean implements Serializable {
+            private int id;
+            private String name;
+            private String subject;
+            private String grade;
+            private String teacher_name;
+            private TeacherBean teacher;
+            private String status;
+            private int preset_lesson_count;
+            private boolean off_shelve;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+
+            public String getTeacher_name() {
+                return teacher_name;
+            }
+
+            public void setTeacher_name(String teacher_name) {
+                this.teacher_name = teacher_name;
+            }
+
+            public TeacherBean getTeacher() {
+                return teacher;
+            }
+
+            public void setTeacher(TeacherBean teacher) {
+                this.teacher = teacher;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public int getPreset_lesson_count() {
+                return preset_lesson_count;
+            }
+
+            public void setPreset_lesson_count(int preset_lesson_count) {
+                this.preset_lesson_count = preset_lesson_count;
+            }
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
+        }
+
+        public static class ProductCustomizedGroupBean implements Serializable {
+            private int id;
+            private String name;
+            private String subject;
+            private String grade;
+            private String teacher_name;
+            private String status;
+            private boolean off_shelve;
+            private int events_count;
+            private int closed_events_count;
+
+            public int getClosed_events_count() {
+                return closed_events_count;
+            }
+
+            public void setClosed_events_count(int closed_events_count) {
+                this.closed_events_count = closed_events_count;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+
+            public String getTeacher_name() {
+                return teacher_name;
+            }
+
+            public void setTeacher_name(String teacher_name) {
+                this.teacher_name = teacher_name;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
+
+            public int getEvents_count() {
+                return events_count;
+            }
+
+            public void setEvents_count(int events_count) {
+                this.events_count = events_count;
+            }
+        }
     }
 }

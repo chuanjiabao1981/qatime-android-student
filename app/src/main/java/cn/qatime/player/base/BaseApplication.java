@@ -19,6 +19,7 @@ import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
@@ -33,6 +34,9 @@ import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -42,15 +46,19 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.holder.CustomAttachParser;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.StorageUtil;
+import cn.qatime.player.utils.UrlUtils;
 import custom.Configure;
 import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
+import libraryextra.rx.HttpManager;
+import libraryextra.rx.model.HttpHeaders;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 
@@ -62,29 +70,19 @@ public class BaseApplication extends MultiDexApplication {
     public boolean newVersion;
     private CityBean.Data currentCity;
     private PushAgent mPushAgent;
-    private boolean voiceStatus;
-    private boolean shakeStatus;
     private CashAccountBean cashAccount;
-    /**
-     * 是否进行聊天消息通知栏提醒
-     */
-    public boolean chatMessageNotifyStatus;
     private boolean tokenOut = false;//账号已过期
 //    public List<Activity> topActivity = new ArrayList<>();
-
-    public boolean isChatMessageNotifyStatus() {
-        return chatMessageNotifyStatus;
-    }
-
-    public void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
-        this.chatMessageNotifyStatus = chatMessageNotifyStatus;
-    }
 
     public RequestQueue getRequestQueue() {
         if (Queue == null) {
             Queue = Volley.newRequestQueue(context);
         }
         return Queue;
+    }
+
+    static {
+        PlatformConfig.setWeixin("wxf2dfbeb5f641ce40", "7eb546caee5844cc6893449287be3b1b");
     }
 
     public CityBean.Data getCurrentCity() {
@@ -112,32 +110,52 @@ public class BaseApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = this;
+        UMShareAPI.get(this);
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(Configure.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
+        HttpManager.init(this);
+        HttpManager.getInstance().setBaseUrl(UrlUtils.getBaseUrl());
+
         profile = SPUtils.getObject(this, "profile", Profile.class);
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
-        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-        chatMessageNotifyStatus = (boolean) SPUtils.get(this, "notify_status", true);
+
 //        CrashHandler.getInstance().init(this);
         //y友盟统计
         MobclickAgent.setDebugMode(Configure.isDebug);
-        initUmengPush();
         initYunxin();
+        initUmengPush();
 
         StorageUtil.init(context, null);
+        initRx();
 //        initGlobeActivity();
+    }
+
+    private void initRx() {
+        HttpManager.init(this);
+
+        //设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        if (!StringUtils.isNullOrBlanK(getProfile().getToken())) {
+            headers.put("Remember-Token", getProfile().getToken());
+        }
+        HttpManager.getInstance()
+                .setReadTimeOut(60 * 1000)
+                .setWriteTimeOut(60 * 1000)
+                .setConnectTimeout(60 * 1000)
+                .setBaseUrl(UrlUtils.getBaseUrl())
+                //.addConverterFactory(GsonConverterFactory.create(gson))//本框架没有采用Retrofit的Gson转化，所以不用配置
+                .addCommonHeaders(headers);//设置全局公共头//设置全局公共参数
     }
 
     private void initUmengPush() {
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(Configure.isDebug);
 
-        mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        mPushAgent.setNotificationPlaySound(UserPreferences.getRingToggle() ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
-        mPushAgent.setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        mPushAgent.setNotificationPlayVibrate(UserPreferences.getVibrateToggle() ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
 
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
@@ -235,6 +253,7 @@ public class BaseApplication extends MultiDexApplication {
                 TeamDataCache.getInstance().registerObservers(true);
 //                FriendDataCache.getInstance().registerObservers(true);
             }
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
             // 注册语言变化监听
             registerLocaleReceiver(true);
         }
@@ -259,8 +278,8 @@ public class BaseApplication extends MultiDexApplication {
 
         config.notificationSound = "android.resource://cn.qatime.player/raw/msg";
         options.statusBarNotificationConfig = config;
-        config.ring = voiceStatus;
-        config.vibrate = shakeStatus;
+        config.ring = UserPreferences.getRingToggle();
+        config.vibrate = UserPreferences.getVibrateToggle();
 
         UserPreferences.setStatusConfig(config);
         // 配置保存图片，文件，log 等数据的目录
@@ -359,6 +378,9 @@ public class BaseApplication extends MultiDexApplication {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+        HttpHeaders header = new HttpHeaders();
+        header.put("Remember-Token", profile.getToken());
+        HttpManager.getInstance().addCommonHeaders(header);
         SPUtils.putObject(context, "profile", profile);
     }
 

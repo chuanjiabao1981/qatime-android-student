@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +13,6 @@
         android:orientation="vertical">
 
         <include layout="@layout/layout_backbar" />
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -106,8 +104,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:visibility="gone">
+                    android:padding="5dp">
 
                     <ImageView
                         android:id="@+id/alipay"
@@ -115,6 +112,7 @@
                         android:layout_height="14dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/shape_select_circle_bg"
+                        android:padding="3dp"
                         android:src="@drawable/shape_select_circle_normal" />
 
                     <ImageView

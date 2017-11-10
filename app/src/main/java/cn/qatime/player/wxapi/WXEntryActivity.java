@@ -10,10 +10,10 @@ import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.weixin.callback.WXCallbackActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
 
 /**
@@ -22,7 +22,7 @@ import cn.qatime.player.utils.Constant;
  * @Describe 微信登录回调
  */
 
-public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler {
+public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHandler {
     private IWXAPI api;
 
     @Override

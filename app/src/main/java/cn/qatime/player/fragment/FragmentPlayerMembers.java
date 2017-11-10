@@ -14,15 +14,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
+import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.Announcements;
+import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
-    private List<Announcements.DataBean.MembersBean> list = new ArrayList<>();
-    private FragmentNEVideoPlayerAdapter4 adapter;
+    private List<ChatTeamBean.Accounts> list = new ArrayList<>();
+    private FragmentNEVideoPlayerAdapter adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
     Runnable runnable = new Runnable() {
@@ -47,7 +47,7 @@ public class FragmentPlayerMembers extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_player_members, null);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
+        adapter = new FragmentNEVideoPlayerAdapter(getActivity(), list, R.layout.item_fragment_nevideo_player);
         listView.setAdapter(adapter);
         hasLoad = true;
         return view;
@@ -56,49 +56,43 @@ public class FragmentPlayerMembers extends BaseFragment {
     /**
      * @param accounts
      */
-    public void setData(Announcements.DataBean accounts) {
-        if (accounts != null && accounts.getMembers() != null) {
+    public void setData(List<ChatTeamBean.Accounts> accounts) {
+        if (accounts != null) {
             list.clear();
-            list.addAll(accounts.getMembers());
-            for (Announcements.DataBean.MembersBean item : list) {
+            list.addAll(accounts);
+            for (ChatTeamBean.Accounts item : list) {
                 if (item == null) continue;
-                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
-                    if (accounts.getOwner().equals(item.getAccid())) {
-                        item.setOwner(true);
-                    } else {
-                        item.setOwner(false);
-                    }
-                }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {
                     item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
-            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
+            Collections.sort(list, new Comparator<ChatTeamBean.Accounts>() {
                 @Override
-                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    int x = 0;
-                    if (lhs.isOwner() && !rhs.isOwner()) {
-                        x = -3;
-                    } else if (!lhs.isOwner() && rhs.isOwner()) {
-                        x = 3;
-                    } else if (lhs.isOwner() && rhs.isOwner()) {
-                        x = -3;
-                    }
-
-                    int y = lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
-                    if (x == 0) {
-                        return y;
-                    }
-                    return x;
+                public int compare(ChatTeamBean.Accounts lhs, ChatTeamBean.Accounts rhs) {
+//                    int x = 0;
+//                    if (lhs.isOwner() && !rhs.isOwner()) {
+//                        x = -3;
+//                    } else if (!lhs.isOwner() && rhs.isOwner()) {
+//                        x = 3;
+//                    } else if (lhs.isOwner() && rhs.isOwner()) {
+//                        x = -3;
+//                    }
+//
+//                    int y = lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+//                    if (x == 0) {
+//                        return y;
+//                    }
+//                    return x;
+                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
             hd.postDelayed(runnable, 200);
         }
     }
 
-    public void setOnlineInfo(List<String> online_users) {
-
-    }
+//    public void setOnlineInfo(List<String> online_users) {
+//
+//    }
 }

@@ -17,6 +17,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -343,7 +344,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 onInputShowListener.OnInputShow();
                 break;
             case R.id.buttonTextMessage:
-                switchToTextLayout();// 显示文本发送的布局
+                switchToTextLayout(true);// 显示文本发送的布局
                 onInputShowListener.OnInputShow();
                 break;
             case R.id.send://发送按钮
@@ -394,7 +395,10 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         }
     }
 
-    private void switchToTextLayout() {
+    /**
+     *
+     */
+    private void switchToTextLayout(boolean isOpenInput) {
         audioRecord.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
 
@@ -402,8 +406,10 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
             tagViewPager.setVisibility(GONE);
             emoji.setImageResource(R.mipmap.biaoqing);
         }
-        content.requestFocus();
-        openInput();
+        if (isOpenInput) {
+            content.requestFocus();
+            openInput();
+        }
 
         buttonTextMessage.setVisibility(GONE);
         buttonAudioMessage.setVisibility(View.VISIBLE);
@@ -425,7 +431,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
      *
      * @return true 被禁言
      */
-    public boolean checkMute() {
+    private boolean checkMute() {
         if (isMute) {
             Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
             clearInputValue();
@@ -440,10 +446,30 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     public void setMute(boolean mute) {
         this.isMute = mute;
+
+        closeEmojiAndInput();
+        if (content.getVisibility() == GONE) {
+            switchToTextLayout(false);
+        }
+        content.setText("");
         if (isMute) {
             content.setHint(R.string.have_muted);
+            content.setGravity(Gravity.CENTER);
+            content.setEnabled(false);
+            send.setEnabled(false);
+            //左边切换语音文字按钮
+            buttonAudioMessage.setEnabled(false);
+
+            emoji.setEnabled(false);
+            imageSelect.setEnabled(false);
         } else {
             content.setHint("");
+            content.setGravity(Gravity.CENTER_VERTICAL);
+            content.setEnabled(true);
+            send.setEnabled(true);
+            buttonAudioMessage.setEnabled(true);
+            emoji.setEnabled(true);
+            imageSelect.setEnabled(true);
         }
     }
 
@@ -480,6 +506,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     if (listener.isShowTime()) {
                         return true;
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            return true;
+                        }
+                    }
                     touched = false;
 //                    if (audioRecordListener != null) {
 //                        audioRecordListener.audioRecordStop();
@@ -495,6 +526,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     if (listener.isShowTime()) {
                         return true;
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            return true;
+                        }
                     }
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));

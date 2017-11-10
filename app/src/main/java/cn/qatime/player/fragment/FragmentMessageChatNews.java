@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -47,6 +48,7 @@ import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MessageListBean;
+import cn.qatime.player.bean.MyExclusiveBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -64,7 +66,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * @author luntify
  * @date 2016/8/15 20:05
- * @Description 直播课消息
+ * @Description 消息
  */
 public class FragmentMessageChatNews extends BaseFragment {
 
@@ -87,7 +89,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void getCourses() {
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", null,
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -108,7 +110,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                                     }
                                 }
                                 listSize = items.size();
-                                refreshMessages();
                             }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -130,7 +131,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         });
-        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/interactive_courses", null,
+        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/interactive_courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -149,7 +150,44 @@ public class FragmentMessageChatNews extends BaseFragment {
                                 }
                             }
                             listSize = items.size();
-                            refreshMessages();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        DaYiJsonObjectRequest request3 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/customized_groups", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
+                        if (data != null && data.getData() != null) {
+                            synchronized (items) {
+                                for (MessageListBean item : items) {
+                                    for (MyExclusiveBean.DataBean bean : data.getData()) {
+                                        // TODO: 2017/8/15 team_id
+//                                        if (item.getContactId().equals(bean.getCustomized_group().getChat_team_id())) {
+//                                            item.setCourseId(bean.getId());
+//                                            item.setCourseType("exclusive");
+//                                            item.setIcon(bean.getPublicize_url());
+//                                            item.setName(bean.getName());
+//                                        }
+                                    }
+                                }
+                            }
+                            listSize = items.size();
                         }
                     }
 
@@ -196,12 +234,6 @@ public class FragmentMessageChatNews extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initMessageList();
         requestMessages(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getCourses();
-            }
-        }, 2000);
         registerObservers(true);
     }
 
@@ -262,6 +294,9 @@ public class FragmentMessageChatNews extends BaseFragment {
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void param) {
+                                    if (StringUtils.isNullOrBlanK(items.get(position - 1).getContactId())) {
+                                        return;
+                                    }
                                     Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
                                     items.get(position - 1).setMute(team.mute());
 //                                notificationConfigText.setText(team.mute() ? getString(R.string.close) : getString(R.string.open));
@@ -331,15 +366,20 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void onRecentContactsLoaded() {
-        if (loadedRecents == null) {
-            //当有任意一个为空都不加载...
-            return;
-        }
         items.clear();
-        for (RecentContact item : loadedRecents) {
+        Iterator<RecentContact> iterator = loadedRecents.iterator();
+        while (iterator.hasNext()) {
+            RecentContact item = iterator.next();
+            Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
+            if (team != null && !team.isMyTeam()) {
+                NIMClient.getService(MsgService.class).deleteRecentContact(item);
+                NIMClient.getService(MsgService.class).clearChattingHistory(item.getContactId(), item.getSessionType());
+                iterator.remove();
+                Logger.e("删除已退出的群组");
+                continue;
+            }
             MessageListBean bean = new MessageListBean();
             bean.setContactId(item.getContactId());
-            Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
             if (team != null) {
                 bean.setMute(team.mute());
             }
@@ -376,6 +416,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             return;
         }
         if (listSize != list.size()) {
+            Logger.e("从后台获取聊天数据");
             getCourses();
         }
         Collections.sort(list, comp);
@@ -459,9 +500,19 @@ public class FragmentMessageChatNews extends BaseFragment {
     Observer<List<RecentContact>> messageObserver = new Observer<List<RecentContact>>() {
         @Override
         public void onEvent(List<RecentContact> messages) {
-            int index;
-            for (RecentContact msg : messages) {
-                index = -1;
+            // 若列表中已存在的群组状态（是否已解散）发生变化，只会在初次加载时删除
+            Iterator<RecentContact> iterator = messages.iterator();
+            while (iterator.hasNext()) {
+                RecentContact msg = iterator.next();
+                Team team = TeamDataCache.getInstance().getTeamById(msg.getContactId());
+                if (team != null && !team.isMyTeam()) {
+                    NIMClient.getService(MsgService.class).deleteRecentContact(msg);
+                    NIMClient.getService(MsgService.class).clearChattingHistory(msg.getContactId(), msg.getSessionType());
+                    iterator.remove();
+                    Logger.e("删除已退出的群组");
+                    continue;
+                }
+                int index = -1;
                 for (int i = 0; i < items.size(); i++) {
                     if (msg.getContactId().equals(items.get(i).getContactId())
                             && msg.getSessionType() == (items.get(i).getSessionType())) {
@@ -474,7 +525,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                     bean = items.get(index);
                 }
                 bean.setContactId(msg.getContactId());
-                Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
+//                Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
                 if (team != null) {
                     bean.setMute(team.mute());
                 }
@@ -584,8 +635,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                     intent.putExtra("sessionId", items.get(position).getContactId());
                     intent.putExtra("sessionType", items.get(position).getSessionType());
                     intent.putExtra("courseId", items.get(position).getCourseId());
-//            intent.putExtra("camera", items.get(position).getCamera());
-//            intent.putExtra("board", items.get(position).getBoard());
                     intent.putExtra("name", items.get(position).getName());
                     intent.putExtra("type", items.get(position).getCourseType());
                     intent.putExtra("owner", items.get(position).getOwner());

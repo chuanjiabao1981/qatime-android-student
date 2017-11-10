@@ -90,17 +90,6 @@
         <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
 
-    <style name="button_style">//小按钮
-        <item name="android:layout_height">40dp</item>
-        <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@drawable/text_selector_white_red</item>
-    </style>
-
     <style name="button_full_width_style">//跨整个屏幕的按钮
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
@@ -178,5 +167,23 @@
         <!-- 背景透明 -->
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 后面的activity变暗 -->
+    </style>
+
+    <style name="dialog_text_style">//dialog文字
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="dialog_button_style">
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
+        <item name="android:layout_height">36dp</item>
     </style>
 </resources>

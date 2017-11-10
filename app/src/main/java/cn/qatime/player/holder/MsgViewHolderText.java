@@ -15,6 +15,7 @@ import libraryextra.utils.DensityUtils;
 
 public class MsgViewHolderText extends MsgViewHolderBase {
     private Hashtable<Integer, GifDrawable> cache = new Hashtable<>();
+    private TextView bodyTextView;
 
     public MsgViewHolderText(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
@@ -27,13 +28,13 @@ public class MsgViewHolderText extends MsgViewHolderBase {
 
     @Override
     protected void inflateContentView() {
+        bodyTextView = findViewById(R.id.message_item_text_body);
     }
 
     @Override
     protected void bindContentView() {
         layoutDirection();
 
-        final TextView bodyTextView = findViewById(R.id.message_item_text_body);
 //        bodyTextView.setTextColor(isReceivedMessage() ? Color.BLACK : Color.WHITE);
         bodyTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,12 +50,11 @@ public class MsgViewHolderText extends MsgViewHolderBase {
                         bodyTextView.postInvalidateDelayed(100);
                     }
                 }));
-        bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
+//        bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
         bodyTextView.setOnLongClickListener(longClickListener);
     }
 
     private void layoutDirection() {
-        TextView bodyTextView = findViewById(R.id.message_item_text_body);
         if (isReceivedMessage()) {
             bodyTextView.setBackgroundResource(R.drawable.chatfrom_bg_normal);
             bodyTextView.setPadding(DensityUtils.dip2px(context, 15), DensityUtils.dip2px(context, 8), DensityUtils.dip2px(context, 10), DensityUtils.dip2px(context, 8));
@@ -74,7 +74,7 @@ public class MsgViewHolderText extends MsgViewHolderBase {
         return 0;
     }
 
-    protected String getDisplayText() {
-        return message.getContent();
-    }
+//    protected String getDisplayText() {
+//        return message.getContent();
+//    }
 }

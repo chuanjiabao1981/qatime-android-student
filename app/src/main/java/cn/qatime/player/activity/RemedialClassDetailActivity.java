@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,6 +22,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -43,7 +46,9 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -52,7 +57,6 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     private int id;
@@ -61,13 +65,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
     private TextView name;
-    //    private TextView title;
     private LiveLessonDetailBean data;
     private ViewPager mViewPager;
     private int pager = 0;
     TextView price;
     TextView studentnumber;
-    //    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
@@ -126,7 +128,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         Button pay = (Button) findViewById(R.id.pay);
         startStudy = (Button) findViewById(R.id.start_study);
         startStudyView = findViewById(R.id.start_study_view);
-//        title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
         transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentnumber = (TextView) findViewById(R.id.student_number);
@@ -176,10 +177,26 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(pager);
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(RemedialClassDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(RemedialClassDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/courses/" + id, name.getText().toString(), "直播课课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/detail", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/detail", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -215,101 +232,102 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             setTitles(data.getData().getCourse().getName());
             studentnumber.setText(getString(R.string.student_number, data.getData().getCourse().getBuy_tickets_count()));
 
-            if (data.getData().getCourse().getSell_type().equals("charge")) {
-                String price;
-                if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
-                    price = df.format(data.getData().getCourse().getPrice());
+            if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
+                layoutView.setBackgroundColor(0xff00d564);
+                int value = 0;
+                try {
+                    value = DateUtils.daysBetween(data.getData().getCourse().getLive_start_time(), System.currentTimeMillis());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                progress.setVisibility(View.GONE);
+                if (value > 0) {
+                    timeToStart.setVisibility(View.VISIBLE);
+                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
                 } else {
-                    price = df.format(data.getData().getCourse().getCurrent_price());
+                    timeToStart.setVisibility(View.GONE);
                 }
-                if (price.startsWith(".")) {
-                    price = "0" + price;
+            } else if (Constant.CourseStatus.teaching.equals(data.getData().getCourse().getStatus())) {
+                layoutView.setBackgroundColor(0xff00a0e9);
+                timeToStart.setVisibility(View.GONE);
+                progress.setVisibility(View.VISIBLE);
+                progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getLessons_count()));
+            } else if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                layoutView.setBackgroundColor(0xff999999);
+                timeToStart.setVisibility(View.GONE);
+                progress.setVisibility(View.VISIBLE);
+                progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getLessons_count()));
+            } else {
+                layoutView.setVisibility(View.GONE);
+            }
+
+            if (data.getData().getCourse().getSell_type().equals("charge")) {
+                String priceStr;
+                if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                    priceStr = df.format(data.getData().getCourse().getPrice());
+                } else {
+                    priceStr = df.format(data.getData().getCourse().getCurrent_price());
                 }
-                RemedialClassDetailActivity.this.price.setText("￥" + price);
+                if (priceStr.startsWith(".")) {
+                    priceStr = "0" + priceStr;
+                }
+                price.setText("￥" + priceStr);
                 if (Constant.CourseStatus.teaching.equals(data.getData().getCourse().getStatus())) {
                     transferPrice.setVisibility(View.VISIBLE);
                 } else {
                     transferPrice.setVisibility(View.GONE);
                 }
 
-                try {
-                    if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
-                        int value = DateUtils.daysBetween(data.getData().getCourse().getLive_start_time(), System.currentTimeMillis());
-                        progress.setVisibility(View.GONE);
-                        if (value > 0) {
-                            timeToStart.setVisibility(View.VISIBLE);
-                            timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
-                        } else {
-                            timeToStart.setVisibility(View.GONE);
-                        }
-                        layoutView.setBackgroundColor(0xff00d564);
-                    } else if (Constant.CourseStatus.teaching.equals(data.getData().getCourse().getStatus())) {
-                        progress.setVisibility(View.VISIBLE);
-                        timeToStart.setVisibility(View.GONE);
-                        layoutView.setBackgroundColor(0xff00a0e9);
-                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getPreset_lesson_count()));
-                    } else if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
-                        timeToStart.setVisibility(View.GONE);
-                        progress.setVisibility(View.VISIBLE);
-                        layoutView.setBackgroundColor(0xff999999);
-                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getPreset_lesson_count()));
+                if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
+                    if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                        handleLayout.setVisibility(View.GONE);
                     } else {
-                        layoutView.setVisibility(View.GONE);
+                        startStudyView.setVisibility(View.VISIBLE);//开始学习
+                        startStudy.setText("开始学习");
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                if (data.getData().getTicket() != null) {//已试听或已购买
-                    if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
-                        if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
-                            if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
-                                startStudyView.setVisibility(View.VISIBLE);//开始学习
-                            } else {//进入试听按钮显示
-                                audition.setVisibility(View.GONE);
-                                auditionStart.setVisibility(View.VISIBLE);
-                                if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
-                                    auditionStart.setText("试听结束");
-                                    auditionStart.setEnabled(false);
-                                }
+                } else {//未购买
+                    if (data.getData().getCourse().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {//已下架或未购买已结束显示已下架
+                        handleLayout.setVisibility(View.GONE);
+                        transferPrice.setVisibility(View.GONE);
+                        price.setText("已下架");
+                    } else {
+                        if (data.getData().getTicket() == null || StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {//未试听
+                            if (data.getData().getCourse().isTastable()) {//可以加入试听
+                                audition.setVisibility(View.VISIBLE);
+                                auditionStart.setVisibility(View.GONE);
+                            } else {//不可试听  只能购买
+                                auditionLayout.setVisibility(View.GONE);
+                            }
+                        } else {//已加入试听
+                            audition.setVisibility(View.GONE);
+                            auditionStart.setVisibility(View.VISIBLE);
+                            if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
+                                auditionStart.setText("试听结束");
+                                auditionStart.setEnabled(false);
                             }
                         }
-                    } else {
-                        handleLayout.setVisibility(View.GONE);
-                    }
-                } else {//需加入试听或购买
-                    if (data.getData().getCourse().isTastable()) {//可以加入试听
-                        audition.setVisibility(View.VISIBLE);
-                        auditionStart.setVisibility(View.GONE);
-                    } else {//不可试听  只能购买
-                        auditionLayout.setVisibility(View.GONE);
-                    }
-                    if (data.getData().getCourse().isOff_shelve()) {
-                        startStudyView.setVisibility(View.VISIBLE);
-                        startStudy.setText("已下架");
-                        startStudy.setEnabled(false);
                     }
                 }
             } else if (data.getData().getCourse().getSell_type().equals("free")) {
-                transferPrice.setText("免费");
-                transferPrice.setVisibility(View.VISIBLE);
-                layoutView.setVisibility(View.GONE);
-                price.setVisibility(View.GONE);
+                price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
-                    if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
-                        startStudyView.setVisibility(View.VISIBLE);
-                    } else {
+                    if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
+                    } else {
+                        startStudy.setText("开始学习");
+                        startStudyView.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    startStudyView.setVisibility(View.VISIBLE);
-                    startStudy.setText("立即报名");
-                    if (data.getData().getCourse().isOff_shelve()) {
-                        startStudy.setText("已下架");
-                        startStudy.setEnabled(false);
+                    if (data.getData().getCourse().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                        price.setText("已下架");
+                        handleLayout.setVisibility(View.GONE);
+                    } else {
+                        startStudyView.setVisibility(View.VISIBLE);
+                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        startStudy.setText("立即报名");
                     }
                 }
-
             }
 
             if (data.getData().getCourse().getIcons() != null) {
@@ -434,14 +452,17 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     //免费,加入
     private void free2deliver() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlRemedialClass + "/" + id + "/deliver_free", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlCourses + id + "/deliver_free", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red);
+                        startStudy.setTextColor(Color.WHITE);
                         Toast.makeText(RemedialClassDetailActivity.this, "已成功添加至我的直播课", Toast.LENGTH_SHORT).show();
-                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
-                        startStudy.setText("开始学习");
+//                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
+//                        startStudy.setText("开始学习");
+                        initData();
                     }
 
                     @Override
@@ -480,13 +501,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private void joinAudition() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/taste", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/taste", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-//                        data.getData().getCourse().setTastable(true);
+//                        data.getData().getEssenceCourse().setTastable(true);
                         auditionStart.setVisibility(View.VISIBLE);
                         loginYunXin();
                     }

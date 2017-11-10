@@ -32,10 +32,6 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     private boolean reLoad = false;
     private ImageView image;
     private TextView status;
-    private TextView orderId;
-    private TextView price;
-    private TextView viewOrder;//查看订单
-    private Button complete;
     private RelativeLayout loading;
     private View failedLayout;
 
@@ -52,10 +48,10 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
         failedLayout = findViewById(R.id.failed_layout);
         image = (ImageView) findViewById(R.id.image);
         status = (TextView) findViewById(R.id.status);
-        orderId = (TextView) findViewById(R.id.orderId);
-        price = (TextView) findViewById(R.id.price);
-        viewOrder = (TextView) findViewById(R.id.view_order);
-        complete = (Button) findViewById(R.id.complete);
+        TextView orderId = (TextView) findViewById(R.id.orderId);
+        TextView price = (TextView) findViewById(R.id.price);
+        TextView viewOrder = (TextView) findViewById(R.id.view_order);
+        Button complete = (Button) findViewById(R.id.complete);
         loading = (RelativeLayout) findViewById(R.id.loading);
 
         viewOrder.setOnClickListener(this);
@@ -64,6 +60,11 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
         switch (state) {
             case SUCCESS:
                 initData();
+                break;
+            case CANCEL:
+                break;
+            case ERROR:
+                payFailed();
                 break;
         }
         orderId.setText(getIntent().getStringExtra("orderId"));
@@ -149,7 +150,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_order://查看订单
-                Intent intent = new Intent(this,PersonalMyOrderActivity.class);
+                Intent intent = new Intent(this, PersonalMyOrderActivity.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -158,6 +159,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
                 break;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();

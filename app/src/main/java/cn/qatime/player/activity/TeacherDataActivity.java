@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -15,6 +16,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.TeacherDataBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -51,6 +54,7 @@ public class TeacherDataActivity extends BaseActivity {
     private List<TeacherDataBean.DataBean.Course> liveList = new ArrayList<>();
     private List<TeacherDataBean.DataBean.VideoCoursesBean> videoList = new ArrayList<>();
     private List<TeacherDataBean.DataBean.InteractiveCourses> interactiveList = new ArrayList<>();
+    private List<TeacherDataBean.DataBean.CustomizedGroupsBean> exclusiveList = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
     private TextView category;
@@ -65,12 +69,15 @@ public class TeacherDataActivity extends BaseActivity {
     private CommonAdapter<TeacherDataBean.DataBean.VideoCoursesBean> videoAdapter;
     private CommonAdapter<TeacherDataBean.DataBean.Course> liveAdapter;
     private CommonAdapter<TeacherDataBean.DataBean.InteractiveCourses> interactiveAdapter;
+    private CommonAdapter<TeacherDataBean.DataBean.CustomizedGroupsBean> exclusiveAdapter;
     private View liveLayout;
     private View interactiveLayout;
     private View videoLayout;
     private TextView courseCanRefund;
     private TextView infoComplete;
     private TextView teachOnline;
+    private GridViewForScrollView exclusiveGrid;
+    private View exclusiveLayout;
 
 //    private View
 // ;
@@ -99,6 +106,24 @@ public class TeacherDataActivity extends BaseActivity {
         liveLayout = findViewById(R.id.live_layout);
         interactiveLayout = findViewById(R.id.interactive_layout);
         videoLayout = findViewById(R.id.video_layout);
+        exclusiveGrid = (GridViewForScrollView) findViewById(R.id.exclusive_grid);
+        exclusiveLayout = findViewById(R.id.exclusive_layout);
+        setRightImage(R.mipmap.share, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (teacherId == 0) {
+                    Toast.makeText(TeacherDataActivity.this, "老师id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(TeacherDataActivity.this, UrlUtils.getBaseUrl() + "teachers/" + teacherId + "/profile", name.getText().toString(), category.getText().toString() + subject.getText().toString() + "老师", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     @Override
@@ -129,7 +154,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price,"free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
                 }
             }
         };
@@ -195,7 +220,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price,"free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
                 }
             }
         };
@@ -208,6 +233,38 @@ public class TeacherDataActivity extends BaseActivity {
             }
         });
         videoGrid.setAdapter(videoAdapter);
+        exclusiveAdapter = new CommonAdapter<TeacherDataBean.DataBean.CustomizedGroupsBean>(this, exclusiveList, R.layout.item_teacher_data) {
+
+            @Override
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.CustomizedGroupsBean item, int position) {
+                if (item == null) {
+                    Logger.e("item數據空");
+                    return;
+                }
+                Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.course_title, item.getName());
+                if (item.isOff_shelve()) {
+                    helper.setText(R.id.price, "已下架");
+                } else {
+                    String price = item.getCurrent_price();
+                    if (price.startsWith(".")) {
+                        price = "0" + price;
+                    }
+                    helper.setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + price));
+                }
+            }
+        };
+        exclusiveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TeacherDataActivity.this, ExclusiveLessonDetailActivity.class);
+                intent.putExtra("id", exclusiveList.get(position).getId());
+                startActivityForResult(intent, Constant.REQUEST);
+            }
+        });
+        exclusiveGrid.setAdapter(exclusiveAdapter);
     }
 
     @Override
@@ -295,6 +352,11 @@ public class TeacherDataActivity extends BaseActivity {
                                     videoList.addAll(bean.getData().getVideo_courses());
                                     videoAdapter.notifyDataSetChanged();
                                 } else videoLayout.setVisibility(View.GONE);
+
+                                if (bean.getData().getVideo_courses() != null && bean.getData().getCustomized_groups().size() > 0) {
+                                    exclusiveList.addAll(bean.getData().getCustomized_groups());
+                                    exclusiveAdapter.notifyDataSetChanged();
+                                } else exclusiveLayout.setVisibility(View.GONE);
                             }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();

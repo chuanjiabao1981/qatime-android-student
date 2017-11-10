@@ -11,13 +11,12 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
+import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.Announcements;
+import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
@@ -27,8 +26,8 @@ import libraryextra.utils.StringUtils;
  * @Describe
  */
 public class FragmentInteractiveMembers extends BaseFragment {
-    private List<Announcements.DataBean.MembersBean> list = new ArrayList<>();
-    private FragmentNEVideoPlayerAdapter4 adapter;
+    private List<ChatTeamBean.Accounts> list = new ArrayList<>();
+    private FragmentNEVideoPlayerAdapter adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
     Runnable runnable = new Runnable() {
@@ -46,7 +45,6 @@ public class FragmentInteractiveMembers extends BaseFragment {
             }
         }
     };
-    private Announcements.DataBean.MembersBean owner;
 
     @Nullable
     @Override
@@ -58,43 +56,29 @@ public class FragmentInteractiveMembers extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ListView listView = (ListView) findViewById(R.id.listview);
-        adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
+        adapter = new FragmentNEVideoPlayerAdapter(getActivity(), list, R.layout.item_fragment_nevideo_player);
         listView.setAdapter(adapter);
         hasLoad = true;
     }
 
-    public void setData(Announcements.DataBean accounts) {
-        if (accounts != null && accounts.getMembers() != null) {
+    public void setData(List<ChatTeamBean.Accounts> accounts) {
+        if (accounts != null) {
             list.clear();
-            list.addAll(accounts.getMembers());
-            Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
-            while (it.hasNext()) {
-                Announcements.DataBean.MembersBean item = it.next();
-                if (item == null) return;
-                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
-                    if (accounts.getOwner().equals(item.getAccid())) {
-                        item.setOwner(true);
-                        owner = item;
-                        it.remove();
-                    } else {
-                        item.setOwner(false);
-                    }
-                }
+            list.addAll(accounts);
+            for (ChatTeamBean.Accounts item : list) {
+                if (item == null) continue;
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {
                     item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
-            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
+            Collections.sort(list, new Comparator<ChatTeamBean.Accounts>() {
                 @Override
-                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
+                public int compare(ChatTeamBean.Accounts lhs, ChatTeamBean.Accounts rhs) {
                     return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
-            if (owner != null) {
-                list.add(0, owner);
-            }
             hd.postDelayed(runnable, 200);
         }
     }

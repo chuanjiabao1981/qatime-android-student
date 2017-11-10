@@ -57,10 +57,21 @@ public class PlayBackListBean implements Serializable {
         private int id;
         private String logo_url;
         private int replay_times;
-        private LiveStudioLessonBean live_studio_lesson;
+        private LessonBean live_studio_lesson;
+        private String target_type;
+        private LessonBean live_studio_interactive_lesson;
+        private LessonBean live_studio_scheduled_lesson;
         private String grade;
         private String subject;
         private String teacher_name;
+
+        public String getTarget_type() {
+            return target_type;
+        }
+
+        public void setTarget_type(String target_type) {
+            this.target_type = target_type;
+        }
 
         public int getId() {
             return id;
@@ -87,12 +98,28 @@ public class PlayBackListBean implements Serializable {
             this.replay_times = replay_times;
         }
 
-        public LiveStudioLessonBean getLive_studio_lesson() {
+        public LessonBean getLive_studio_lesson() {
             return live_studio_lesson;
         }
 
-        public void setLive_studio_lesson(LiveStudioLessonBean live_studio_lesson) {
+        public void setLive_studio_lesson(LessonBean live_studio_lesson) {
             this.live_studio_lesson = live_studio_lesson;
+        }
+
+        public LessonBean getLive_studio_interactive_lesson() {
+            return live_studio_interactive_lesson;
+        }
+
+        public void setLive_studio_interactive_lesson(LessonBean live_studio_interactive_lesson) {
+            this.live_studio_interactive_lesson = live_studio_interactive_lesson;
+        }
+
+        public LessonBean getLive_studio_scheduled_lesson() {
+            return live_studio_scheduled_lesson;
+        }
+
+        public void setLive_studio_scheduled_lesson(LessonBean live_studio_scheduled_lesson) {
+            this.live_studio_scheduled_lesson = live_studio_scheduled_lesson;
         }
 
         public String getGrade() {
@@ -119,30 +146,8 @@ public class PlayBackListBean implements Serializable {
             this.teacher_name = teacher_name;
         }
 
-        public static class LiveStudioLessonBean {
-            /**
-             * id : 247
-             * name :  test 04辛老师回放功能测试 BB
-             * status : completed
-             * class_date : 2017-01-18
-             * live_time : 18:00-18:45
-             * board_pull_stream : http://va0a19f55.live.126.net/live/2794c854398f4d05934157e05e2fe419.flv?netease=va0a19f55.live.126.net
-             * camera_pull_stream : http://va0a19f55.live.126.net/live/0ca7943afaa340c9a7c1a8baa5afac97.flv?netease=va0a19f55.live.126.net
-             * replayable : true
-             * left_replay_times : 0
-             * modal_type : LiveStudio::Lesson
-             */
-
-            private int id;
+        public static class LessonBean {
             private String name;
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
 
             public String getName() {
                 return name;

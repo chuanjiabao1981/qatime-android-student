@@ -7,7 +7,7 @@
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
     <!--//fragment1-->
-    <string name="login_has_expired">登录已过期，请重新登录</string>
+    <string name="login_has_expired">您的账号正在使用其它同类客户端登录\n请重新登录</string>
     <string name="app_name">答疑时间</string>
     <string name="home_page">首页</string>
     <string name="time_table">课程表</string>
@@ -120,7 +120,7 @@
     <string name="apply_refund">申请退款</string>
     <string name="pay">付款</string>
     <string name="deal_done">交易完成</string>//
-    <string name="dealing">正在交易</string>//
+    <string name="dealing">交易完成</string>//
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
@@ -152,7 +152,7 @@
     <string name="forget_password">找回密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
-    <string name="logout">切换账号</string>
+    <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     <!--//注册-->
     <string name="set_for_login">设置登录</string>
@@ -408,7 +408,7 @@
     <string name="team_need_authentication">需要身份验证</string>
     <string name="team_allow_anyone_join">允许任何人加入</string>
     <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
-    <string name="have_muted">你已被禁言，暂不能发送消息</string>
+    <string name="have_muted">你已被禁言</string>
     <string name="get_wallet_info_error">钱包信息获取失败</string>
     <string name="balance">余额</string>
     <string name="account_consumption">累计消费￥</string>
@@ -567,8 +567,8 @@
     <string name="try_again">重试</string>
     <string name="recharge_result">充值结果</string>
     <string name="wechat_bind_error_alerady_used"><![CDATA[该手机号已注册,请登录进入\n个人中心>安全设置绑定]]></string>
-    <string name="new_phone_to_regist"><新号码></新号码>注册</string>
-    <string name="user_withdraw">用户提现</string>
+    <string name="new_phone_to_regist">新号码注册</string>
+    <string name="user_withdraw">账户提现</string>
     <string name="withdraw_server_error">提现系统繁忙，请稍后再试</string>
     <string name="be">被</string>
     <string name="mute">禁言</string>
@@ -628,9 +628,15 @@
     <string name="video_courses">视频课</string>
     <string name="live_courses">直播课</string>
     <string name="my_video">我的视频课</string>
+    <string name="my_exclusive">我的专属课</string>
     <string name="all_class_has_over">全部课程已完成</string>
     <string name="my_taste">我的试听</string>
     <string name="hint_choose_region">请选择您所在的区域</string>
     <string name="hint_choose_school">请选择您所在的学校</string>
     <string name="withdraw_paid">提现成功</string>
+    <string name="download_manager">我的下载</string>
+    <string name="captcha_phone_has_changed">手机号已变更,请重新验证</string>
+    <string name="captcha_email_has_changed">邮箱已变更,请重新验证</string>
+    <string name="my_homework">我的作业</string>
+    <string name="my_question">我的提问</string>
 </resources>

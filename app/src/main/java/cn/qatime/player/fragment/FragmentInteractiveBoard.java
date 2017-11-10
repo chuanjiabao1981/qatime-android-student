@@ -28,6 +28,7 @@ import cn.qatime.player.im.doodle.OnlineStatusObserver;
 import cn.qatime.player.im.doodle.SupportActionType;
 import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.im.doodle.action.MyPath;
+import cn.qatime.player.utils.LogCatHelper;
 import libraryextra.utils.DensityUtils;
 
 import static android.os.Looper.getMainLooper;
@@ -226,7 +227,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
             playBack.setEnabled(false);
             if (isClearDoodle) {
                 doodleView.clearAll();
-                joinTipText.setText(getString(R.string.join_tip));
+                joinTipText.setText("加入互动后可在上方涂鸦");
             }
             doodleView.setEnableView(false);
         }
@@ -245,6 +246,8 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
      * @param isOpen 开启桌面共享
      */
     public void onSwitch(final boolean isOpen) {
+        if (isOpen == !ChatRoomMemberCache.getInstance().isRTSOpen()) return;
+        LogCatHelper.getInstance(null).log("onSwitch" + isOpen);
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

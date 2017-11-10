@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,12 +35,13 @@ import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
 import cn.qatime.player.fragment.FragmentVideoCoursesTeacherInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.SimpleViewPagerIndicator;
 
 /**
  * @author lungtify
@@ -56,14 +59,13 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private DecimalFormat df = new DecimalFormat("#.00");
     private TextView name;
     private TextView price;
-    private TextView transferPrice;
     private TextView studentNumber;
     private RelativeLayout handleLayout;
     private Button auditionStart;
     private LinearLayout startStudyView;
     private AlertDialog alertDialog;
     private TextView freeTaste;
-    private TextView joinCheap;
+    private TextView couponFree;
     private Button startStudy;
 
     @Override
@@ -90,39 +92,40 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                             studentNumber.setText("学习人数" + data.getData().getVideo_course().getBuy_tickets_count());
 
                             if (data.getData().getVideo_course().getSell_type().equals("charge")) {
-                                String price = df.format(Float.valueOf(data.getData().getVideo_course().getPrice()));
-                                if (price.startsWith(".")) {
-                                    price = "0" + price;
+                                String priceStr = df.format(Float.valueOf(data.getData().getVideo_course().getPrice()));
+                                if (priceStr.startsWith(".")) {
+                                    priceStr = "0" + priceStr;
                                 }
-                                VideoCoursesActivity.this.price.setText("￥" + price);
-                                if (data.getData().getVideo_course().getTaste_count() > 0) {//显示进入试听按钮
-                                    auditionStart.setVisibility(View.VISIBLE);
-                                } else {
-                                    auditionStart.setVisibility(View.GONE);
-                                }
+                                price.setText("￥" + priceStr);
 
-                                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
+                                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {//已购买
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("观看");
-                                } else {
-                                    if (data.getData().getVideo_course().isOff_shelve()) {
-                                        startStudyView.setVisibility(View.VISIBLE);
-                                        startStudy.setText("已下架");
-                                        startStudy.setEnabled(false);
+                                } else {//未购买
+                                    if (data.getData().getVideo_course().isOff_shelve()) {//已下架
+                                        price.setText("已下架");
+                                        handleLayout.setVisibility(View.GONE);
+                                    } else {
+                                        if (data.getData().getVideo_course().getTaste_count() > 0) {//显示进入试听按钮(没有加入试听按钮)
+                                            auditionStart.setVisibility(View.VISIBLE);
+                                        } else {
+                                            auditionStart.setVisibility(View.GONE);
+                                        }
                                     }
                                 }
                             } else if (data.getData().getVideo_course().getSell_type().equals("free")) {
-                                transferPrice.setText("免费");
-                                transferPrice.setVisibility(View.VISIBLE);
-                                price.setVisibility(View.GONE);
+                                price.setText("免费");
                                 startStudyView.setVisibility(View.VISIBLE);
                                 if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudy.setText("观看");
                                 } else {
-                                    startStudy.setText("立即学习");
                                     if (data.getData().getVideo_course().isOff_shelve()) {
-                                        startStudy.setText("已下架");
-                                        startStudy.setEnabled(false);
+                                        price.setText("已下架");
+                                        handleLayout.setVisibility(View.GONE);
+                                    } else {
+                                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                        startStudy.setText("立即学习");
                                     }
                                 }
                             }
@@ -131,8 +134,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 if (!data.getData().getVideo_course().getIcons().isFree_taste()) {
                                     freeTaste.setVisibility(View.GONE);
                                 }
-                                if (!data.getData().getVideo_course().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.GONE);
+                                if (!data.getData().getVideo_course().getIcons().isCoupon_free()) {
+                                    couponFree.setVisibility(View.GONE);
                                 }
                             }
                             ((FragmentVideoCoursesClassInfo) fragBaseFragments.get(0)).setData(data);
@@ -161,10 +164,9 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
     private void initView() {
         freeTaste = (TextView) findViewById(R.id.free_taste);
-        joinCheap = (TextView) findViewById(R.id.join_cheap);
+        couponFree = (TextView) findViewById(R.id.coupon_free);
         name = (TextView) findViewById(R.id.name);
         price = (TextView) findViewById(R.id.price);
-        transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentNumber = (TextView) findViewById(R.id.student_number);
         handleLayout = (RelativeLayout) findViewById(R.id.handle_layout);
         auditionStart = (Button) findViewById(R.id.audition_start);
@@ -220,6 +222,22 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         });
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
+        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (id == 0) {
+                    Toast.makeText(VideoCoursesActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ShareUtil.getInstance(VideoCoursesActivity.this, UrlUtils.getBaseUrl() + "live_studio/video_courses/" + id, name.getText().toString(), "视频课课程", new ShareUtil.ShareListener() {
+                    @Override
+                    public void onSuccess(SHARE_MEDIA platform) {
+
+                    }
+
+                }).open();
+            }
+        });
     }
 
     @Override
@@ -343,6 +361,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Toast.makeText(VideoCoursesActivity.this, "已成功加入我的视频课", Toast.LENGTH_SHORT).show();
+                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red);
+                        startStudy.setTextColor(Color.WHITE);
                         startStudy.setText("观看");
                         data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
                         data.getData().getTicket().setStatus("active");
@@ -378,7 +398,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(VideoCoursesActivity.this, "已成功加入我的试听视频课", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VideoCoursesActivity.this, "已成功加入我的试听", Toast.LENGTH_SHORT).show();
                         data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
                         data.getData().getTicket().setStatus("inactive");
                         Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);

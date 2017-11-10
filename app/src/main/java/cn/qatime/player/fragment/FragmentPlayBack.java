@@ -82,7 +82,7 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
         }
         if (time != null) {
             if (duration > 0)
-                time.setText(DateUtils.stringForTime(duration));
+                time.setText(DateUtils.stringForTime_ms(duration));
             else
                 time.setText("--:--:--");
         }
@@ -218,7 +218,7 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
         seekBar.setMax(Integer.parseInt(String.valueOf(duration)));
 //        Logger.e(duration + "****buffering" + Integer.parseInt(String.valueOf(duration)) + "**percent" + Integer.parseInt(String.valueOf(percent * duration / 100)));
         seekBar.setSecondaryProgress(Integer.parseInt(String.valueOf(percent * duration / 100)));
-        time.setText(DateUtils.stringForTime(duration));
+        time.setText(DateUtils.stringForTime_ms(duration));
     }
 
     public interface CallBack {

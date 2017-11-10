@@ -64,6 +64,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     Button next;
     private TimeCount time;
     private Profile profile;
+    private String captchaPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +134,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (StringUtils.isPhone(phone.getText().toString().trim())) {
                     time.start();
 //                    发送验证码
+                    captchaPhone = phone.getText().toString().trim();
                     Map<String, String> map = new HashMap<>();
-
-                    map.put("send_to", phone.getText().toString().trim());
+                    map.put("send_to", captchaPhone);
                     map.put("key", "register_captcha");
                     DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                         @Override
@@ -200,51 +201,42 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void next() {
-
         if (StringUtils.isNullOrBlanK(phone.getText().toString().trim())) {//账号为空
             Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
-
         if (!StringUtils.isPhone(phone.getText().toString().trim())) {//手机号不正确
             Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
-        if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-            Toast.makeText(this, getResources().getString(R.string.password_format_error), Toast.LENGTH_LONG).show();
-            next.setClickable(true);
-            return;
-        }
-        if (StringUtils.isNullOrBlanK(repassword.getText().toString().trim())) {  //确认密码为空
-            Toast.makeText(this, getResources().getString(R.string.repassword_can_not_be_empty), Toast.LENGTH_LONG).show();
-            next.setClickable(true);
-            return;
-        }
-        if (!password.getText().toString().trim().equals(repassword.getText().toString().trim())) {//前后不一致
-            Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
+        if (!phone.getText().toString().trim().equals(captchaPhone)) { //验证手机是否一致
+            Toast.makeText(this, getResources().getString(R.string.captcha_phone_has_changed), Toast.LENGTH_SHORT).show();
             return;
         }
         if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
             Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
-//        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
-//            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
-//            next.setClickable(true);
-//            return;
-//        }
+        if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+            Toast.makeText(this, getResources().getString(R.string.password_format_error), Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(repassword.getText().toString().trim())) {  //确认密码为空
+            Toast.makeText(this, getResources().getString(R.string.repassword_can_not_be_empty), Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!password.getText().toString().trim().equals(repassword.getText().toString().trim())) {//前后不一致
+            Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!checkBox.isChecked()) {   //协议勾选
             Toast.makeText(this, getResources().getString(R.string.agree_agreement), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("login_mobile", phone.getText().toString().trim());
+        map.put("login_mobile", captchaPhone);
         map.put("captcha_confirmation", code.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("password_confirmation", repassword.getText().toString().trim());//确认密码

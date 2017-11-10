@@ -103,6 +103,14 @@ public class FragmentOrderPaid extends BaseFragment {
                             .append("/").append(item.getProduct_video_course().getTeacher().getName());
                     helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::Group".equals(item.getProduct_type())){
+                    sp.append("专属课/");
+                    sp.append(item.getProduct_customized_group().getGrade())
+                            .append(item.getProduct_customized_group().getSubject())
+                            .append("/共").append(item.getProduct_customized_group().getEvents_count()).append("课")
+                            .append("/").append(item.getProduct_customized_group().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct_customized_group().getName())
+                            .setText(R.id.describe, sp.toString());
                 }
 
 
@@ -117,9 +125,9 @@ public class FragmentOrderPaid extends BaseFragment {
                     refund.setText(R.string.apply_refund);
                     refund.setTextColor(0xffff5842);
                     refund.setBackgroundResource(R.drawable.button_background_normal);
-                    if (item.getStatus().equals("shipped")) {//正在交易
+                    if (item.getStatus().equals("shipped")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.dealing));
-                    } else if (item.getStatus().equals("paid")) {//正在交易
+                    } else if (item.getStatus().equals("paid")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.dealing));
                     } else if (item.getStatus().equals("completed")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.deal_done));
@@ -241,6 +249,9 @@ public class FragmentOrderPaid extends BaseFragment {
         } else if ("LiveStudio::Course".equals(item.getProduct_type()) && item.getProduct().getStatus().equals(Constant.CourseStatus.completed)) {
             Toast.makeText(getActivity(), "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
             return;
+        } else if ("LiveStudio::Group".equals(item.getProduct_type()) && item.getProduct_customized_group().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(getActivity(), "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
         }
         Map<String, String> map = new HashMap<>();
         map.put("order_id", item.getId());
@@ -275,6 +286,10 @@ public class FragmentOrderPaid extends BaseFragment {
 //                            intent.putExtra("closed_lessons_count",item.getProduct_video_course().getClosed_lessons_count());
                             Logger.e("error");
                             return;
+                        } else if ("LiveStudio::Group".equals(item.getProduct_type())) {
+                            intent.putExtra("name", item.getProduct_customized_group().getName());
+                            intent.putExtra("preset_lesson_count", item.getProduct_customized_group().getEvents_count());
+                            intent.putExtra("closed_lessons_count", item.getProduct_customized_group().getClosed_events_count());
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);
