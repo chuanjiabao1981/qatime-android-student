@@ -102,8 +102,8 @@ public class MyExclusiveBean implements Serializable {
             private int view_tickets_count;
             private int events_count;
             private int closed_events_count;
-            private int start_at;
-            private int end_at;
+            private long start_at;
+            private long end_at;
             private String teacher_name;
 
             public int getId() {
@@ -170,19 +170,19 @@ public class MyExclusiveBean implements Serializable {
                 this.closed_events_count = closed_events_count;
             }
 
-            public int getStart_at() {
+            public long getStart_at() {
                 return start_at;
             }
 
-            public void setStart_at(int start_at) {
+            public void setStart_at(long start_at) {
                 this.start_at = start_at;
             }
 
-            public int getEnd_at() {
+            public long getEnd_at() {
                 return end_at;
             }
 
-            public void setEnd_at(int end_at) {
+            public void setEnd_at(long end_at) {
                 this.end_at = end_at;
             }
 

@@ -253,10 +253,10 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
             if (getActivity() != null && getActivity().getResources() != null) {
                 className.setText(data.getCustomized_group().getName());
                 subject.setText((data.getCustomized_group().getSubject() == null ? "" : data.getCustomized_group().getSubject()));
-                classStartTime.setText((data.getCustomized_group().getStart_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getStart_at() * 1000))));
-                classEndTime.setText(data.getCustomized_group().getEnd_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getEnd_at() * 1000)));
+                classStartTime.setText((data.getCustomized_group().getStart_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getStart_at() * 1000L))));
+                classEndTime.setText(data.getCustomized_group().getEnd_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getEnd_at() * 1000L)));
                 grade.setText((data.getCustomized_group().getGrade() == null ? "" : data.getCustomized_group().getGrade()));
-                totalClass.setText(getString(R.string.lesson_count, data.getCustomized_group().getView_tickets_count()));
+                totalClass.setText(getString(R.string.lesson_count, data.getCustomized_group().getEvents_count()));
                 if (!StringUtils.isNullOrBlanK(data.getCustomized_group().getObjective())) {
                     target.setText(data.getCustomized_group().getObjective());
                 }

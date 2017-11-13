@@ -109,8 +109,8 @@ public class ExclusiveLessonPlayBean implements Serializable {
             private String suit_crowd;
             private String description;
             private IconsBean icons;
-            private int start_at;
-            private int end_at;
+            private long start_at;
+            private long end_at;
             private TeacherBean teacher;
             private ChatTeamBean chat_team;
             private String board_pull_stream;
@@ -254,19 +254,19 @@ public class ExclusiveLessonPlayBean implements Serializable {
                 this.icons = icons;
             }
 
-            public int getStart_at() {
+            public long getStart_at() {
                 return start_at;
             }
 
-            public void setStart_at(int start_at) {
+            public void setStart_at(long start_at) {
                 this.start_at = start_at;
             }
 
-            public int getEnd_at() {
+            public long getEnd_at() {
                 return end_at;
             }
 
-            public void setEnd_at(int end_at) {
+            public void setEnd_at(long end_at) {
                 this.end_at = end_at;
             }
 
