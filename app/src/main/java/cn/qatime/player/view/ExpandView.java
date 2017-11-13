@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -154,7 +155,8 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageItem item = adapter.getItem(position);
                 Intent intent = new Intent(getContext(), WatchPictureActivity.class);
-                intent.putExtra("src", item.imagePath);
+                intent.putExtra("imageItems", (Serializable) list);
+                intent.putExtra("position", position);
                 getContext().startActivity(intent);
             }
         });
