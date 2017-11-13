@@ -52,6 +52,7 @@
                 android:maxLines="3"
                 android:minHeight="40dp"
                 android:paddingLeft="5dp"
+                android:textColorHint="#FF0000"
                 android:textSize="14sp" />
 
             <Button

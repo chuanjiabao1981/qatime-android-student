@@ -96,11 +96,6 @@ android {
     }
 }
 
-//def getVersionNameFromManifest() {
-//    def manifestParser = new com.android.builder.core.DefaultManifestParser(android.sourceSets.main.manifest.srcFile)
-//    return manifestParser.getVersionName()
-//}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
