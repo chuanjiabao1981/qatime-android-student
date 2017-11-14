@@ -25,7 +25,7 @@ public class UrlUtils {
     public static String teachers = baseUrl + "api/v1/home/teachers";
     //课程base
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
-    //专属课
+    //小班课
     public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
     //课程
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
@@ -37,7 +37,7 @@ public class UrlUtils {
     public static String urlVideoLessons = baseUrl + "api/v1/live_studio/video_lessons/";
     //我的
     public static String urlStudent = baseUrl + "api/v1/live_studio/students/";
-    //专属课资源
+    //小班课资源
     public static String urlGroups = baseUrl + "api/v1/live_studio/groups/";
     //
     public static String lessons = baseUrl + "api/v1/live_studio/lessons/";

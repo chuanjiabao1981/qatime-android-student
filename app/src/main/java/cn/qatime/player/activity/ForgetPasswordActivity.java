@@ -146,7 +146,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 time.start();
                 break;
             case R.id.submit:
-                if(!statusLogin){//非登陆，取number值
+                if(!statusLogin){//非登录，取number值
                     String phone = number.getText().toString().trim();
                     if (!StringUtils.isPhone(phone)) {//手机号不正确
                         Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();

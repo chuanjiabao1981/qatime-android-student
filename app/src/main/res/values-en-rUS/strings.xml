@@ -135,7 +135,7 @@
     <string name="account">Account</string>//请输入账户
     <string name="password">Password</string>
     <string name="register">Create new account</string>//注册
-    <string name="login">Sign in</string>//登陆
+    <string name="login">Sign in</string>//登录
     <string name="forget_password">Forget password</string>//忘记密码
     <string name="verification_code">Verification Code</string>//验证码
     <string name="change_it">Change it?</string>//看不清 换一张

@@ -107,7 +107,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                     helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::Group".equals(item.getProduct_type())){
-                    sp.append("专属课/");
+                    sp.append("小班课/");
                     sp.append(item.getProduct_customized_group().getGrade())
                             .append(item.getProduct_customized_group().getSubject())
                             .append("/共").append(item.getProduct_customized_group().getEvents_count()).append("课")
