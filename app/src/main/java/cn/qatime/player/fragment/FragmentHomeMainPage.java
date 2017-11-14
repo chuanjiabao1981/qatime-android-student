@@ -402,7 +402,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //今日直播只有直播课和专属课
+                            //今日直播只有直播课和小班课
                             int courseId = recentList.get(position).getCourse_id();
                             if ("LiveStudio::Lesson".equals(recentList.get(position).getModel_name())) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);

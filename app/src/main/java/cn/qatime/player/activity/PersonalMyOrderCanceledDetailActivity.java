@@ -137,9 +137,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_customized_group().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getGrade())) {
-                grade.setText("专属课/" + getResourceString(R.string.grade));
+                grade.setText("小班课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("专属课/" + data.getProduct_customized_group().getGrade());
+                grade.setText("小班课/" + data.getProduct_customized_group().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));

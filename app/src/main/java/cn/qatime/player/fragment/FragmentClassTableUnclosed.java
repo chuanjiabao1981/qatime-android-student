@@ -183,7 +183,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                     helper.setText(R.id.modal_type, "一对一");
                 }else if ("LiveStudio::CustomizedGroup".equals(item.getProduct_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xff00ccff);
-                    helper.setText(R.id.modal_type, "专属课");
+                    helper.setText(R.id.modal_type, "小班课");
                 }
                 if("LiveStudio::OfflineLesson".equals(item.getModel_type())){
                     helper.getView(R.id.offline_flag).setVisibility(View.VISIBLE);

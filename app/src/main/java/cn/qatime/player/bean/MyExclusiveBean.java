@@ -13,7 +13,7 @@ public class MyExclusiveBean implements Serializable {
 
     /**
      * status : 1
-     * data : [{"id":829,"used_count":0,"buy_count":2,"customized_group":{"id":5,"name":"高三数学专属课","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高三","view_tickets_count":0,"events_count":2,"closed_events_count":0,"start_at":1501257600,"end_at":1501257600}}]
+     * data : [{"id":829,"used_count":0,"buy_count":2,"customized_group":{"id":5,"name":"高三数学小班课","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高三","view_tickets_count":0,"events_count":2,"closed_events_count":0,"start_at":1501257600,"end_at":1501257600}}]
      */
 
     private int status;
@@ -40,7 +40,7 @@ public class MyExclusiveBean implements Serializable {
          * id : 829
          * used_count : 0
          * buy_count : 2
-         * customized_group : {"id":5,"name":"高三数学专属课","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高三","view_tickets_count":0,"events_count":2,"closed_events_count":0,"start_at":1501257600,"end_at":1501257600}
+         * customized_group : {"id":5,"name":"高三数学小班课","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高三","view_tickets_count":0,"events_count":2,"closed_events_count":0,"start_at":1501257600,"end_at":1501257600}
          */
 
         private int id;
@@ -83,7 +83,7 @@ public class MyExclusiveBean implements Serializable {
         public static class CustomizedGroupBean {
             /**
              * id : 5
-             * name : 高三数学专属课
+             * name : 高三数学小班课
              * publicizes_url : {"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"}
              * subject : 数学
              * grade : 高三

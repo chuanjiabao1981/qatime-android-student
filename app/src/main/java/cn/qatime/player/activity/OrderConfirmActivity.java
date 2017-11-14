@@ -103,7 +103,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 textCourseType.setText(R.string.video_courses);
                 tip.inflate();
             } else if ("exclusive".equals(courseType)) {
-                textCourseType.setText("专属课");
+                textCourseType.setText("小班课");
             }
         }
 

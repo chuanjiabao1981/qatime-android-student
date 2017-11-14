@@ -48,7 +48,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * @author lungtify
  * @Time 2017/7/24 11:10
- * @Describe 专属课详情
+ * @Describe 小班课详情
  */
 
 public class ExclusiveLessonDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -200,7 +200,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                     Toast.makeText(ExclusiveLessonDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ShareUtil.getInstance(ExclusiveLessonDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/customized_groups/" + id, name.getText().toString(), "专属课课程", new ShareUtil.ShareListener() {
+                ShareUtil.getInstance(ExclusiveLessonDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/customized_groups/" + id, name.getText().toString(), "小班课课程", new ShareUtil.ShareListener() {
                     @Override
                     public void onSuccess(SHARE_MEDIA platform) {
 
@@ -472,7 +472,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         // TODO: 2017/8/8 记得改按钮样式 ↓
         //startStudy.setBackgroundResource(R.drawable.button_bg_selector_red);
         //startStudy.setTextColor(Color.WHITE);
-        Toast.makeText(this, "暂不支持专属课免费", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "暂不支持小班课免费", Toast.LENGTH_SHORT).show();
     }
 
     private void payRemedial() {

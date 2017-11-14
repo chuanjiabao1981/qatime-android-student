@@ -9,7 +9,7 @@ import libraryextra.bean.TeacherBean;
 /**
  * @author lungtify
  * @Time 2017/7/27 13:40
- * @Describe 专属课详情
+ * @Describe 小班课详情
  */
 
 public class ExclusiveLessonDetailBean implements Serializable {
@@ -17,7 +17,7 @@ public class ExclusiveLessonDetailBean implements Serializable {
 
     /**
      * status : 1
-     * data : {"customized_group":{"id":1,"name":"测试专属课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试专属课1","suit_crowd":"测试专属课1","description":"<p>测试专属课1测试专属课1<br><\/p>","teacher":{"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","is_guest":false,"teaching_years":"within_three_years","category":"初中","subject":"政治","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-18","province":1,"city":1,"school":17,"school_name":"阳泉实验中学","school_id":17,"desc":"注意啦"},"offline_lessons":[{"id":3,"name":"公开课","class_date":"2017-07-29","start_time":"05:10","end_time":"06:10","status":"init","class_address":"一号楼"}],"scheduled_lessons":[{"id":2,"name":"第二季","class_date":"2017-07-28","start_time":"15:35","end_time":"16:20","status":"init"},{"id":1,"name":"第一节","class_date":"2017-07-27","start_time":"13:30","end_time":"14:15","status":"init"}]}}
+     * data : {"customized_group":{"id":1,"name":"测试小班课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试小班课1","suit_crowd":"测试小班课1","description":"<p>测试小班课1测试小班课1<br><\/p>","teacher":{"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","is_guest":false,"teaching_years":"within_three_years","category":"初中","subject":"政治","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-18","province":1,"city":1,"school":17,"school_name":"阳泉实验中学","school_id":17,"desc":"注意啦"},"offline_lessons":[{"id":3,"name":"公开课","class_date":"2017-07-29","start_time":"05:10","end_time":"06:10","status":"init","class_address":"一号楼"}],"scheduled_lessons":[{"id":2,"name":"第二季","class_date":"2017-07-28","start_time":"15:35","end_time":"16:20","status":"init"},{"id":1,"name":"第一节","class_date":"2017-07-27","start_time":"13:30","end_time":"14:15","status":"init"}]}}
      */
 
     private int status;
@@ -41,7 +41,7 @@ public class ExclusiveLessonDetailBean implements Serializable {
 
     public static class DataBean {
         /**
-         * customized_group : {"id":1,"name":"测试专属课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试专属课1","suit_crowd":"测试专属课1","description":"<p>测试专属课1测试专属课1<br><\/p>","teacher":{"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","is_guest":false,"teaching_years":"within_three_years","category":"初中","subject":"政治","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-18","province":1,"city":1,"school":17,"school_name":"阳泉实验中学","school_id":17,"desc":"注意啦"},"offline_lessons":[{"id":3,"name":"公开课","class_date":"2017-07-29","start_time":"05:10","end_time":"06:10","status":"init","class_address":"一号楼"}],"scheduled_lessons":[{"id":2,"name":"第二季","class_date":"2017-07-28","start_time":"15:35","end_time":"16:20","status":"init"},{"id":1,"name":"第一节","class_date":"2017-07-27","start_time":"13:30","end_time":"14:15","status":"init"}]}
+         * customized_group : {"id":1,"name":"测试小班课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试小班课1","suit_crowd":"测试小班课1","description":"<p>测试小班课1测试小班课1<br><\/p>","teacher":{"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","is_guest":false,"teaching_years":"within_three_years","category":"初中","subject":"政治","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-18","province":1,"city":1,"school":17,"school_name":"阳泉实验中学","school_id":17,"desc":"注意啦"},"offline_lessons":[{"id":3,"name":"公开课","class_date":"2017-07-29","start_time":"05:10","end_time":"06:10","status":"init","class_address":"一号楼"}],"scheduled_lessons":[{"id":2,"name":"第二季","class_date":"2017-07-28","start_time":"15:35","end_time":"16:20","status":"init"},{"id":1,"name":"第一节","class_date":"2017-07-27","start_time":"13:30","end_time":"14:15","status":"init"}]}
          */
 
         private CustomizedGroupBean customized_group;
@@ -66,7 +66,7 @@ public class ExclusiveLessonDetailBean implements Serializable {
         public static class CustomizedGroupBean {
             /**
              * id : 1
-             * name : 测试专属课1
+             * name : 测试小班课1
              * publicizes_url : {"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"}
              * subject : 数学
              * grade : 高一
@@ -78,9 +78,9 @@ public class ExclusiveLessonDetailBean implements Serializable {
              * events_count : 3
              * start_at : null
              * end_at : null
-             * objective : 测试专属课1
-             * suit_crowd : 测试专属课1
-             * description : <p>测试专属课1测试专属课1<br></p>
+             * objective : 测试小班课1
+             * suit_crowd : 测试小班课1
+             * description : <p>测试小班课1测试小班课1<br></p>
              * teacher : {"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","is_guest":false,"teaching_years":"within_three_years","category":"初中","subject":"政治","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-18","province":1,"city":1,"school":17,"school_name":"阳泉实验中学","school_id":17,"desc":"注意啦"}
              * offline_lessons : [{"id":3,"name":"公开课","class_date":"2017-07-29","start_time":"05:10","end_time":"06:10","status":"init","class_address":"一号楼"}]
              * scheduled_lessons : [{"id":2,"name":"第二季","class_date":"2017-07-28","start_time":"15:35","end_time":"16:20","status":"init"},{"id":1,"name":"第一节","class_date":"2017-07-27","start_time":"13:30","end_time":"14:15","status":"init"}]
