@@ -56,7 +56,7 @@ public class TeacherSearchBean implements Serializable {
         private String teaching_years;
         private String category;
         private String subject;
-        private Object gender;
+        private String gender;
         private String province;
         private String city;
         private String school;
@@ -117,11 +117,11 @@ public class TeacherSearchBean implements Serializable {
             this.subject = subject;
         }
 
-        public Object getGender() {
+        public String getGender() {
             return gender;
         }
 
-        public void setGender(Object gender) {
+        public void setGender(String gender) {
             this.gender = gender;
         }
 

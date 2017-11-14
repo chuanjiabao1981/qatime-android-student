@@ -129,6 +129,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
                 if (!StringUtils.isNullOrBlanK(item.getName())) {
                     holder.setText(R.id.name, item.getName());
                 }
+                holder.setImageResource(R.id.sex,"male".equals(item.getGender()) ? R.mipmap.male : R.mipmap.female);
                 if (!StringUtils.isNullOrBlanK(item.getTeaching_years())) {
                     holder.setText(R.id.teaching_years, getTeachingYear(item.getTeaching_years()));
                 }
