@@ -286,7 +286,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.bottom_button:
                 String trim = content.getText().toString().trim();
-                if (StringUtils.isNullOrBlanK(trim)) {
+                if (StringUtils.isNullOrBlanK(trim)&&imageAttachmentList.size()==0&&StringUtils.isNullOrBlanK(audioFileName) ) {
                     Toast.makeText(this, "回答不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
