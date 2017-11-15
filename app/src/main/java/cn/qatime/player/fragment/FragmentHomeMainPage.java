@@ -177,6 +177,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         close = view.findViewById(R.id.close);
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
         recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
+        view.findViewById(R.id.teacher_more).setOnClickListener(this);
         view.findViewById(R.id.more1).setOnClickListener(this);
         view.findViewById(R.id.more2).setOnClickListener(this);
         view.findViewById(R.id.more3).setOnClickListener(this);
@@ -364,6 +365,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private SimpleDateFormat recentParse = new SimpleDateFormat("MM-dd HH:mm");
+
     private void initRecent() {
         recentList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -396,7 +398,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     LiveRecentBean.DataBean item = recentList.get(position);
                     holder.setText(R.id.teaching_name, item.getName())
                             .setImageByUrl(R.id.image, item.getPublicizes().getApp_info().getUrl(), R.mipmap.photo)
-                            .setText(R.id.time,recentParse.format(new Date(item.getStart_at()*1000)))
+                            .setText(R.id.time, recentParse.format(new Date(item.getStart_at() * 1000)))
                             .setText(R.id.status, getTodayStatusText(item.getStatus()))
                             .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -810,9 +812,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private int getTodayStatusColor(String status) {
-        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
+        if ("ready".equals(status) || "missed".equals(status) || "init".equals(status)) {
             return 0xff4873ff;
-        } else if ("teaching".equals(status)||"paused".equals(status)) {
+        } else if ("teaching".equals(status) || "paused".equals(status)) {
             return 0xffff5842;
         } else {
             return 0xff999999;
@@ -820,9 +822,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private String getTodayStatusText(String status) {
-        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
+        if ("ready".equals(status) || "missed".equals(status) || "init".equals(status)) {
             return "尚未直播";
-        } else if ("teaching".equals(status)||"paused".equals(status)) {
+        } else if ("teaching".equals(status) || "paused".equals(status)) {
             return "正在直播";
         } else {
             return "直播结束";
@@ -841,6 +843,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
+            case R.id.teacher_more:
+                intent = new Intent(getActivity(), TeacherSearchActivity.class);
+                startActivity(intent);
+                break;
             case R.id.more1:
             case R.id.more2:
             case R.id.more3:
