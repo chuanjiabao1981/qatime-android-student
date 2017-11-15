@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -52,6 +56,7 @@ import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -87,6 +92,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView timeToStart;
     private View layoutView;
     private RelativeLayout auditionLayout;
+    private PopupWindow pop;
+    private RemedialClassDetailBean playInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +202,52 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         });
     }
 
+    /**
+     * @param tasteOrBought 已购买或已试听
+     * @param status        课程状态
+     */
+    private void initMenu(boolean tasteOrBought, String status) {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+            if (!tasteOrBought) {
+                menu1.setVisibility(View.GONE);
+            }
+            if (Constant.CourseStatus.completed.equals(status)) {
+                menu1.setVisibility(View.GONE);
+            }
+            menu2.setVisibility(View.GONE);
+            menu3.setVisibility(View.GONE);
+            menu4.setVisibility(View.GONE);
+            menu1.setOnClickListener(this);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1);
+                }
+            });
+        }
+    }
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
     private void initData() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/detail", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
@@ -222,6 +275,29 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         });
         addToRequestQueue(request);
+        DaYiJsonObjectRequest requestPlay = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/play_info", null,
+                new VolleyListener(RemedialClassDetailActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        playInfo = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(requestPlay);
     }
 
     private void setData() {
@@ -279,6 +355,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
 
                 if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
+                    initMenu(true, data.getData().getCourse().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
@@ -287,11 +364,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {//未购买
                     if (data.getData().getCourse().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {//已下架或未购买已结束显示已下架
+                        initMenu(false, data.getData().getCourse().getStatus());
                         handleLayout.setVisibility(View.GONE);
                         transferPrice.setVisibility(View.GONE);
                         price.setText("已下架");
                     } else {
                         if (data.getData().getTicket() == null || StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {//未试听
+                            initMenu(false, data.getData().getCourse().getStatus());
                             if (data.getData().getCourse().isTastable()) {//可以加入试听
                                 audition.setVisibility(View.VISIBLE);
                                 auditionStart.setVisibility(View.GONE);
@@ -299,6 +378,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                 auditionLayout.setVisibility(View.GONE);
                             }
                         } else {//已加入试听
+                            initMenu(true, data.getData().getCourse().getStatus());
                             audition.setVisibility(View.GONE);
                             auditionStart.setVisibility(View.VISIBLE);
                             if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
@@ -447,6 +527,26 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     startActivity(intent);
                 }
                 break;
+            case R.id.menu_1:
+
+                if (playInfo == null || playInfo.getData() == null || StringUtils.isNullOrBlanK(playInfo.getData().getChat_team_id())) {
+                    Toast.makeText(this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent = new Intent(RemedialClassDetailActivity.this, MessageActivity.class);
+                intent.putExtra("sessionId", playInfo.getData().getChat_team_id());
+                intent.putExtra("sessionType", SessionTypeEnum.None);
+                intent.putExtra("courseId", id);
+                intent.putExtra("name", data.getData().getCourse().getName());
+                intent.putExtra("type", "custom");
+                startActivity(intent);
+                break;
+            case R.id.menu_5:
+                intent = new Intent(RemedialClassDetailActivity.this, MembersActivity.class);
+                intent.putExtra("members",playInfo.getData().getChat_team());
+                startActivity(intent);
+                break;
+
         }
     }
 

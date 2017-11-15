@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +70,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private TextView freeTaste;
     private TextView couponFree;
     private Button startStudy;
+    private PopupWindow pop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,46 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         EventBus.getDefault().register(this);
         initView();
         initData();
+        initMenu();
+    }
+
+    /**
+
+     */
+    private void initMenu() {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+            menu1.setVisibility(View.GONE);
+            menu2.setVisibility(View.GONE);
+            menu3.setVisibility(View.GONE);
+            menu4.setVisibility(View.GONE);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1);
+                }
+            });
+        }
+    }
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
     }
 
     private void initData() {
@@ -324,6 +368,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                     intent.putExtra("id", id);
                     startActivity(intent);
                 }
+                break;
+            case R.id.menu_5:
                 break;
         }
     }
