@@ -99,7 +99,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                     backgroundAlpha(0.9f);
                 }
             });
-            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
             View menu1 = popView.findViewById(R.id.menu_1);
             View menu2 = popView.findViewById(R.id.menu_2);
             View menu3 = popView.findViewById(R.id.menu_3);
@@ -389,7 +389,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 intent.putExtra("courseId", id);
                 intent.putExtra("name", data.getData().getCustomized_group().getName());
                 intent.putExtra("type", "exclusive");
-                intent.putExtra("owner", 0);
                 startActivity(intent);
                 pop.dismiss();
                 break;
@@ -413,7 +412,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.menu_5:
                 intent = new Intent(this, MembersActivity.class);
-                intent.putExtra("courseId", id);
+                intent.putExtra("members", playInfo.getData().getCustomized_group().getChat_team());
                 startActivity(intent);
                 pop.dismiss();
                 break;

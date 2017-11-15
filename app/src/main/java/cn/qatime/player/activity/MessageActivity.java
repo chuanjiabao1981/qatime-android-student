@@ -119,7 +119,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     backgroundAlpha(0.9f);
                 }
             });
-            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
             View menu1 = popView.findViewById(R.id.menu_1);
             View menu2 = popView.findViewById(R.id.menu_2);
             View menu3 = popView.findViewById(R.id.menu_3);

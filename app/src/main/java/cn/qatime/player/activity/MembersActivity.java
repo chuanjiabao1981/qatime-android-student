@@ -1,13 +1,13 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,16 +33,8 @@ import libraryextra.utils.VolleyListener;
 public class MembersActivity extends BaseActivity {
     private List<ChatTeamBean.Accounts> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter adapter;
-    private Handler hd = new Handler();
     private int id;
     private ExclusiveLessonPlayInfoBean playInfo;
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            adapter.notifyDataSetChanged();
-            hd.removeCallbacks(this);
-        }
-    };
 
 
     @Override
@@ -55,7 +47,14 @@ public class MembersActivity extends BaseActivity {
         listView.setAdapter(adapter);
 
         id = getIntent().getIntExtra("courseId", 0);
-        initData();
+        if (id != 0) {
+            initData();
+        } else {
+            ChatTeamBean chatTeam = (ChatTeamBean) getIntent().getSerializableExtra("members");
+            if (chatTeam != null) {
+                setData(chatTeam.getAccounts());
+            }
+        }
 
     }
 
@@ -131,7 +130,7 @@ public class MembersActivity extends BaseActivity {
                     return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
-            hd.postDelayed(runnable, 200);
+            adapter.notifyDataSetChanged();
         }
     }
 }
