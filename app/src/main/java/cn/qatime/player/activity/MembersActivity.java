@@ -7,7 +7,6 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
