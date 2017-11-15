@@ -125,7 +125,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(this, "请输入提问标题", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (StringUtils.isNullOrBlanK(body)) {
+        if (StringUtils.isNullOrBlanK(body)&&imageAttachmentList.size()==0&&StringUtils.isNullOrBlanK(audioFileName)) {
             Toast.makeText(this, "请输入提问内容", Toast.LENGTH_SHORT).show();
             return;
         }

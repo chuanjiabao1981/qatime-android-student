@@ -1,8 +1,10 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
     private List<HomeworkDetailBean> list;
     private HomeworkDetailBean doingItem;
     private List<HomeWorkItemBean> answerList = new ArrayList<>();
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,9 @@ public class HomeWorkDetailActivity extends BaseActivity {
     private void doHomework() {
         if (answerList.size() <= 0) {
             Toast.makeText(this, "请先添加答案", Toast.LENGTH_SHORT).show();
+            return;
+        }else  if (answerList.size() < item.getHomework().getItems().size()) {
+            dialog();
             return;
         }
         Map<String, String> map = new HashMap<>();
@@ -105,37 +111,6 @@ public class HomeWorkDetailActivity extends BaseActivity {
     }
 
     private String getContentString() {
-        List<MyHomeWorksBean.DataBean.ItemsBean> items = item.getHomework().getItems();
-        if (answerList.size() < items.size()) {//如果提交时没做完
-//            List<Integer> ids = new ArrayList<>();
-//            for (MyHomeWorksBean.DataBean.ItemsBean itemsBean : items) {//循环拿到所有的作业Id
-//                ids.add(itemsBean.getId());
-//            }
-//            List<Integer> answerIds = new ArrayList<>();
-//            for (HomeWorkItemBean homeWorkItemBean : answerList) { //循环拿到已经做的id
-//                answerIds.add(homeWorkItemBean.parent_id);
-//            }
-//            ids.removeAll(answerIds);//去掉所有的已经做过的id（拿到没做的id）
-//            for (Integer id : ids) {//循环为没有做过的添加答案
-//                HomeWorkItemBean itemBean = new HomeWorkItemBean();
-//                itemBean.parent_id = id;
-//                itemBean.content="未做";
-//                answerList.add(itemBean);
-//            }
-
-            for (MyHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
-                HomeWorkItemBean itemBean = new HomeWorkItemBean();
-                itemBean.parent_id = itemsBean.getId();
-                if (!answerList.contains(itemBean)) {
-                    itemBean.content = "未做";
-                    answerList.add(itemBean);
-                }
-
-            }
-
-        }
-
-
         StringBuilder sb = new StringBuilder("[");
         for (HomeWorkItemBean homeWorkItemBean : answerList) {
             sb.append("{\"parent_id\":")
@@ -264,6 +239,49 @@ public class HomeWorkDetailActivity extends BaseActivity {
         }, new VolleyErrorListener()));
     }
 
+    private void dialog() {
+        if (alertDialog == null) {
+            View view = View.inflate(HomeWorkDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
+            Button cancel = (Button) view.findViewById(R.id.cancel);
+            Button confirm = (Button) view.findViewById(R.id.confirm);
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText("有作业未作答，是否继续提交？");
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //补全
+                    List<MyHomeWorksBean.DataBean.ItemsBean> items = item.getHomework().getItems();
+                    if (answerList.size() < items.size()) {
+                        for (MyHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
+                            HomeWorkItemBean itemBean = new HomeWorkItemBean();
+                            itemBean.parent_id = itemsBean.getId();
+                            if (!answerList.contains(itemBean)) {
+                                itemBean.content = "未作答";
+                                answerList.add(itemBean);
+                            }
+
+                        }
+
+                    }
+                    doHomework();
+                    alertDialog.dismiss();
+                }
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeWorkDetailActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+        } else {
+            alertDialog.show();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
@@ -343,11 +361,11 @@ public class HomeWorkDetailActivity extends BaseActivity {
                             answerView.initExpandView(item.answer.getBody(), answerAudioAttachments.file_url, answerImageAttachments, true);
                         } else {
                             ExpandView answerView = holder.getView(R.id.answer_view);
-                            answerView.initExpandView("无", null, null, true);
+                            answerView.initExpandView("未作答", null, null, true);
                         }
                     } else {//已做但是答案为空  理论上不会出现   answer为空id为空
                         ExpandView answerView = holder.getView(R.id.answer_view);
-                        answerView.initExpandView("无", null, null, true);
+                        answerView.initExpandView("未作答", null, null, true);
                     }
                     if (HomeWorkDetailActivity.this.item.getStatus().equals("resolved")) {
                         View correctionLayout = holder.getView(R.id.correction_layout);
@@ -372,11 +390,11 @@ public class HomeWorkDetailActivity extends BaseActivity {
                                 correctView.initExpandView(item.correction.getBody(), correctionAudioAttachments.file_url, correctionImageAttachments, true);
                             } else {
                                 ExpandView correctView = holder.getView(R.id.correction_view);
-                                correctView.initExpandView("无", null, null, true);
+                                correctView.initExpandView("未批改", null, null, true);
                             }
                         } else {//已批改的状态但是没有批改结果  理论上不会出现   correction为空id为空
                             ExpandView correctView = holder.getView(R.id.correction_view);
-                            correctView.initExpandView("无", null, null, true);
+                            correctView.initExpandView("未批改", null, null, true);
                         }
                     }
                 } else {
@@ -403,7 +421,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                             answerView.initExpandView(item.answer.getBody(), answerAudioAttachments.file_url, answerImageAttachments, true);
                         } else {
                             ExpandView answerView = holder.getView(R.id.answer_view);
-                            answerView.initExpandView("无", null, null, true);
+                            answerView.initExpandView("未作答", null, null, true);
                         }
                     }
                     doHomeWork.setOnClickListener(new View.OnClickListener() {
