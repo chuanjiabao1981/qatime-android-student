@@ -64,8 +64,8 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private InteractCourseDetailBean data;
     private ViewPager mViewPager;
     private int pager = 0;
-    TextView price;
-    DecimalFormat df = new DecimalFormat("#.00");
+    private TextView price;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private View startStudyView;
     private View handleLayout;
@@ -278,9 +278,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }
-
-                , new VolleyErrorListener() {
+                }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -396,7 +394,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 break;
             case R.id.menu_5:
                 intent = new Intent(InteractCourseDetailActivity.this, MembersActivity.class);
-                intent.putExtra("members",playInfo.getData().getInteractive_course().getChat_team());
+                intent.putExtra("members", playInfo.getData().getInteractive_course().getChat_team());
                 startActivity(intent);
                 break;
         }

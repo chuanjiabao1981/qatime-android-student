@@ -87,5 +87,8 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
     <!--search-->
-    <ImageView style="@style/backbar_icon_style" />
+    <ImageView
+        android:id="@+id/search"
+        style="@style/backbar_icon_style"
+        android:src="@mipmap/search"/>
 </LinearLayout>
