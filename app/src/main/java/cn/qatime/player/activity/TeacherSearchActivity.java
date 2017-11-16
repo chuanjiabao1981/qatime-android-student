@@ -103,7 +103,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
-        setRightImage(R.mipmap.search, new View.OnClickListener() {
+        setRightImage(R.mipmap.button_search, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TeacherSearchActivity.this, SearchActivity.class);

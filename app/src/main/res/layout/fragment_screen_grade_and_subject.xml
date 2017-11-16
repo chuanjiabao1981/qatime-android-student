@@ -21,7 +21,7 @@
             android:id="@+id/search"
             style="@style/backbar_icon_style"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/search" />
+            android:src="@mipmap/button_search" />
     </RelativeLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout

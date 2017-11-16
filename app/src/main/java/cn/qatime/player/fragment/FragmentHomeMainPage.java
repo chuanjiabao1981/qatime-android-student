@@ -60,6 +60,7 @@ import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
+import cn.qatime.player.activity.WebActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
@@ -668,7 +669,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
-            public View getView(ViewGroup container, int position) {
+            public View getView(ViewGroup container, final int position) {
 //                Logger.e("position:" + position + "url:" + listBanner.get(position).getLogo_url());
                 ImageView iv = new ImageView(getActivity());
                 iv.setClickable(true);
@@ -676,6 +677,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 iv.setId(position);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 Glide.with(getActivity()).load(listBanner.get(position).getLogo_url()).placeholder(R.mipmap.no_banner).into(iv);
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (StringUtils.isNullOrBlanK(listBanner.get(position).getLink()) || StringUtils.isGoodUrl(listBanner.get(position).getLink())) {
+                            Toast.makeText(getActivity(), "网址格式不正确", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), WebActivity.class);
+                        intent.putExtra("url", listBanner.get(position).getLink());
+                        startActivity(intent);
+                    }
+                });
                 container.addView(iv);
                 return iv;
             }
