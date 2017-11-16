@@ -248,7 +248,7 @@ public class MainActivity extends BaseFragmentActivity {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(BaseApplication.getInstance().getUserId()));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications", map), null,
-                new VolleyListener(MainActivity.this) {
+                new VolleyListener( MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);

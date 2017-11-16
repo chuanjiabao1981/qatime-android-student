@@ -289,7 +289,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
                 if (!StringUtils.isNullOrBlanK(owner)) {
                     if (owner.equals(message.getFromAccount())) {
                         name = name + "(" + context.getString(R.string.teacher_translate) + ")";
-                        nameTextView.setTextColor(0xffff5842);
+                        nameTextView.setTextColor(0xffC4483C);
                     }
                 }
                 nameTextView.setText(name);

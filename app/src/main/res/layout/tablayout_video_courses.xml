@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="课时安排"
-                android:textColor="#ff5842"
+                android:textColor="#C4483C"
                 android:textSize="14sp" />
         </LinearLayout>
 

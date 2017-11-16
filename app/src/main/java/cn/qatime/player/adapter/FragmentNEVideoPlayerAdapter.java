@@ -7,17 +7,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.ChatTeamBean;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -36,8 +32,8 @@ public class FragmentNEVideoPlayerAdapter extends CommonAdapter<ChatTeamBean.Acc
     public void convert(ViewHolder holder, ChatTeamBean.Accounts item, int position) {
         if (item == null) return;
 //        if (item.isOwner()) {
-//            ((TextView) holder.getView(R.id.name)).setTextColor(0xffff5842);
-//            ((TextView) holder.getView(R.id.role)).setTextColor(0xffff5842);
+//            ((TextView) holder.getView(R.id.name)).setTextColor(0xffC4483C);
+//            ((TextView) holder.getView(R.id.role)).setTextColor(0xffC4483C);
 //            ((TextView) holder.getView(R.id.role)).setText(R.string.teacher_translate);
 //        } else {
         ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);

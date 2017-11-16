@@ -70,7 +70,7 @@ public class FragmentInteractDetailClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                     if (data != null && data.getData().getTicket() != null && !StringUtils.isNullOrBlanK(data.getData().getTicket().getStatus()) && data.getData().getTicket().getStatus().equals("active") && item.isReplayable()) {
-                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffC4483C);
                         holder.setText(R.id.status, "观看回放");
                     } else {
                         ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
