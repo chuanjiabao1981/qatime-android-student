@@ -90,5 +90,5 @@
     <ImageView
         android:id="@+id/search"
         style="@style/backbar_icon_style"
-        android:src="@mipmap/search"/>
+        android:src="@mipmap/button_search"/>
 </LinearLayout>
