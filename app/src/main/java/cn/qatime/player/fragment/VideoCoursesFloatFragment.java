@@ -129,8 +129,8 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
                 holder.setText(R.id.number, getPosition(position))
                         .setText(R.id.name, item.getName());
                 if (act != null && act.playingData != null && act.playingData.getId() == item.getId()) {
-                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffff5842);
-                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffff5842);
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffC4483C);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffC4483C);
                 } else {
                     ((TextView) holder.getView(R.id.number)).setTextColor(0xffffffff);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xffffffff);

@@ -316,7 +316,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffC4483C);
                 if (position == 0) {
                     if (inputPanel != null)
                         inputPanel.visibilityInput();

@@ -123,7 +123,7 @@ public class FragmentOrderPaid extends BaseFragment {
                     //                    android:background="@drawable/button_background"
                 } else {
                     refund.setText(R.string.apply_refund);
-                    refund.setTextColor(0xffff5842);
+                    refund.setTextColor(0xffC4483C);
                     refund.setBackgroundResource(R.drawable.button_background_normal);
                     if (item.getStatus().equals("shipped")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.dealing));

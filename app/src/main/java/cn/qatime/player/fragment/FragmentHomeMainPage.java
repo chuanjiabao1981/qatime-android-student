@@ -828,7 +828,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         if ("ready".equals(status) || "missed".equals(status) || "init".equals(status)) {
             return 0xff4873ff;
         } else if ("teaching".equals(status) || "paused".equals(status)) {
-            return 0xffff5842;
+            return 0xffC4483C;
         } else {
             return 0xff999999;
         }

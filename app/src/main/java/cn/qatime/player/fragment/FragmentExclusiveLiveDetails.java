@@ -128,7 +128,7 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                     if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
-                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffC4483C);
                         holder.setText(R.id.status, "观看回放");
                     } else {
                         ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
