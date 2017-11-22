@@ -370,6 +370,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 }
                 break;
             case R.id.menu_5:
+                pop.dismiss();
                 break;
         }
     }

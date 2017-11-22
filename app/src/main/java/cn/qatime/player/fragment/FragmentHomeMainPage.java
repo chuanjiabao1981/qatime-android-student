@@ -122,7 +122,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private View cashAccountSafe;
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
-    private CommonAdapter<FreeCourseBean.DataBean> freeCourrseAdapter;
+    private CommonAdapter<FreeCourseBean.DataBean> freeCourseAdapter;
     private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList<>();
     private View emptyViewToday;
 
@@ -272,7 +272,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initFreeCourse() {
         //免费课程
-        freeCourrseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
+        freeCourseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
             @Override
             public void convert(ViewHolder holder, FreeCourseBean.DataBean item, int position) {
                 holder.setImageByUrl(R.id.image, item.getPublicizes().getList().getUrl(), R.mipmap.photo)
@@ -281,7 +281,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
             }
         };
-        listViewFree.setAdapter(freeCourrseAdapter);
+        listViewFree.setAdapter(freeCourseAdapter);
         ViewGroup parent = (ViewGroup) listViewFree.getParent();
         View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
         parent.addView(inflate, parent.indexOfChild(listViewFree) + 1);
@@ -637,7 +637,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         listFree.clear();
                         if (data != null && data.getData() != null) {
                             listFree.addAll(data.getData());
-                            freeCourrseAdapter.notifyDataSetChanged();
+                            freeCourseAdapter.notifyDataSetChanged();
                         }
                     }
 

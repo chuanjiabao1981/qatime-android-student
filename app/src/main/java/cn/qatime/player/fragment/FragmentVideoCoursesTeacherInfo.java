@@ -1,14 +1,11 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +33,7 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
     private TextView teachingyears;
     private TextView school;
     private ImageView sex;
-    private WebView describe;
+    private TextView describe;
 
     @Nullable
     @Override
@@ -57,25 +54,7 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
         school = (TextView) findViewById(R.id.school);
         sex = (ImageView) findViewById(R.id.sex);
 
-        describe = (WebView) findViewById(R.id.describe);
-
-        describe.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
-
-        describe.setBackgroundColor(0); // 设置背景色
-        describe.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
-        describe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
-        WebSettings settings = describe.getSettings();
-        settings.setDefaultTextEncodingName("UTF-8");
-        settings.setBlockNetworkImage(false);
-        settings.setDefaultFontSize(14);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
-        }
+        describe = (TextView) findViewById(R.id.describe);
     }
 
     public void setData(final VideoCoursesDetailsBean data) {
@@ -116,9 +95,15 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
                 startActivity(intent);
             }
         });
-        String body = StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getVideo_course().getTeacher().getDesc();
-        body = body.replace("\r\n", "<br>");
-        String css = "<style>* {color:#666666;margin:0;padding:0}</style>";//默认color（android标签下以及所有未设置颜色的标签）
-        describe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
+        describe.setText(StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getVideo_course().getTeacher().getDesc());
+        findViewById(R.id.name_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                intent.putExtra("teacherId", data.getData().getVideo_course().getTeacher().getId());
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -128,8 +128,6 @@ public class FragmentInteractiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
                 }
-
-
             }
         };
         list.setAdapter(adapter);

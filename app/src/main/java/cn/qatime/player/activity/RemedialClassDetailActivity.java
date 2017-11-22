@@ -378,12 +378,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                 auditionLayout.setVisibility(View.GONE);
                             }
                         } else {//已加入试听
-                            initMenu(true, data.getData().getCourse().getStatus());
                             audition.setVisibility(View.GONE);
                             auditionStart.setVisibility(View.VISIBLE);
                             if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
+                                initMenu(false, data.getData().getCourse().getStatus());
                                 auditionStart.setText("试听结束");
                                 auditionStart.setEnabled(false);
+                            } else {
+                                initMenu(true, data.getData().getCourse().getStatus());
                             }
                         }
                     }
@@ -391,6 +393,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             } else if (data.getData().getCourse().getSell_type().equals("free")) {
                 price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
+                    initMenu(true, data.getData().getCourse().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
@@ -398,6 +401,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         startStudyView.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    initMenu(false, data.getData().getCourse().getStatus());
                     if (data.getData().getCourse().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         price.setText("已下架");
                         handleLayout.setVisibility(View.GONE);
@@ -540,11 +544,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 intent.putExtra("name", data.getData().getCourse().getName());
                 intent.putExtra("type", "custom");
                 startActivity(intent);
+                pop.dismiss();
                 break;
             case R.id.menu_5:
                 intent = new Intent(RemedialClassDetailActivity.this, MembersActivity.class);
-                intent.putExtra("members",playInfo.getData().getChat_team());
+                intent.putExtra("members", playInfo.getData().getChat_team());
                 startActivity(intent);
+                pop.dismiss();
                 break;
 
         }

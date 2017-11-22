@@ -28,13 +28,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.AppUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.NetUtils;
@@ -54,7 +54,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
+        ((TextView) findViewById(R.id.version)).setText("V " + BuildConfig.VERSION_NAME);
         if (!NetUtils.isConnected(StartActivity.this)) {
             Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
             if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
@@ -121,7 +121,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         Map<String, String> map = new HashMap<>();
         map.put("category", "student_client");
         map.put("platform", "android");
-        map.put("version", AppUtils.getVersionName(this));
+        map.put("version",BuildConfig.VERSION_NAME);
 //        map.put("version", "0.0.1");
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
             @Override
