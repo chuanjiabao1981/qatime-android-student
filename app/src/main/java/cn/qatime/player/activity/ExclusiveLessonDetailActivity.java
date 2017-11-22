@@ -90,7 +90,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         initData();
     }
 
-    private void initMenu(String status) {
+    private void initMenu(boolean tasteOrBought, String status) {
         if (pop == null) {
             setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
                 @Override
@@ -105,6 +105,12 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             View menu3 = popView.findViewById(R.id.menu_3);
             View menu4 = popView.findViewById(R.id.menu_4);
             View menu5 = popView.findViewById(R.id.menu_5);
+            if (!tasteOrBought) {
+                menu1.setVisibility(View.GONE);
+                menu2.setVisibility(View.GONE);
+                menu3.setVisibility(View.GONE);
+                menu4.setVisibility(View.GONE);
+            }
             if (Constant.CourseStatus.completed.equals(status)) {
                 menu1.setVisibility(View.GONE);
             }
@@ -306,13 +312,14 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 price.setText("￥" + priceStr);
                 if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
-                    initMenu(data.getData().getCustomized_group().getStatus());
+                    initMenu(true, data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
                         startStudy.setText("开始学习");
                     }
                 } else {//需购买
+                    initMenu(false, data.getData().getCustomized_group().getStatus());
                     if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {//已下架或未购买已结束显示已下架
                         handleLayout.setVisibility(View.GONE);
                         price.setText("已下架");
@@ -332,13 +339,14 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             } else if (data.getData().getCustomized_group().getSell_type().equals("free")) {
                 price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
-                    initMenu(data.getData().getCustomized_group().getStatus());
+                    initMenu(true, data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
                         startStudy.setText("开始学习");
                     }
                 } else {
+                    initMenu(false, data.getData().getCustomized_group().getStatus());
                     if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         price.setText("已下架");
                         handleLayout.setVisibility(View.GONE);

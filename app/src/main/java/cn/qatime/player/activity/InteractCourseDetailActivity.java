@@ -391,11 +391,13 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 intent.putExtra("name", data.getData().getInteractive_course().getName());
                 intent.putExtra("type", "custom");
                 startActivity(intent);
+                pop.dismiss();
                 break;
             case R.id.menu_5:
                 intent = new Intent(InteractCourseDetailActivity.this, MembersActivity.class);
                 intent.putExtra("members", playInfo.getData().getInteractive_course().getChat_team());
                 startActivity(intent);
+                pop.dismiss();
                 break;
         }
     }
