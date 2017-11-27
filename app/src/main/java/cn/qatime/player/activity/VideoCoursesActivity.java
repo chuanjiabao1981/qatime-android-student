@@ -68,7 +68,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private LinearLayout startStudyView;
     private AlertDialog alertDialog;
     private TextView freeTaste;
-    private TextView couponFree;
     private Button startStudy;
     private PopupWindow pop;
 
@@ -178,9 +177,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 if (!data.getData().getVideo_course().getIcons().isFree_taste()) {
                                     freeTaste.setVisibility(View.GONE);
                                 }
-                                if (!data.getData().getVideo_course().getIcons().isCoupon_free()) {
-                                    couponFree.setVisibility(View.GONE);
-                                }
                             }
                             ((FragmentVideoCoursesClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentVideoCoursesTeacherInfo) fragBaseFragments.get(1)).setData(data);
@@ -208,7 +204,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
     private void initView() {
         freeTaste = (TextView) findViewById(R.id.free_taste);
-        couponFree = (TextView) findViewById(R.id.coupon_free);
         name = (TextView) findViewById(R.id.name);
         price = (TextView) findViewById(R.id.price);
         studentNumber = (TextView) findViewById(R.id.student_number);

@@ -82,10 +82,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private Button auditionStart;
     private TextView transferPrice;
     private View handleLayout;
-    private TextView refundAnyTime;
+//    private TextView refundAnyTime;
     private TextView freeTaste;
     private TextView couponFree;
-    private TextView joinCheap;
+//    private TextView joinCheap;
 
     private TextView progress;
     private TextView status;
@@ -120,10 +120,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
         fragBaseFragments.add(new FragmentClassDetailClassList());
 
-        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
+//        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
         freeTaste = (TextView) findViewById(R.id.free_taste);
         couponFree = (TextView) findViewById(R.id.coupon_free);
-        joinCheap = (TextView) findViewById(R.id.join_cheap);
+//        joinCheap = (TextView) findViewById(R.id.join_cheap);
         progress = (TextView) findViewById(R.id.progress);
         timeToStart = (TextView) findViewById(R.id.time_to_start);
         status = (TextView) findViewById(R.id.status);
@@ -418,15 +418,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 if (!data.getData().getCourse().getIcons().isCoupon_free()) {
                     couponFree.setVisibility(View.GONE);
                 }
-                if (!data.getData().getCourse().getIcons().isRefund_any_time()) {
-                    refundAnyTime.setVisibility(View.GONE);
-                }
+//                if (!data.getData().getCourse().getIcons().isRefund_any_time()) {
+//                    refundAnyTime.setVisibility(View.GONE);
+//                }
                 if (!data.getData().getCourse().getIcons().isFree_taste()) {
                     freeTaste.setVisibility(View.GONE);
                 }
-                if (!data.getData().getCourse().getIcons().isJoin_cheap()) {
-                    joinCheap.setVisibility(View.GONE);
-                }
+//                if (!data.getData().getCourse().getIcons().isJoin_cheap()) {
+//                    joinCheap.setVisibility(View.GONE);
+//                }
             }
             ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);

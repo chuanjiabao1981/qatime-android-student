@@ -57,7 +57,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private TextView name;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private DecimalFormat df = new DecimalFormat("#.00");
-    private TextView refundAnyTime;
+//    private TextView refundAnyTime;
     private TextView couponFree;
     private TextView progress;
     private TextView timeToStart;
@@ -74,7 +74,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private AlertDialog alertDialog;
     private PopupWindow pop;
     private ExclusiveLessonPlayInfoBean playInfo;
-    private TextView joinCheap;
+//    private TextView joinCheap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +144,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         fragBaseFragments.add(new FragmentExclusiveLessonClassList());
 
 
-        joinCheap = (TextView) findViewById(R.id.join_cheap);
-        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
+//        joinCheap = (TextView) findViewById(R.id.join_cheap);
+//        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
         couponFree = (TextView) findViewById(R.id.coupon_free);
         progress = (TextView) findViewById(R.id.progress);
         timeToStart = (TextView) findViewById(R.id.time_to_start);
@@ -366,15 +366,15 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             }
 
             if (data.getData().getCustomized_group().getIcons() != null) {
-                if (!data.getData().getCustomized_group().getIcons().isRefund_any_time()) {
-                    refundAnyTime.setVisibility(View.GONE);
-                }
+//                if (!data.getData().getCustomized_group().getIcons().isRefund_any_time()) {
+//                    refundAnyTime.setVisibility(View.GONE);
+//                }
                 if (!data.getData().getCustomized_group().getIcons().isCoupon_free()) {
                     couponFree.setVisibility(View.GONE);
                 }
-                if (!data.getData().getCustomized_group().getIcons().isJoin_cheap()) {
-                    joinCheap.setVisibility(View.GONE);
-                }
+//                if (!data.getData().getCustomized_group().getIcons().isJoin_cheap()) {
+//                    joinCheap.setVisibility(View.GONE);
+//                }
             }
             ((FragmentExclusiveLessonClassInfo) fragBaseFragments.get(0)).setData(data);
             ((FragmentExclusiveLessonTeacherInfo) fragBaseFragments.get(1)).setData(data);

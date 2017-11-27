@@ -40,14 +40,17 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_interact_detail_teachers_info, container, false);
-        initview(view);
-        return view;
+        return inflater.inflate(R.layout.fragment_interact_detail_teachers_info, container, false);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initview();
+    }
 
-    private void initview(View view) {
-        ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
+    private void initview() {
+        ListView listView = (ListView) findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         list = new ArrayList<>();
         adapter = new CommonAdapter<TeacherBean>(getActivity(), list, R.layout.item_course_teacher_info) {

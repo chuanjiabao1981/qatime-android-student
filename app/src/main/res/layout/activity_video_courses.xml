@@ -36,6 +36,16 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/identification_light"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text=" 无需插班"
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
+
+                <TextView
                     android:id="@+id/free_taste"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,13 +57,12 @@
                     android:textSize="11dp" />
 
                 <TextView
-                    android:id="@+id/coupon_free"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/identification_light"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text=" 报名立减"
+                    android:text=" 支持回放"
                     android:textColor="#109f10"
                     android:textSize="11dp" />
 
@@ -121,10 +130,10 @@
             android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:clickable="true"
             android:drawableLeft="@mipmap/share_dark"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:clickable="true"
             android:text=" 分 享 "
             android:textColor="#000" />
 

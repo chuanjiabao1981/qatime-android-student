@@ -69,8 +69,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private AlertDialog alertDialog;
     private View startStudyView;
     private View handleLayout;
-    private TextView refundAnyTime;
-    private TextView couponFree;
     private PopupWindow pop;
     private InteractCourseDetailBean playInfo;
 
@@ -98,9 +96,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         fragBaseFragments.add(new FragmentInteractDetailClassInfo());
         fragBaseFragments.add(new FragmentInteractDetailTeachersInfo());
         fragBaseFragments.add(new FragmentInteractDetailClassList());
-
-        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
-        couponFree = (TextView) findViewById(R.id.coupon_free);
 
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
@@ -237,16 +232,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                                 priceStr = "0" + priceStr;
                             }
                             price.setText("￥" + priceStr);
-
-                            if (data.getData().getInteractive_course().getIcons() != null) {
-                                if (!data.getData().getInteractive_course().getIcons().isRefund_any_time()) {
-                                    refundAnyTime.setVisibility(View.GONE);
-                                }
-
-                                if (!data.getData().getInteractive_course().getIcons().isCoupon_free()) {
-                                    couponFree.setVisibility(View.GONE);
-                                }
-                            }
 
                             ((FragmentInteractDetailClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentInteractDetailTeachersInfo) fragBaseFragments.get(1)).setData(data);
