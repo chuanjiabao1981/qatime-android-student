@@ -48,9 +48,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private Button exit;
     private String totalCacheSize;
     private android.app.AlertDialog alertDialog;
-//    private String apkUrl;
+    //    private String apkUrl;
     private String downLoadLinks;
     private View updateView;
+    private LinearLayout security;
     private LinearLayout about;
 
     private void assignViews() {
@@ -60,7 +61,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         cleanCache = (LinearLayout) findViewById(R.id.clean_cache);
         cacheSize = (TextView) findViewById(R.id.cache_size);
         feedback = (LinearLayout) findViewById(R.id.feedback);
-
+        security = (LinearLayout) findViewById(R.id.security);
+        about = (LinearLayout) findViewById(R.id.about);
         exit = (Button) findViewById(R.id.exit);
     }
 
@@ -81,6 +83,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         cacheSize = (TextView) findViewById(R.id.cache_size);
 
 
+        about.setOnClickListener(this);
+        security.setOnClickListener(this);
         exit.setOnClickListener(this);
         notifySetting.setOnClickListener(this);
         checkUpdate.setOnClickListener(this);
@@ -107,9 +111,17 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.about:
+                Intent intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.security:// 安全管理
+                intent = new Intent(SystemSettingActivity.this, SecurityManagerActivity.class);
+                startActivity(intent);
+                break;
             case R.id.exit:// 退出登录
                 BaseApplication.getInstance().clearToken();
-                Intent intent = new Intent(SystemSettingActivity.this, MainActivity.class);
+                intent = new Intent(SystemSettingActivity.this, MainActivity.class);
                 intent.putExtra("sign", "exit_login");
                 startActivity(intent);
 //                finish();
@@ -145,7 +157,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             desc.setMovementMethod(ScrollingMovementMethod.getInstance());
                             try {
                                 x.setOnClickListener(SystemSettingActivity.this);
-                               //boolean updateEnforce = response.getJSONObject("data").getBoolean("enforce");
+                                //boolean updateEnforce = response.getJSONObject("data").getBoolean("enforce");
 //                                if (!updateEnforce) {
 //                                    TextView pleaseUpdate = (TextView) updateView.findViewById(R.id.please_update);
 //                                    pleaseUpdate.setVisibility(View.VISIBLE);
@@ -154,7 +166,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                                 String descStr = response.getJSONObject("data").getString("description");
                                 desc.setText(StringUtils.isNullOrBlanK(descStr) ? "\n" : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
-                                newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
+                                newVersion.setText("(V" + response.getJSONObject("data").getString("version") + ")");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

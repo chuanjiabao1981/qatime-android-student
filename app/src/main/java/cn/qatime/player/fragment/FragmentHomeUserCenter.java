@@ -17,7 +17,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.AboutUsActivity;
 import cn.qatime.player.activity.DownloadManagerActivity;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyExclusiveActivity;
@@ -29,7 +28,6 @@ import cn.qatime.player.activity.PersonalMyTasteActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.PersonalMyVideoActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
-import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -47,13 +45,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private LinearLayout course;
     private LinearLayout myInteract;
     private LinearLayout myVideo;
-    private LinearLayout myTaste;
-    private LinearLayout security;
+    private TextView myTaste;
     private LinearLayout setting;
     private TextView newVersion;
     private TextView name;
     private TextView balance;
-    private LinearLayout about;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,8 +69,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         myVideo.setOnClickListener(this);
         myTaste.setOnClickListener(this);
         information.setOnClickListener(this);
-        about.setOnClickListener(this);
-        security.setOnClickListener(this);
         setting.setOnClickListener(this);
         return view;
     }
@@ -141,18 +135,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), DownloadManagerActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.security:// 安全管理
-                intent = new Intent(getActivity(), SecurityManagerActivity.class);
-                startActivity(intent);
-                break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
                 getActivity().startActivity(intent);
                 break;
-            case R.id.about:
-                intent = new Intent(getActivity(), AboutUsActivity.class);
-                startActivity(intent);
-                break;
+
         }
     }
 
@@ -185,11 +172,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         view.findViewById(R.id.download_manager).setOnClickListener(this);
         view.findViewById(R.id.my_homework).setOnClickListener(this);
         view.findViewById(R.id.my_question).setOnClickListener(this);
-        myTaste = (LinearLayout) view.findViewById(R.id.my_taste);
-        security = (LinearLayout) view.findViewById(R.id.security);
+        myTaste = (TextView) view.findViewById(R.id.my_taste);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
-        about = (LinearLayout) view.findViewById(R.id.about);
+
     }
 
     @Override

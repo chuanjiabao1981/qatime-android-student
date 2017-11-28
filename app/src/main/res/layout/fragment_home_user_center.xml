@@ -57,6 +57,58 @@
 
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/my_taste"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/center_my_tasted"
+                    android:gravity="center_horizontal"
+                    android:text="@string/my_taste" />
+
+                <TextView
+                    android:id="@+id/my_homework"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/center_my_homework"
+                    android:gravity="center_horizontal"
+                    android:text="@string/my_homework" />
+
+
+                <TextView
+                    android:id="@+id/my_question"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/center_my_question"
+                    android:gravity="center_horizontal"
+                    android:text="@string/my_question" />
+
+
+                <TextView
+                    android:id="@+id/download_manager"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/center_download_manager"
+                    android:gravity="center_horizontal"
+                    android:text="@string/download_manager" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
                 android:id="@+id/my_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +187,7 @@
                     android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
-            <View
+            <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
@@ -274,179 +326,9 @@
                     android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
-            <View
+            <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
-
-            <LinearLayout
-                android:id="@+id/my_taste"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_my_tasted" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/my_taste" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-            <LinearLayout
-                android:id="@+id/my_homework"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_my_homework" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/my_homework" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-            <LinearLayout
-                android:id="@+id/my_question"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_my_question" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/my_question" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-            <LinearLayout
-                android:id="@+id/download_manager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_download_manager" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/download_manager" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-            <LinearLayout
-                android:id="@+id/security"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_security" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/security_management" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
 
             <LinearLayout
                 android:id="@+id/setting"
@@ -480,42 +362,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1px"
                     android:layout_weight="1" />
-
-                <ImageView
-                    style="@style/setting_icon_margin_right"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/personal_enter" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-
-            <LinearLayout
-                android:id="@+id/about"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/about_us" />
-
-                <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/about_us" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
 
                 <ImageView
                     style="@style/setting_icon_margin_right"
