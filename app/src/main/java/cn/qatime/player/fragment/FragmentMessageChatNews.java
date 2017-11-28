@@ -47,16 +47,14 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.MessageChatListBean;
 import cn.qatime.player.bean.MessageListBean;
-import cn.qatime.player.bean.MyExclusiveBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MyInteractClassBean;
-import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -89,22 +87,32 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void getCourses() {
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/courses", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(String.format(UrlUtils.urlUsersTeams, BaseApplication.getInstance().getUserId()), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         try {
-                            Logger.e(response.toString());
-                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
+                            MessageChatListBean data = JsonUtils.objectFromJson(response.toString(), MessageChatListBean.class);
                             if (data != null && data.getData() != null) {
-                                synchronized (items) {
+                                synchronized (this) {
                                     for (MessageListBean item : items) {
-                                        for (MyTutorialClassBean.Data bean : data.getData()) {
-                                            if (item.getContactId().equals(bean.getChat_team_id())) {
-                                                item.setCourseId(bean.getId());
-                                                item.setCourseType("custom");
-                                                item.setIcon(bean.getPublicize());
-                                                item.setName(bean.getName());
+                                        for (MessageChatListBean.DataBean bean : data.getData()) {
+                                            if (item.getContactId().equals(bean.getTeam_id())) {
+                                                item.setCourseId(bean.getDiscussable_id());
+                                                if (!StringUtils.isNullOrBlanK(bean.getDiscussable_type())) {
+                                                    if (bean.getDiscussable_type().equals("LiveStudio::Course")) {
+                                                        item.setCourseType("custom");
+                                                    } else if (bean.getDiscussable_type().equals("LiveStudio::InteractiveCourse")) {
+                                                        item.setCourseType("interactive");
+                                                    } else if (bean.getDiscussable_type().equals("LiveStudio::Group")) {
+                                                        item.setCourseType("exclusive");
+                                                    }
+                                                }
+                                                if (bean.getDiscussable_publicize() != null) {
+                                                    item.setDefaultIcon(bean.getDiscussable_publicize().getUrl());
+                                                    item.setIcon(bean.getDiscussable_publicize().getList().getUrl());
+                                                }
+                                                item.setName(bean.getDiscussable_name());
                                             }
                                         }
                                     }
@@ -131,83 +139,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         });
-        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/interactive_courses", null,
-                new VolleyListener(getActivity()) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
-                        if (data != null && data.getData() != null) {
-                            synchronized (items) {
-                                for (MessageListBean item : items) {
-                                    for (MyInteractClassBean.DataBean bean : data.getData()) {
-                                        if (item.getContactId().equals(bean.getChat_team_id())) {
-                                            item.setCourseId(bean.getId());
-                                            item.setCourseType("interactive");
-                                            item.setIcon(bean.getPublicize_url());
-                                            item.setName(bean.getName());
-                                        }
-                                    }
-                                }
-                            }
-                            listSize = items.size();
-                        }
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        DaYiJsonObjectRequest request3 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/customized_groups", null,
-                new VolleyListener(getActivity()) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
-                        if (data != null && data.getData() != null) {
-                            synchronized (items) {
-                                for (MessageListBean item : items) {
-                                    for (MyExclusiveBean.DataBean bean : data.getData()) {
-                                        // TODO: 2017/8/15 team_id
-//                                        if (item.getContactId().equals(bean.getCustomized_group().getChat_team_id())) {
-//                                            item.setCourseId(bean.getId());
-//                                            item.setCourseType("exclusive");
-//                                            item.setIcon(bean.getPublicize_url());
-//                                            item.setName(bean.getName());
-//                                        }
-                                    }
-                                }
-                            }
-                            listSize = items.size();
-                        }
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request1);
-        addToRequestQueue(request2);
+        addToRequestQueue(request);
     }
 
     private void initView(View view) {
@@ -263,11 +195,10 @@ public class FragmentMessageChatNews extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
                 intent.putExtra("sessionId", items.get(position - 1).getContactId());
-                intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 intent.putExtra("courseId", items.get(position - 1).getCourseId());
                 intent.putExtra("name", items.get(position - 1).getName());
                 intent.putExtra("type", items.get(position - 1).getCourseType());
-                intent.putExtra("owner", items.get(position - 1).getOwner());
+//                intent.putExtra("owner", items.get(position - 1).getOwner());
                 startActivity(intent);
             }
         });
@@ -383,7 +314,6 @@ public class FragmentMessageChatNews extends BaseFragment {
             if (team != null) {
                 bean.setMute(team.mute());
             }
-            bean.setSessionType(item.getSessionType());
             bean.setUnreadCount(item.getUnreadCount());
             bean.setTime(item.getTime());
             bean.setRecentMessageId(item.getRecentMessageId());
@@ -443,7 +373,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeRecentContact(messageObserver, register);
-        service.observeMsgStatus(statusObserver, register);
+//        service.observeMsgStatus(statusObserver, register);
         service.observeRecentContactDeleted(deleteObserver, register);
         registerTeamUpdateObserver(register);
         registerTeamMemberUpdateObserver(register);
@@ -514,8 +444,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 }
                 int index = -1;
                 for (int i = 0; i < items.size(); i++) {
-                    if (msg.getContactId().equals(items.get(i).getContactId())
-                            && msg.getSessionType() == (items.get(i).getSessionType())) {
+                    if (msg.getContactId().equals(items.get(i).getContactId())) {
                         index = i;
                         break;
                     }
@@ -529,7 +458,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                 if (team != null) {
                     bean.setMute(team.mute());
                 }
-                bean.setSessionType(msg.getSessionType());
                 if (StringUtils.isNullOrBlanK(bean.getName())) {
                     bean.setName(TeamDataCache.getInstance().getTeamName(msg.getContactId()).replace("讨论组", ""));
                 }
@@ -545,24 +473,23 @@ public class FragmentMessageChatNews extends BaseFragment {
         }
     };
 
-    Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
-        @Override
-        public void onEvent(IMMessage message) {
-            int index = getItemIndex(message.getUuid());
-            if (index >= 0 && index < items.size()) {
-                MessageListBean item = items.get(index);
-                item.setMsgStatus(message.getStatus());
-            }
-        }
-    };
+//    Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
+//        @Override
+//        public void onEvent(IMMessage message) {
+//            int index = getItemIndex(message.getUuid());
+//            if (index >= 0 && index < items.size()) {
+//                MessageListBean item = items.get(index);
+//                item.setMsgStatus(message.getStatus());
+//            }
+//        }
+//    };
 
     Observer<RecentContact> deleteObserver = new Observer<RecentContact>() {
         @Override
         public void onEvent(RecentContact recentContact) {
             if (recentContact != null) {
                 for (MessageListBean item : items) {
-                    if (TextUtils.equals(item.getContactId(), recentContact.getContactId())
-                            && item.getSessionType() == recentContact.getSessionType()) {
+                    if (TextUtils.equals(item.getContactId(), recentContact.getContactId())) {
                         items.remove(item);
                         refreshMessages();
                         break;
@@ -633,11 +560,10 @@ public class FragmentMessageChatNews extends BaseFragment {
                 if (position > -1) {
                     Intent intent = new Intent(getActivity(), MessageActivity.class);
                     intent.putExtra("sessionId", items.get(position).getContactId());
-                    intent.putExtra("sessionType", items.get(position).getSessionType());
                     intent.putExtra("courseId", items.get(position).getCourseId());
                     intent.putExtra("name", items.get(position).getName());
                     intent.putExtra("type", items.get(position).getCourseType());
-                    intent.putExtra("owner", items.get(position).getOwner());
+//                    intent.putExtra("owner", items.get(position).getOwner());
                     startActivity(intent);
                 }
             }

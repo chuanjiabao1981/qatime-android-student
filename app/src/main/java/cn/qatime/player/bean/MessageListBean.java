@@ -6,6 +6,8 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 
 import java.io.Serializable;
 
+import libraryextra.utils.StringUtils;
+
 /**
  * @author lungtify
  * @date 2016/9/6 19:36
@@ -13,17 +15,16 @@ import java.io.Serializable;
  */
 public class MessageListBean implements Serializable {
     private String contactId;
-    private SessionTypeEnum sessionType;
     private String recentMessageId;
-    private MsgStatusEnum msgStatus;
     private long time;
     private int unreadCount;
+    private String defaultIcon;
     private String icon;
     private String courseType;
     private String name;
     private int courseId;
     private boolean mute;
-    private String owner;
+//    private String owner;
 
     @Override
     public boolean equals(Object o) {
@@ -36,13 +37,17 @@ public class MessageListBean implements Serializable {
 
     }
 
+    public void setDefaultIcon(String defaultIcon) {
+        this.defaultIcon = defaultIcon;
+    }
+
     @Override
     public int hashCode() {
         return contactId != null ? contactId.hashCode() : 0;
     }
 
     public String getIcon() {
-        return icon;
+        return !StringUtils.isNullOrBlanK(icon) ? icon : (!StringUtils.isNullOrBlanK(defaultIcon) ? defaultIcon : "");
     }
 
     public void setIcon(String icon) {
@@ -57,28 +62,20 @@ public class MessageListBean implements Serializable {
         this.courseType = courseType;
     }
 
-    public String getOwner() {
-        return owner;
-    }
+//    public String getOwner() {
+//        return owner;
+//    }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
+//    public void setOwner(String owner) {
+//        this.owner = owner;
+//    }
 
     public void setContactId(String contactId) {
         this.contactId = contactId;
     }
 
-    public void setSessionType(SessionTypeEnum sessionType) {
-        this.sessionType = sessionType;
-    }
-
     public void setRecentMessageId(String recentMessageId) {
         this.recentMessageId = recentMessageId;
-    }
-
-    public MsgStatusEnum getMsgStatus() {
-        return msgStatus;
     }
 
     public void setTime(long time) {
@@ -89,37 +86,17 @@ public class MessageListBean implements Serializable {
         this.unreadCount = unreadCount;
     }
 
-//    public String getCamera() {
-//        return camera;
-//    }
-//
-//    public void setCamera(String camera) {
-//        this.camera = camera;
-//    }
-//
-//    public String getBoard() {
-//        return board;
-//    }
-//
-//    public void setBoard(String board) {
-//        this.board = board;
-//    }
-
     public String getContactId() {
         return contactId;
-    }
-
-    public SessionTypeEnum getSessionType() {
-        return sessionType;
     }
 
     public CharSequence getRecentMessageId() {
         return recentMessageId;
     }
 
-    public void setMsgStatus(MsgStatusEnum msgStatus) {
-        this.msgStatus = msgStatus;
-    }
+//    public void setMsgStatus(MsgStatusEnum msgStatus) {
+//        this.msgStatus = msgStatus;
+//    }
 
     public long getTime() {
         return time;

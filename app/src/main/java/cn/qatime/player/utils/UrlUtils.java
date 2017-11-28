@@ -87,6 +87,9 @@ public class UrlUtils {
     public static String urlGetCode = baseUrl + "api/v1/captcha";
     //基础信息
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
+    //我加入的群组
+    public static String urlUsersTeams = baseUrl + "api/v1/chat/users/%d/teams";
+
     //课程表
     public static String urlScheduleData = baseUrl + "api/v2/live_studio/students/";
     public static String urlHomeworks = baseUrl + "api/v1/live_studio/homeworks/";

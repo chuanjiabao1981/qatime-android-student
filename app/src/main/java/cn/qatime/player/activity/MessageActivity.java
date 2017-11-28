@@ -50,7 +50,6 @@ import libraryextra.utils.StringUtils;
  */
 public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy, View.OnClickListener {
     private String sessionId;//聊天对象id
-    private SessionTypeEnum sessionType;
     private Team team;
     private TextView tipText;
 
@@ -75,7 +74,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         }
         sessionId = getIntent().getStringExtra("sessionId");
         final String type = getIntent().getStringExtra("type");//直播类型，正常/一对一
-        sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
 
         if (StringUtils.isNullOrBlanK(type)) {
@@ -395,7 +393,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         requestTeamInfo();
         MobclickAgent.onResume(this);
         messageListPanel.onResume();
-        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
+        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
     }
 
     @Override
