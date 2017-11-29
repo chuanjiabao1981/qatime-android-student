@@ -89,6 +89,8 @@ public class UrlUtils {
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
     //我加入的群组
     public static String urlUsersTeams = baseUrl + "api/v1/chat/users/%d/teams";
+    //成员列表 MembersActivity
+    public static String urlUsersTeamsMember = baseUrl + "api/v1/chat/users/%d/teams/%s";
 
     //课程表
     public static String urlScheduleData = baseUrl + "api/v2/live_studio/students/";

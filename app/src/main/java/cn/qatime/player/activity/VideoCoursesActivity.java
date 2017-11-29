@@ -370,6 +370,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 }
                 break;
             case R.id.menu_5:
+                intent = new Intent(VideoCoursesActivity.this, MembersActivity.class);
+                intent.putExtra("type", "video");
+                intent.putExtra("id", id);
+                startActivity(intent);
                 pop.dismiss();
                 break;
         }
@@ -466,9 +470,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                         tokenOut();
                     }
 
-                }
-
-                , new VolleyErrorListener() {
+                }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);

@@ -393,7 +393,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 intent = new Intent(this, MessageActivity.class);
                 intent.putExtra("sessionId", playInfo.getData().getCustomized_group().getChat_team().getTeam_id());
-                intent.putExtra("sessionType", SessionTypeEnum.None);
                 intent.putExtra("courseId", id);
                 intent.putExtra("name", data.getData().getCustomized_group().getName());
                 intent.putExtra("type", "exclusive");
@@ -420,7 +419,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.menu_5:
                 intent = new Intent(this, MembersActivity.class);
-                intent.putExtra("members", playInfo.getData().getCustomized_group().getChat_team());
+                intent.putExtra("type", "exclusive");
+                intent.putExtra("id", id);
                 startActivity(intent);
                 pop.dismiss();
                 break;

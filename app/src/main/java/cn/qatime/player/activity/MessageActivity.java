@@ -430,10 +430,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.menu_1:
-                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
-                pop.dismiss();
-                break;
+//            case R.id.menu_1:
+//                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+//                pop.dismiss();
+//                break;
             case R.id.menu_2:
                 intent = new Intent(this, ExclusiveFilesActivity.class);
                 intent.putExtra("id", courseId);
@@ -454,7 +454,8 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 break;
             case R.id.menu_5:
                 intent = new Intent(this, MembersActivity.class);
-                intent.putExtra("courseId", courseId);
+                intent.putExtra("type", "exclusive");
+                intent.putExtra("id", courseId);
                 startActivity(intent);
                 pop.dismiss();
                 break;

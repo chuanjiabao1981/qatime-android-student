@@ -426,14 +426,15 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                             if (data != null) {
                                 if (data.getData() != null && data.getData().getCustomized_group() != null) {
                                     ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
-                                    if (data.getData().getCustomized_group().getChat_team() != null) {
-                                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getCustomized_group().getChat_team().getAccounts());
-                                    }
                                     camera = data.getData().getCustomized_group().getCamera_pull_stream();
                                     board = data.getData().getCustomized_group().getBoard_pull_stream();
                                     canLoop = true;
                                     hd.post(runnable);
-                                    sessionId = data.getData().getCustomized_group().getChat_team().getTeam_id();
+                                    if (data.getData().getCustomized_group().getChat_team() != null) {
+                                        sessionId = data.getData().getCustomized_group().getChat_team().getTeam_id();
+                                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(sessionId);
+                                    }
+
                                 }
                             }
                             initSessionId();
@@ -718,11 +719,11 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                         floatFragment.setNameAndCount("", 1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
-                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+//                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
-                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+//                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
                 }

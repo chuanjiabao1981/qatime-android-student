@@ -539,7 +539,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
                 intent = new Intent(RemedialClassDetailActivity.this, MessageActivity.class);
                 intent.putExtra("sessionId", playInfo.getData().getChat_team_id());
-                intent.putExtra("sessionType", SessionTypeEnum.None);
                 intent.putExtra("courseId", id);
                 intent.putExtra("name", data.getData().getCourse().getName());
                 intent.putExtra("type", "custom");
@@ -548,7 +547,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.menu_5:
                 intent = new Intent(RemedialClassDetailActivity.this, MembersActivity.class);
-                intent.putExtra("members", playInfo.getData().getChat_team());
+                intent.putExtra("type", "custom");
+                intent.putExtra("id", id);
                 startActivity(intent);
                 pop.dismiss();
                 break;

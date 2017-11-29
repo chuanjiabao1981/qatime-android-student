@@ -269,8 +269,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
                                 if (data.getData().getInteractive_course() != null && data.getData().getInteractive_course().getChat_team() != null) {
-                                    ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData().getInteractive_course().getChat_team().getAccounts());
                                     sessionId = data.getData().getInteractive_course().getChat_team().getTeam_id();
+                                    ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(sessionId);
+
                                 }
                             }
                             initSessionId();
