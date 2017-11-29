@@ -64,6 +64,8 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
     private CommonAdapter<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean> offlineAdapter;
     private List<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean> scheduleList = new ArrayList<>();
     private List<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean> offlineList = new ArrayList<>();
+    private View scheduleText;
+    private View offlineText;
 
     @Nullable
     @Override
@@ -83,6 +85,8 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
         scheduleListView = (ListViewForScrollView) view.findViewById(R.id.schedule_list);
         offlineListView = (ListViewForScrollView) view.findViewById(R.id.offline_list);
         viewEmptyGone = view.findViewById(R.id.view_empty_gone);
+        scheduleText = view.findViewById(R.id.schedule_text);
+        offlineText = view.findViewById(R.id.offline_text);
 
         target = (TextView) view.findViewById(R.id.target);
         suitable = (TextView) view.findViewById(R.id.suitable);
@@ -124,7 +128,7 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                     if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
-                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffC4483C);
                         holder.setText(R.id.status, "观看回放");
                     } else {
                         ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
@@ -232,10 +236,23 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
         if (offlineAdapter != null) {
             offlineAdapter.notifyDataSetChanged();
         }
-        if (scheduleList.size() == 0) {
+        if (scheduleList.size() == 0&&offlineList.size()==0) {
             viewEmptyGone.setVisibility(View.GONE);
         } else {
             viewEmptyGone.setVisibility(View.VISIBLE);
+        }
+
+        if(scheduleList.size()>0){
+            scheduleText.setVisibility(View.VISIBLE);
+        }
+        if(offlineList.size()>0){
+            offlineText.setVisibility(View.VISIBLE);
+        }
+        if (scheduleAdapter != null) {
+            scheduleAdapter.notifyDataSetChanged();
+        }
+        if (offlineAdapter != null) {
+            offlineAdapter.notifyDataSetChanged();
         }
     }
 
@@ -253,10 +270,10 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
             if (getActivity() != null && getActivity().getResources() != null) {
                 className.setText(data.getCustomized_group().getName());
                 subject.setText((data.getCustomized_group().getSubject() == null ? "" : data.getCustomized_group().getSubject()));
-                classStartTime.setText((data.getCustomized_group().getStart_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getStart_at() * 1000))));
-                classEndTime.setText(data.getCustomized_group().getEnd_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getEnd_at() * 1000)));
+                classStartTime.setText((data.getCustomized_group().getStart_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getStart_at() * 1000L))));
+                classEndTime.setText(data.getCustomized_group().getEnd_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getEnd_at() * 1000L)));
                 grade.setText((data.getCustomized_group().getGrade() == null ? "" : data.getCustomized_group().getGrade()));
-                totalClass.setText(getString(R.string.lesson_count, data.getCustomized_group().getView_tickets_count()));
+                totalClass.setText(getString(R.string.lesson_count, data.getCustomized_group().getEvents_count()));
                 if (!StringUtils.isNullOrBlanK(data.getCustomized_group().getObjective())) {
                     target.setText(data.getCustomized_group().getObjective());
                 }

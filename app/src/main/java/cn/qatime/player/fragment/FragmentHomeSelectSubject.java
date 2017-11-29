@@ -16,6 +16,7 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.FilterCourseActivity;
+import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -23,7 +24,6 @@ import libraryextra.adapter.ViewHolder;
 /**
  * @author lungtify
  * @Time 2017/3/14 18:22
- *
  * @Describe
  */
 
@@ -103,6 +103,13 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                 listAdapter.notifyDataSetChanged();
 
                 notifySubject(position);
+            }
+        });
+        view.findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
     }

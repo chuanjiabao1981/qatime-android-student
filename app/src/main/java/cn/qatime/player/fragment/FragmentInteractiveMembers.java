@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,10 +19,16 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.ChatTeamBean;
+import cn.qatime.player.bean.MembersBean;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -26,7 +36,7 @@ import libraryextra.utils.StringUtils;
  * @Describe
  */
 public class FragmentInteractiveMembers extends BaseFragment {
-    private List<ChatTeamBean.Accounts> list = new ArrayList<>();
+    private List<MembersBean.DataBean.Members> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
@@ -61,11 +71,41 @@ public class FragmentInteractiveMembers extends BaseFragment {
         hasLoad = true;
     }
 
-    public void setData(List<ChatTeamBean.Accounts> accounts) {
+    public void setData(String id) {
+        DaYiJsonObjectRequest requestMember = new DaYiJsonObjectRequest(String.format(UrlUtils.urlUsersTeamsMember, BaseApplication.getInstance().getUserId(), id), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        MembersBean bean = JsonUtils.objectFromJson(response.toString(), MembersBean.class);
+                        if (bean != null && bean.getData() != null && !StringUtils.isNullOrBlanK(bean.getData().getMembers())) {
+                            setDatas(bean.getData().getMembers());
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(requestMember);
+
+    }
+
+    private void setDatas(List<MembersBean.DataBean.Members> accounts) {
         if (accounts != null) {
             list.clear();
             list.addAll(accounts);
-            for (ChatTeamBean.Accounts item : list) {
+            for (MembersBean.DataBean.Members item : list) {
                 if (item == null) continue;
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
@@ -73,10 +113,24 @@ public class FragmentInteractiveMembers extends BaseFragment {
                     item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
-            Collections.sort(list, new Comparator<ChatTeamBean.Accounts>() {
+            Collections.sort(list, new Comparator<MembersBean.DataBean.Members>() {
                 @Override
-                public int compare(ChatTeamBean.Accounts lhs, ChatTeamBean.Accounts rhs) {
-                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                public int compare(MembersBean.DataBean.Members lhs, MembersBean.DataBean.Members rhs) {
+                    int x = 0;
+                    if (lhs.isOwner() && !rhs.isOwner()) {
+                        x = -3;
+                    } else if (!lhs.isOwner() && rhs.isOwner()) {
+                        x = 3;
+                    } else if (lhs.isOwner() && rhs.isOwner()) {
+                        x = -3;
+                    }
+
+                    int y = lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                    if (x == 0) {
+                        return y;
+                    }
+                    return x;
+//                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
             hd.postDelayed(runnable, 200);

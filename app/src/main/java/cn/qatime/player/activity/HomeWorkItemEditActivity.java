@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +141,8 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(HomeWorkItemEditActivity.this, "看大图", Toast.LENGTH_SHORT).show();
                     ImageItem item = adapter.getItem(position);
                     Intent intent = new Intent(HomeWorkItemEditActivity.this, WatchPictureActivity.class);
-                    intent.putExtra("src", item.imagePath);
+                    intent.putExtra("imageItems", (Serializable) list);
+                    intent.putExtra("position", position);
                     startActivity(intent);
                 }
             }
@@ -284,7 +286,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.bottom_button:
                 String trim = content.getText().toString().trim();
-                if (StringUtils.isNullOrBlanK(trim)) {
+                if (StringUtils.isNullOrBlanK(trim)&&imageAttachmentList.size()==0&&StringUtils.isNullOrBlanK(audioFileName) ) {
                     Toast.makeText(this, "回答不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }

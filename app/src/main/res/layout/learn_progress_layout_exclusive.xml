@@ -397,7 +397,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1.购买课程后方可观看回放；\n2.专属课课程回放暂无任何观看限制，学生可任意观看；\n3.直播结束后最晚于24小时内上传回放；\n4.回放内容不完全等于直播内容，请尽量观看直播进行学习；\n5.回放内容仅供学生学习使用，未经允许不得进行录制。"
+        android:text="1.购买课程后方可观看回放；\n2.小班课课程回放暂无任何观看限制，学生可任意观看；\n3.直播结束后最晚于24小时内上传回放；\n4.回放内容不完全等于直播内容，请尽量观看直播进行学习；\n5.回放内容仅供学生学习使用，未经允许不得进行录制。"
         android:textColor="#666"
         android:textSize="13sp" />
 

@@ -19,7 +19,7 @@ import libraryextra.view.FragmentLayoutWithLine;
 /**
  * @author lungtify
  * @Time 2017/7/25 9:57
- * @Describe 我的专属课
+ * @Describe 我的小班课
  */
 
 public class PersonalMyExclusiveActivity extends BaseFragmentActivity {
@@ -31,7 +31,7 @@ public class PersonalMyExclusiveActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_exclusive);
-        setTitles("我的专属课");
+        setTitles("我的小班课");
         initView();
     }
 

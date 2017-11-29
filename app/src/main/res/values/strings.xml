@@ -79,7 +79,7 @@
     <string name="done">已结束</string>
     <string name="audition">试听</string>
     <string name="security_management">安全管理</string>
-    <string name="setting">系统设置</string>
+    <string name="setting">设置</string>
     <string name="new_edition">新版本</string>
     <!--//个人信息-->
     <string name="clip_photo">裁剪照片</string>
@@ -628,15 +628,15 @@
     <string name="video_courses">视频课</string>
     <string name="live_courses">直播课</string>
     <string name="my_video">我的视频课</string>
-    <string name="my_exclusive">我的专属课</string>
+    <string name="my_exclusive">我的小班课</string>
     <string name="all_class_has_over">全部课程已完成</string>
-    <string name="my_taste">我的试听</string>
+    <string name="my_taste">试听</string>
     <string name="hint_choose_region">请选择您所在的区域</string>
     <string name="hint_choose_school">请选择您所在的学校</string>
     <string name="withdraw_paid">提现成功</string>
-    <string name="download_manager">我的下载</string>
+    <string name="download_manager">下载</string>
     <string name="captcha_phone_has_changed">手机号已变更,请重新验证</string>
     <string name="captcha_email_has_changed">邮箱已变更,请重新验证</string>
-    <string name="my_homework">我的作业</string>
-    <string name="my_question">我的提问</string>
+    <string name="my_homework">作业</string>
+    <string name="my_question">提问</string>
 </resources>

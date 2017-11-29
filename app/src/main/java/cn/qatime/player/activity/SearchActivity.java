@@ -20,7 +20,6 @@ import libraryextra.utils.StringUtils;
  * @Description:
  */
 public class SearchActivity extends BaseActivity {
-    private FlowLayout flow;
     private EditText edit;
 
     @Override
@@ -42,7 +41,7 @@ public class SearchActivity extends BaseActivity {
                 }
             }
         });
-        flow = (FlowLayout) findViewById(R.id.flow);
+        FlowLayout flow = (FlowLayout) findViewById(R.id.flow);
         String[] value = new String[]{"高考", "语文", "初二", "动态电路", "力学", "必修"};
         for (String aValue : value) {
             TextView textView = new TextView(this);

@@ -18,7 +18,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
 
     private static final int COLOR_TEXT_NORMAL = 0xFF999999;
     private static final int COLOR_TEXT_SELECT = 0xFF333333;
-    private static final int COLOR_INDICATOR_COLOR = 0xffff5842;
+    private static final int COLOR_INDICATOR_COLOR = 0xffC4483C;
 
     private String[] mTitles;
     private int mTabCount = 3;

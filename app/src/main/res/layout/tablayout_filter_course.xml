@@ -77,7 +77,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:text="专属课"
+            android:text="小班课"
             android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
     </LinearLayout>
@@ -87,5 +87,8 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
     <!--search-->
-    <ImageView style="@style/backbar_icon_style" />
+    <ImageView
+        android:id="@+id/search"
+        style="@style/backbar_icon_style"
+        android:src="@mipmap/button_search"/>
 </LinearLayout>

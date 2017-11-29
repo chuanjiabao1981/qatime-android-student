@@ -13,6 +13,36 @@
         android:background="#dfdddd" />
 
     <LinearLayout
+        android:id="@+id/security"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/security_management" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
         android:id="@+id/notify_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,12 +138,40 @@
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/about_us" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#dfdddd"
-        android:visibility="gone" />
+        android:background="#dfdddd"/>
 
     <LinearLayout
         android:id="@+id/feedback"

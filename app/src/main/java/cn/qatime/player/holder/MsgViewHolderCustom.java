@@ -60,7 +60,7 @@ public class MsgViewHolderCustom extends MsgViewHolderBase {
         if (type.equals("LiveStudio::Homework") || type.equals("LiveStudio::Question") || type.equals("LiveStudio::Answer") || type.equals("Resource::File")) {
             if (type.equals("LiveStudio::Homework")) {
                 customType.setText("作业");
-                customBackground.setBackgroundColor(0xffff5842);
+                customBackground.setBackgroundColor(0xffC4483C);
                 customTitle.setText(attachment.getTitle());
                 customEvent.setText("发布作业");
             } else if (type.equals("LiveStudio::Question")) {

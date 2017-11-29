@@ -8,11 +8,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -46,6 +50,7 @@ import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -59,13 +64,15 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private InteractCourseDetailBean data;
     private ViewPager mViewPager;
     private int pager = 0;
-    TextView price;
-    DecimalFormat df = new DecimalFormat("#.00");
+    private TextView price;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private View startStudyView;
     private View handleLayout;
     private TextView refundAnyTime;
     private TextView couponFree;
+    private PopupWindow pop;
+    private InteractCourseDetailBean playInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +174,52 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         });
     }
 
+    /**
+     * @param tasteOrBought 已购买或已试听
+     * @param status        课程状态
+     */
+    private void initMenu(boolean tasteOrBought, String status) {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+            if (!tasteOrBought) {
+                menu1.setVisibility(View.GONE);
+            }
+            if (Constant.CourseStatus.completed.equals(status)) {
+                menu1.setVisibility(View.GONE);
+            }
+            menu2.setVisibility(View.GONE);
+            menu3.setVisibility(View.GONE);
+            menu4.setVisibility(View.GONE);
+            menu1.setOnClickListener(this);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1);
+                }
+            });
+        }
+    }
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
     private void initData() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id + "/detail", null,
                 new VolleyListener(InteractCourseDetailActivity.this) {
@@ -201,11 +254,13 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
 
                             if (data.getData().getTicket() != null && "active".equals(data.getData().getTicket().getStatus())) {//已购买
+                                initMenu(true, data.getData().getInteractive_course().getStatus());
                                 startStudyView.setVisibility(View.VISIBLE);
                                 if (Constant.CourseStatus.completed.equals(data.getData().getInteractive_course().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
                             } else {//未购买
+                                initMenu(false, data.getData().getInteractive_course().getStatus());
                                 if (data.getData().getInteractive_course().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getInteractive_course().getStatus())) {//已下架或未购买已结束显示已下架
                                     handleLayout.setVisibility(View.GONE);
                                     price.setText("已下架");
@@ -223,15 +278,36 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }
-
-                , new VolleyErrorListener() {
+                }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
             }
         });
         addToRequestQueue(request);
+        DaYiJsonObjectRequest requestPlay = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id + "/detail", null,
+                new VolleyListener(InteractCourseDetailActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        playInfo = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(requestPlay);
     }
 
     @Override
@@ -300,6 +376,28 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                     intent.putExtra("id", id);
                     startActivity(intent);
                 }
+                break;
+            case R.id.menu_1:
+
+                if (playInfo == null || playInfo.getData() == null || playInfo.getData().getInteractive_course() == null || playInfo.getData().getInteractive_course().getChat_team() == null ||
+                        StringUtils.isNullOrBlanK(playInfo.getData().getInteractive_course().getChat_team().getTeam_id())) {
+                    Toast.makeText(this, "id为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent = new Intent(InteractCourseDetailActivity.this, MessageActivity.class);
+                intent.putExtra("sessionId", playInfo.getData().getInteractive_course().getChat_team().getTeam_id());
+                intent.putExtra("courseId", id);
+                intent.putExtra("name", data.getData().getInteractive_course().getName());
+                intent.putExtra("type", "interactive");
+                startActivity(intent);
+                pop.dismiss();
+                break;
+            case R.id.menu_5:
+                intent = new Intent(InteractCourseDetailActivity.this, MembersActivity.class);
+                intent.putExtra("type", "interactive");
+                intent.putExtra("id", id);
+                startActivity(intent);
+                pop.dismiss();
                 break;
         }
     }

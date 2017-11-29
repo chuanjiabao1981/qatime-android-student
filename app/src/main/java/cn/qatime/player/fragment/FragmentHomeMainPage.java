@@ -60,6 +60,7 @@ import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
+import cn.qatime.player.activity.WebActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
@@ -121,7 +122,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private View cashAccountSafe;
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
-    private CommonAdapter<FreeCourseBean.DataBean> freeCourrseAdapter;
+    private CommonAdapter<FreeCourseBean.DataBean> freeCourseAdapter;
     private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList<>();
     private View emptyViewToday;
 
@@ -177,6 +178,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         close = view.findViewById(R.id.close);
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
         recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
+        view.findViewById(R.id.teacher_more).setOnClickListener(this);
         view.findViewById(R.id.more1).setOnClickListener(this);
         view.findViewById(R.id.more2).setOnClickListener(this);
         view.findViewById(R.id.more3).setOnClickListener(this);
@@ -270,7 +272,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initFreeCourse() {
         //免费课程
-        freeCourrseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
+        freeCourseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
             @Override
             public void convert(ViewHolder holder, FreeCourseBean.DataBean item, int position) {
                 holder.setImageByUrl(R.id.image, item.getPublicizes().getList().getUrl(), R.mipmap.photo)
@@ -279,7 +281,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
             }
         };
-        listViewFree.setAdapter(freeCourrseAdapter);
+        listViewFree.setAdapter(freeCourseAdapter);
         ViewGroup parent = (ViewGroup) listViewFree.getParent();
         View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
         parent.addView(inflate, parent.indexOfChild(listViewFree) + 1);
@@ -364,6 +366,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private SimpleDateFormat recentParse = new SimpleDateFormat("MM-dd HH:mm");
+
     private void initRecent() {
         recentList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -396,13 +399,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     LiveRecentBean.DataBean item = recentList.get(position);
                     holder.setText(R.id.teaching_name, item.getName())
                             .setImageByUrl(R.id.image, item.getPublicizes().getApp_info().getUrl(), R.mipmap.photo)
-                            .setText(R.id.time,recentParse.format(new Date(item.getStart_at()*1000)))
+                            .setText(R.id.time, recentParse.format(new Date(item.getStart_at() * 1000)))
                             .setText(R.id.status, getTodayStatusText(item.getStatus()))
                             .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //今日直播只有直播课和专属课
+                            //今日直播只有直播课和小班课
                             int courseId = recentList.get(position).getCourse_id();
                             if ("LiveStudio::Lesson".equals(recentList.get(position).getModel_name())) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
@@ -634,7 +637,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         listFree.clear();
                         if (data != null && data.getData() != null) {
                             listFree.addAll(data.getData());
-                            freeCourrseAdapter.notifyDataSetChanged();
+                            freeCourseAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -666,7 +669,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
-            public View getView(ViewGroup container, int position) {
+            public View getView(ViewGroup container, final int position) {
 //                Logger.e("position:" + position + "url:" + listBanner.get(position).getLogo_url());
                 ImageView iv = new ImageView(getActivity());
                 iv.setClickable(true);
@@ -674,6 +677,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 iv.setId(position);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 Glide.with(getActivity()).load(listBanner.get(position).getLogo_url()).placeholder(R.mipmap.no_banner).into(iv);
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (StringUtils.isNullOrBlanK(listBanner.get(position).getLink()) || StringUtils.isGoodUrl(listBanner.get(position).getLink())) {
+                            Toast.makeText(getActivity(), "网址格式不正确", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), WebActivity.class);
+                        intent.putExtra("url", listBanner.get(position).getLink());
+                        startActivity(intent);
+                    }
+                });
                 container.addView(iv);
                 return iv;
             }
@@ -810,19 +825,19 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private int getTodayStatusColor(String status) {
-        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
+        if ("ready".equals(status) || "missed".equals(status) || "init".equals(status)) {
             return 0xff4873ff;
-        } else if ("teaching".equals(status)||"paused".equals(status)) {
-            return 0xffff5842;
+        } else if ("teaching".equals(status) || "paused".equals(status)) {
+            return 0xffC4483C;
         } else {
             return 0xff999999;
         }
     }
 
     private String getTodayStatusText(String status) {
-        if ("ready".equals(status)||"missed".equals(status)||"init".equals(status)) {
+        if ("ready".equals(status) || "missed".equals(status) || "init".equals(status)) {
             return "尚未直播";
-        } else if ("teaching".equals(status)||"paused".equals(status)) {
+        } else if ("teaching".equals(status) || "paused".equals(status)) {
             return "正在直播";
         } else {
             return "直播结束";
@@ -841,6 +856,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
+            case R.id.teacher_more:
+                intent = new Intent(getActivity(), TeacherSearchActivity.class);
+                startActivity(intent);
+                break;
             case R.id.more1:
             case R.id.more2:
             case R.id.more3:

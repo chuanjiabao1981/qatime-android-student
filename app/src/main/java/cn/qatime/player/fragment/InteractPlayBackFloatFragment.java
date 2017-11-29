@@ -126,7 +126,7 @@ public class InteractPlayBackFloatFragment extends Fragment implements View.OnCl
             public void convert(ViewHolder holder, InteractPlayBackBean.Replay item, int position) {
                 holder.setText(R.id.number,"第"+ (position+1) + "段回放");
                 if (act != null && act.playingData != null && act.playingData.getId() == item.getId()) {
-                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffff5842);
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffC4483C);
                 } else {
                     ((TextView) holder.getView(R.id.number)).setTextColor(0xffffffff);
                 }

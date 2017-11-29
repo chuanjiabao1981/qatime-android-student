@@ -103,6 +103,13 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
+        setRightImage(R.mipmap.button_search, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TeacherSearchActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         all = (TextView) findViewById(R.id.all);
         high = (TextView) findViewById(R.id.high);
         middle = (TextView) findViewById(R.id.middle);
@@ -129,6 +136,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
                 if (!StringUtils.isNullOrBlanK(item.getName())) {
                     holder.setText(R.id.name, item.getName());
                 }
+                holder.setImageResource(R.id.sex, "male".equals(item.getGender()) ? R.mipmap.male : R.mipmap.female);
                 if (!StringUtils.isNullOrBlanK(item.getTeaching_years())) {
                     holder.setText(R.id.teaching_years, getTeachingYear(item.getTeaching_years()));
                 }
@@ -164,7 +172,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherSearchActivity.this, TeacherDataActivity.class);
-                intent.putExtra("teacherId", datas.get(position-1).getId());
+                intent.putExtra("teacherId", datas.get(position - 1).getId());
                 startActivity(intent);
             }
         });
@@ -174,7 +182,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.all:
-                all.setTextColor(0xffff5842);
+                all.setTextColor(0xffC4483C);
                 high.setTextColor(0xff666666);
                 middle.setTextColor(0xff666666);
                 primary.setTextColor(0xff666666);
@@ -183,7 +191,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.high:
                 all.setTextColor(0xff666666);
-                high.setTextColor(0xffff5842);
+                high.setTextColor(0xffC4483C);
                 middle.setTextColor(0xff666666);
                 primary.setTextColor(0xff666666);
                 try {
@@ -196,7 +204,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
             case R.id.middle:
                 all.setTextColor(0xff666666);
                 high.setTextColor(0xff666666);
-                middle.setTextColor(0xffff5842);
+                middle.setTextColor(0xffC4483C);
                 primary.setTextColor(0xff666666);
                 try {
                     category = URLEncoder.encode(middle.getText().toString(), "UTF-8");
@@ -209,7 +217,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
                 all.setTextColor(0xff666666);
                 high.setTextColor(0xff666666);
                 middle.setTextColor(0xff666666);
-                primary.setTextColor(0xffff5842);
+                primary.setTextColor(0xffC4483C);
                 try {
                     category = URLEncoder.encode(primary.getText().toString(), "UTF-8");
                     initData();

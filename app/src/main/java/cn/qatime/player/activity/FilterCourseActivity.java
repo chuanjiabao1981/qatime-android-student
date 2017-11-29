@@ -30,8 +30,6 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
     private ArrayList<View> views = new ArrayList<>();
     private ViewPager pager;
     private int lastPosition = 0;
-    private String grade;
-    private String subject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +56,10 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
         views.add(tab3);
         views.add(tab4);
         views.get(0).setSelected(true);
+        findViewById(R.id.search).setOnClickListener(this);
 
-        grade = getIntent().getStringExtra("grade");
-        subject = getIntent().getStringExtra("subject");
+        String grade = getIntent().getStringExtra("grade");
+        String subject = getIntent().getStringExtra("subject");
         fragBaseFragments.add(new FragmentFilterClassLive().setArguments(grade, subject));
         fragBaseFragments.add(new FragmentFilterClassInteract().setArguments(grade, subject));
         fragBaseFragments.add(new FragmentFilterClassVideo().setArguments(grade, subject));
@@ -128,6 +127,10 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.tab_text4:
                 pager.setCurrentItem(3);
+                break;
+            case R.id.search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }

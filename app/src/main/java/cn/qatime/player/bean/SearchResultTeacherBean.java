@@ -35,11 +35,20 @@ public class SearchResultTeacherBean {
         private String name;
         private String nick_name;
         private String avatar_url;
+        private String gender;
         private String teaching_years;
         private String category;
         private String subject;
         private String school;
         private int total_entries;
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
 
         public int getTotal_entries() {
             return total_entries;

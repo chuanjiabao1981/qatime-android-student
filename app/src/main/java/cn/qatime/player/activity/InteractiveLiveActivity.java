@@ -268,8 +268,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             InteractCourseDetailBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
-                                ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData().getInteractive_course().getChat_team().getAccounts());
-                                sessionId = data.getData().getInteractive_course().getChat_team().getTeam_id();
+                                if (data.getData().getInteractive_course() != null && data.getData().getInteractive_course().getChat_team() != null) {
+                                    sessionId = data.getData().getInteractive_course().getChat_team().getTeam_id();
+                                    ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(sessionId);
+
+                                }
                             }
                             initSessionId();
                         }

@@ -337,11 +337,13 @@
             android:background="#f7f7f7" />
 
         <TextView
+            android:id="@+id/schedule_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
+            android:visibility="gone"
             android:text="线上直播"
             android:textColor="#333" />
 
@@ -356,11 +358,13 @@
             android:scrollbars="none" />
 
         <TextView
+            android:id="@+id/offline_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
+            android:visibility="gone"
             android:text="线下直播"
             android:textColor="#333" />
 

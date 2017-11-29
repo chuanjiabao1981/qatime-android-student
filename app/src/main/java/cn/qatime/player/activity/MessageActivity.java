@@ -50,7 +50,6 @@ import libraryextra.utils.StringUtils;
  */
 public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy, View.OnClickListener {
     private String sessionId;//聊天对象id
-    private SessionTypeEnum sessionType;
     private Team team;
     private TextView tipText;
 
@@ -75,7 +74,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         }
         sessionId = getIntent().getStringExtra("sessionId");
         final String type = getIntent().getStringExtra("type");//直播类型，正常/一对一
-        sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
 
         if (StringUtils.isNullOrBlanK(type)) {
@@ -119,7 +117,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     backgroundAlpha(0.9f);
                 }
             });
-            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
             View menu1 = popView.findViewById(R.id.menu_1);
             View menu2 = popView.findViewById(R.id.menu_2);
             View menu3 = popView.findViewById(R.id.menu_3);
@@ -395,7 +393,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         requestTeamInfo();
         MobclickAgent.onResume(this);
         messageListPanel.onResume();
-        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
+        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
     }
 
     @Override
@@ -432,10 +430,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.menu_1:
-                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
-                pop.dismiss();
-                break;
+//            case R.id.menu_1:
+//                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+//                pop.dismiss();
+//                break;
             case R.id.menu_2:
                 intent = new Intent(this, ExclusiveFilesActivity.class);
                 intent.putExtra("id", courseId);
@@ -456,7 +454,8 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 break;
             case R.id.menu_5:
                 intent = new Intent(this, MembersActivity.class);
-                intent.putExtra("courseId", courseId);
+                intent.putExtra("type", "exclusive");
+                intent.putExtra("id", courseId);
                 startActivity(intent);
                 pop.dismiss();
                 break;

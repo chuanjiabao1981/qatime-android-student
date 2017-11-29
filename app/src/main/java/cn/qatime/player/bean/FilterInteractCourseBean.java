@@ -78,7 +78,7 @@ public class FilterInteractCourseBean implements Serializable {
         private String publicize_info_url;
         private String publicize_list_url;
         private String publicize_app_url;
-        private int created_at;
+        private long created_at;
         private List<TeacherBean> teachers;
 
         public List<TeacherBean> getTeachers() {
@@ -226,11 +226,11 @@ public class FilterInteractCourseBean implements Serializable {
             this.publicize_app_url = publicize_app_url;
         }
 
-        public int getCreated_at() {
+        public long getCreated_at() {
             return created_at;
         }
 
-        public void setCreated_at(int created_at) {
+        public void setCreated_at(long created_at) {
             this.created_at = created_at;
         }
 

@@ -16,6 +16,12 @@
             style="@style/backbar_text_style"
             android:layout_centerInParent="true"
             android:text="选课" />
+
+        <ImageView
+            android:id="@+id/search"
+            style="@style/backbar_icon_style"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/button_search" />
     </RelativeLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout

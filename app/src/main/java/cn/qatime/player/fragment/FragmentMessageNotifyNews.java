@@ -96,7 +96,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 //                                helper.setText(R.id.type, " 调课 ", 0xffff9900);
 //                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_change);
 //                            } else {
-//                                helper.setText(R.id.type, " 系统 ", 0xffff5842);
+//                                helper.setText(R.id.type, " 系统 ", 0xffC4483C);
 //                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_system);
 //                            }
 //                            break;
@@ -105,12 +105,12 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 //                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_refund);
 //                            break;
 //                        case "action_record":
-//                            helper.setText(R.id.type, " 专属课程 ", 0xff780078);
+//                            helper.setText(R.id.type, " 小班课程 ", 0xff780078);
 //                            blank = "\u3000\u3000\u3000\u3000  ";
 //                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_record);
 //                            break;
 //                        default:
-//                            helper.setText(R.id.type, " 系统 ", 0xffff5842);
+//                            helper.setText(R.id.type, " 系统 ", 0xffC4483C);
 //                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_system);
 //                    }
 //                }

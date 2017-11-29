@@ -88,10 +88,10 @@ public class FragmentSearchTeacher extends BaseFragment {
                 listview.onRefreshComplete();
                 SearchResultTeacherBean data = JsonUtils.objectFromJson(response.toString(), SearchResultTeacherBean.class);
                 SearchResultActivity activity = (SearchResultActivity) getActivity();
-                if(data.getData()!=null&&data.getData().size()>0) {
+                if (data.getData() != null && data.getData().size() > 0) {
                     activity.setTeacherCount(data.getData().get(0).getTotal_entries());
                     datas.addAll(data.getData());
-                }else{
+                } else {
                     activity.setTeacherCount(0);
                 }
                 adapter.notifyDataSetChanged();
@@ -120,6 +120,7 @@ public class FragmentSearchTeacher extends BaseFragment {
             public void convert(ViewHolder holder, SearchResultTeacherBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
+                        .setImageResource(R.id.sex, "male".equals(item.getGender()) ? R.mipmap.male : R.mipmap.female)
                         .setText(R.id.teaching_years, getTeachingYear(item.getTeaching_years()))
                         .setText(R.id.info, item.getCategory() + item.getSubject() + " | " + item.getSchool());
             }
@@ -129,7 +130,7 @@ public class FragmentSearchTeacher extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                intent.putExtra("teacherId", datas.get(position-1).getId());
+                intent.putExtra("teacherId", datas.get(position - 1).getId());
                 startActivity(intent);
             }
         });

@@ -366,7 +366,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="专属课"
+                    android:text="小班课"
                     android:textColor="#333"
                     android:textSize="16sp" />
 

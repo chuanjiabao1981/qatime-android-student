@@ -319,7 +319,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffC4483C);
                 if (position == 0) {
                     if (inputPanel != null)
                         inputPanel.visibilityInput();
@@ -437,15 +437,13 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
                                 if (data.getData() != null) {
-                                    if (data.getData().getChat_team() != null) {
-                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
-                                    }
                                     camera = data.getData().getCamera();
                                     board = data.getData().getBoard();
                                     canLoop = true;
                                     hd.post(runnable);
+                                    sessionId = data.getData().getChat_team_id();
+                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(sessionId);
                                 }
-                                sessionId = data.getData().getChat_team_id();
                             }
                             initSessionId();
                         }

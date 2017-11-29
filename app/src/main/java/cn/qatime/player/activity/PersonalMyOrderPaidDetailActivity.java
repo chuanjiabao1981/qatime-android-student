@@ -155,9 +155,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_customized_group().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getGrade())) {
-                grade.setText("专属课/" + getResourceString(R.string.grade));
+                grade.setText("小班课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("专属课/" + data.getProduct_customized_group().getGrade());
+                grade.setText("小班课/" + data.getProduct_customized_group().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -209,7 +209,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             refund.setBackgroundResource(R.drawable.button_background_light);
         } else {
             refund.setText(R.string.apply_refund);
-            refund.setTextColor(0xffff5842);
+            refund.setTextColor(0xffC4483C);
             refund.setBackgroundResource(R.drawable.button_background_normal);
             if (data.getStatus().equals("paid")) {//正在交易
                 status.setImageResource(R.mipmap.complete_pay);

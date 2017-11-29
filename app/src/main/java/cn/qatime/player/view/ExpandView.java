@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,7 @@ import io.reactivex.functions.Predicate;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.ImageItem;
+import libraryextra.utils.StringUtils;
 import libraryextra.view.GridViewForScrollView;
 
 public class ExpandView extends FrameLayout implements View.OnClickListener {
@@ -129,7 +131,12 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
                     }
                 });
         this.content = (TextView) findViewById(R.id.content);
-        this.content.setText(content);
+        if (!StringUtils.isNullOrBlanK(content)) {
+            this.content.setVisibility(VISIBLE);
+            this.content.setText(content);
+        } else {
+            this.content.setVisibility(GONE);
+        }
         this.audioFileName = audioUrl;
         this.list = imageList;
 
@@ -137,7 +144,11 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
             this.list = new ArrayList<>();
         }
         GridViewForScrollView grid = (GridViewForScrollView) findViewById(R.id.grid);
-        grid.setVisibility(VISIBLE);
+        if(list.size()>0){
+            grid.setVisibility(VISIBLE);
+        }else{
+            grid.setVisibility(GONE);
+        }
         adapter = new CommonAdapter<ImageItem>(getContext(), list, R.layout.item_question_image) {
             @Override
             public void convert(ViewHolder holder, ImageItem item, int position) {
@@ -154,7 +165,8 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageItem item = adapter.getItem(position);
                 Intent intent = new Intent(getContext(), WatchPictureActivity.class);
-                intent.putExtra("src", item.imagePath);
+                intent.putExtra("imageItems", (Serializable) list);
+                intent.putExtra("position", position);
                 getContext().startActivity(intent);
             }
         });

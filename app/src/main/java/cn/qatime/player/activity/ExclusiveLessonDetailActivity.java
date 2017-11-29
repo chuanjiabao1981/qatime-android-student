@@ -48,7 +48,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * @author lungtify
  * @Time 2017/7/24 11:10
- * @Describe 专属课详情
+ * @Describe 小班课详情
  */
 
 public class ExclusiveLessonDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -90,7 +90,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         initData();
     }
 
-    private void initMenu(String status) {
+    private void initMenu(boolean tasteOrBought, String status) {
         if (pop == null) {
             setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
                 @Override
@@ -99,12 +99,18 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                     backgroundAlpha(0.9f);
                 }
             });
-            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View popView = View.inflate(this, R.layout.course_detail_pop_menu, null);
             View menu1 = popView.findViewById(R.id.menu_1);
             View menu2 = popView.findViewById(R.id.menu_2);
             View menu3 = popView.findViewById(R.id.menu_3);
             View menu4 = popView.findViewById(R.id.menu_4);
             View menu5 = popView.findViewById(R.id.menu_5);
+            if (!tasteOrBought) {
+                menu1.setVisibility(View.GONE);
+                menu2.setVisibility(View.GONE);
+                menu3.setVisibility(View.GONE);
+                menu4.setVisibility(View.GONE);
+            }
             if (Constant.CourseStatus.completed.equals(status)) {
                 menu1.setVisibility(View.GONE);
             }
@@ -200,7 +206,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                     Toast.makeText(ExclusiveLessonDetailActivity.this, "id为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ShareUtil.getInstance(ExclusiveLessonDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/customized_groups/" + id, name.getText().toString(), "专属课课程", new ShareUtil.ShareListener() {
+                ShareUtil.getInstance(ExclusiveLessonDetailActivity.this, UrlUtils.getBaseUrl() + "live_studio/customized_groups/" + id, name.getText().toString(), "小班课课程", new ShareUtil.ShareListener() {
                     @Override
                     public void onSuccess(SHARE_MEDIA platform) {
 
@@ -306,13 +312,14 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 price.setText("￥" + priceStr);
                 if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
-                    initMenu(data.getData().getCustomized_group().getStatus());
+                    initMenu(true, data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
                         startStudy.setText("开始学习");
                     }
                 } else {//需购买
+                    initMenu(false, data.getData().getCustomized_group().getStatus());
                     if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {//已下架或未购买已结束显示已下架
                         handleLayout.setVisibility(View.GONE);
                         price.setText("已下架");
@@ -332,13 +339,14 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             } else if (data.getData().getCustomized_group().getSell_type().equals("free")) {
                 price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
-                    initMenu(data.getData().getCustomized_group().getStatus());
+                    initMenu(true, data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
                         startStudy.setText("开始学习");
                     }
                 } else {
+                    initMenu(false, data.getData().getCustomized_group().getStatus());
                     if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         price.setText("已下架");
                         handleLayout.setVisibility(View.GONE);
@@ -385,11 +393,9 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 intent = new Intent(this, MessageActivity.class);
                 intent.putExtra("sessionId", playInfo.getData().getCustomized_group().getChat_team().getTeam_id());
-                intent.putExtra("sessionType", SessionTypeEnum.None);
                 intent.putExtra("courseId", id);
                 intent.putExtra("name", data.getData().getCustomized_group().getName());
                 intent.putExtra("type", "exclusive");
-                intent.putExtra("owner", 0);
                 startActivity(intent);
                 pop.dismiss();
                 break;
@@ -413,7 +419,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.menu_5:
                 intent = new Intent(this, MembersActivity.class);
-                intent.putExtra("courseId", id);
+                intent.putExtra("type", "exclusive");
+                intent.putExtra("id", id);
                 startActivity(intent);
                 pop.dismiss();
                 break;
@@ -472,7 +479,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         // TODO: 2017/8/8 记得改按钮样式 ↓
         //startStudy.setBackgroundResource(R.drawable.button_bg_selector_red);
         //startStudy.setTextColor(Color.WHITE);
-        Toast.makeText(this, "暂不支持专属课免费", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "暂不支持小班课免费", Toast.LENGTH_SHORT).show();
     }
 
     private void payRemedial() {

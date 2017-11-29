@@ -13,7 +13,7 @@ public class FilterExclusiveCourseBean implements Serializable {
 
     /**
      * status : 1
-     * data : [{"id":1,"name":"测试专属课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试专属课1","suit_crowd":"测试专属课1","description":"<p>测试专属课1测试专属课1<br><\/p>"}]
+     * data : [{"id":1,"name":"测试小班课1","publicizes_url":{"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"},"subject":"数学","grade":"高一","status":"published","teacher_name":"王志成","price":200,"current_price":200,"view_tickets_count":0,"events_count":3,"start_at":null,"end_at":null,"objective":"测试小班课1","suit_crowd":"测试小班课1","description":"<p>测试小班课1测试小班课1<br><\/p>"}]
      */
 
     private int status;
@@ -38,7 +38,7 @@ public class FilterExclusiveCourseBean implements Serializable {
     public static class DataBean {
         /**
          * id : 1
-         * name : 测试专属课1
+         * name : 测试小班课1
          * publicizes_url : {"app_info":"http://testing.qatime.cn/assets/groups/mathematics/app_info_default-af5e8db92e98e136a1a7b724b7dedd49.png","list":"http://testing.qatime.cn/assets/groups/mathematics/list_default-1b3bf1a3d82979605caea89854b60a44.png","info":"http://testing.qatime.cn/assets/groups/mathematics/info_default-3c9e978bbb618ce34ebd31defd6e2c61.png"}
          * subject : 数学
          * grade : 高一
@@ -50,9 +50,9 @@ public class FilterExclusiveCourseBean implements Serializable {
          * events_count : 3
          * start_at : null
          * end_at : null
-         * objective : 测试专属课1
-         * suit_crowd : 测试专属课1
-         * description : <p>测试专属课1测试专属课1<br></p>
+         * objective : 测试小班课1
+         * suit_crowd : 测试小班课1
+         * description : <p>测试小班课1测试小班课1<br></p>
          */
 
         private int id;
