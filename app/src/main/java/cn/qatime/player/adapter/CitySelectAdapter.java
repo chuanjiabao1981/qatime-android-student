@@ -56,15 +56,15 @@ public abstract class CitySelectAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size() + VIEW_TYPE_COUNT-1;
+        return list.size() + VIEW_TYPE_COUNT - 1;
     }
 
     @Override
     public Object getItem(int position) {
-        if (position < VIEW_TYPE_COUNT-1) {
+        if (position < VIEW_TYPE_COUNT - 1) {
             return null;
-        }else {
-            return list.get(position - VIEW_TYPE_COUNT+1);
+        } else {
+            return list.get(position - VIEW_TYPE_COUNT + 1);
         }
     }
 
@@ -79,25 +79,25 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         int viewType = getItemViewType(position);
         if (viewType == 0) {//最近
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[0], position);
-                GridViewForScrollView grid = viewHolder.getView(R.id.grid_city_lately);
-                grid.setAdapter(new CommonAdapter<CityBean.Data>(context, listLately, R.layout.item_city_single) {
-                    @Override
-                    public void convert(ViewHolder holder, CityBean.Data item, int position) {
-                        holder.setText(R.id.city_name, item.getName());
-                    }
-                });
-                grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        setCityName(listLately.get(position));
-                    }
-                });
-        }else if (viewType ==1) {//热门
+            GridViewForScrollView grid = viewHolder.getView(R.id.grid_city_lately);
+            grid.setAdapter(new CommonAdapter<CityBean.Data>(context, listLately, R.layout.item_city_single) {
+                @Override
+                public void convert(ViewHolder holder, CityBean.Data item, int position) {
+                    holder.setText(R.id.city_name, item.getName());
+                }
+            });
+            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    setCityName(listLately.get(position));
+                }
+            });
+        } else if (viewType == 1) {//热门
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[1], position);
             viewHolder.getView(R.id.hot_city1).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CityBean.Data _default = new CityBean.Data("阳泉");
+                    CityBean.Data _default = new CityBean.Data("阳泉市");
                     _default.setWorkstation_id(1);
                     setCityName(_default);
                 }
@@ -105,7 +105,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.getView(R.id.hot_city2).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CityBean.Data _default = new CityBean.Data("太原");
+                    CityBean.Data _default = new CityBean.Data("太原市");
                     _default.setWorkstation_id(2);
                     setCityName(_default);
                 }
@@ -113,12 +113,12 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.getView(R.id.hot_city3).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CityBean.Data _default = new CityBean.Data("昔阳");
+                    CityBean.Data _default = new CityBean.Data("昔阳市");
                     _default.setWorkstation_id(3);
                     setCityName(_default);
                 }
             });
-        }  else if (viewType == 2) {//全国
+        } else if (viewType == 2) {//全国
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[2], position);
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,24 +129,24 @@ public abstract class CitySelectAdapter extends BaseAdapter {
                 }
             });
         } else {//城市
-            viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[VIEW_TYPE_COUNT-1], position);
-            CityBean.Data item = list.get(position - VIEW_TYPE_COUNT+1);
+            viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[VIEW_TYPE_COUNT - 1], position);
+            CityBean.Data item = list.get(position - VIEW_TYPE_COUNT + 1);
             viewHolder.setText(R.id.city_latter, item.getFirstLetter());
             viewHolder.setText(R.id.city_name, item.getName());
-            if (position > VIEW_TYPE_COUNT-1) {
+            if (position > VIEW_TYPE_COUNT - 1) {
                 if (list.get(position - VIEW_TYPE_COUNT).getFirstLetter().equals(item.getFirstLetter())) {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.GONE);
                 } else {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.VISIBLE);
                 }
             }
-            if(position == VIEW_TYPE_COUNT-1){
+            if (position == VIEW_TYPE_COUNT - 1) {
                 viewHolder.getView(R.id.city_latter).setVisibility(View.VISIBLE);
             }
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCityName(list.get(position - VIEW_TYPE_COUNT+1));
+                    setCityName(list.get(position - VIEW_TYPE_COUNT + 1));
                 }
             });
         }
@@ -172,10 +172,10 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             return "最近";
         } else if (position == 1) {
             return "推荐";
-        }else if (position == 2) {
+        } else if (position == 2) {
             return "全国";
         } else {
-            return list.get(position - VIEW_TYPE_COUNT+1).getFirstLetter();
+            return list.get(position - VIEW_TYPE_COUNT + 1).getFirstLetter();
         }
     }
 

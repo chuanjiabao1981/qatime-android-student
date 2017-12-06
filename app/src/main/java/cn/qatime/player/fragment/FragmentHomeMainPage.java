@@ -301,8 +301,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 } else if ("LiveStudio::CustomizedGroup".equals(listFree.get(position).getModel_name())) {
                     intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
-                intent.putExtra("id", courseId);
-                startActivity(intent);
+                if (intent != null) {
+                    intent.putExtra("id", courseId);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -339,8 +341,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 } else if ("LiveStudio::Group".equals(listEssenceContent.get(position).getTarget_type())) {
                     intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
-                intent.putExtra("id", courseId);
-                startActivity(intent);
+                if (intent != null) {
+                    intent.putExtra("id", courseId);
+                    startActivity(intent);
+                }
             }
         });
     }

@@ -231,7 +231,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
             listLately = lately;
         }
         refreshLately(BaseApplication.getInstance().getCurrentCity());
-        adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately,R.layout.item_city_hot,R.layout.item_city_all, R.layout.item_city_list) {
+        adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_hot, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
                 setCityAndHistory(data);
@@ -247,7 +247,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                     listView.setSelection(0);
                 } else if (s.equals("推荐")) {
                     listView.setSelection(1);
-                }else if (s.equals("全国")) {
+                } else if (s.equals("全国")) {
                     listView.setSelection(2);
                 } else {
                     int position = adapter.getPositionByLetter(s);
@@ -275,7 +275,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setCityAndHistory(CityBean.Data data) {
-        if(data.getWorkstation_id()==0){
+        if (data.getWorkstation_id() == 0) {
             Toast.makeText(this, "该城市尚未开通", Toast.LENGTH_SHORT).show();
             return;
         }

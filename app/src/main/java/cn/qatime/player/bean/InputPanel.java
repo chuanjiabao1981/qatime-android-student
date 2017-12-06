@@ -445,14 +445,17 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     }
 
     public void setMute(boolean mute) {
+        if (this.isMute == mute) {
+            return;
+        }
         this.isMute = mute;
 
-        closeEmojiAndInput();
-        if (content.getVisibility() == GONE) {
-            switchToTextLayout(false);
-        }
-        content.setText("");
         if (isMute) {
+            closeEmojiAndInput();
+            if (content.getVisibility() == GONE) {
+                switchToTextLayout(false);
+            }
+            content.setText("");
             content.setHint(R.string.have_muted);
             content.setGravity(Gravity.CENTER);
             content.setEnabled(false);
