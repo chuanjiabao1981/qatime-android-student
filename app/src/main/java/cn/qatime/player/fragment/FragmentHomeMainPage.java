@@ -59,6 +59,7 @@ import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
+import cn.qatime.player.activity.TipsBeforeExaminationActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.activity.WebActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -185,6 +186,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         view.findViewById(R.id.to_search).setOnClickListener(this);
         view.findViewById(R.id.to_all_teacher).setOnClickListener(this);
         view.findViewById(R.id.to_live_replay).setOnClickListener(this);
+        view.findViewById(R.id.online_exam).setOnClickListener(this);
 
         initBanner();
         initGrade();
@@ -897,6 +899,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.to_all_teacher:
                 intent = new Intent(getActivity(), TeacherSearchActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.online_exam:
+                intent = new Intent(getActivity(), TipsBeforeExaminationActivity.class);
                 startActivity(intent);
                 break;
 

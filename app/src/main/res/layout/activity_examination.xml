@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_backbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标题"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已购人数0" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cdcdcd" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="-基本信息介绍"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:columnCount="2">
+
+                <TextView
+                    android:text="考试时长:0分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:text="考题数量:共0小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:text="适考范围"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+            </android.support.v7.widget.GridLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="-支持判卷方式"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/text_background_flowlayout"
+                    android:padding="3dp"
+                    android:text="老师手动判卷" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="说明：老师手动判卷1-3天可获取结果。"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/text_background_flowlayout"
+                    android:padding="3dp"
+                    android:text="系统自动判卷" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="说明：系统自动判卷提交后即可获取结果。"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="-考试内容安排"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#ededed"
+                app:alignmentMode="alignBounds"
+                app:columnCount="4"
+                app:rowCount="5">
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#f5f5f5"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:text="Ⅰ    听后选择"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="1.5分/题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="共8小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="合计12分"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="约9分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#f5f5f5"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:text="Ⅱ    听后回答"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="2分/题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="共5小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="合计10分"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="约5分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#f5f5f5"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:text="Ⅲ    听后记录、听后转述"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
+                    android:text="第一节"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="1分/题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="共5小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="合计5分"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="约5分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
+                    android:text="第二节"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="5分/题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="共1小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="合计5分"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="约7分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#f5f5f5"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:text="Ⅳ    短文朗读"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="8分/题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="共1小题"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="合计8分"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+                <TextView
+                    android:layout_margin="1dp"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="约4分钟"
+                    app:layout_columnWeight="1"
+                    app:layout_rowWeight="1" />
+
+            </android.support.v7.widget.GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:drawableLeft="@mipmap/share_dark"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text=" 分 享 "
+            android:textColor="#000" />
+
+        <RelativeLayout
+            android:id="@+id/handle_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:visibility="visible"
+            app:layout_widthPercent="50%w">
+
+            <Button
+                android:id="@+id/pay"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/button_bg_selector_red_with_stork"
+                android:clickable="true"
+                android:text="立即报名"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/start_study"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/button_bg_selector_red"
+                android:clickable="true"
+                android:text="开始学习"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f2f2f2" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</LinearLayout>

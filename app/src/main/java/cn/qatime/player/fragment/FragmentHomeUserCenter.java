@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.DownloadManagerActivity;
 import cn.qatime.player.activity.PersonalInformationActivity;
+import cn.qatime.player.activity.PersonalMyExamActivity;
 import cn.qatime.player.activity.PersonalMyExclusiveActivity;
 import cn.qatime.player.activity.PersonalMyHomeworkActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
@@ -139,7 +140,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
                 getActivity().startActivity(intent);
                 break;
-
+            case R.id.exam:
+                intent = new Intent(getActivity(), PersonalMyExamActivity.class);
+                getActivity().startActivity(intent);
+                break;
         }
     }
 
@@ -172,6 +176,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         view.findViewById(R.id.download_manager).setOnClickListener(this);
         view.findViewById(R.id.my_homework).setOnClickListener(this);
         view.findViewById(R.id.my_question).setOnClickListener(this);
+        view.findViewById(R.id.exam).setOnClickListener(this);
         myTaste = (TextView) view.findViewById(R.id.my_taste);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
