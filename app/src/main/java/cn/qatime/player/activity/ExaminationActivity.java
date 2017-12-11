@@ -18,3 +18,4 @@ public class ExaminationActivity extends BaseActivity {
         setContentView(R.layout.activity_examination);
     }
 }
+
