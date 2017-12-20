@@ -177,6 +177,22 @@ public abstract class FlowBaseLayout extends LinearLayout {
         }
     }
 
+    public void pause() {
+        if (d != null) {
+            d.dispose();
+            d = null;
+        }
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.release();
+                player = null;
+            }
+        }
+    }
+
+    public void reStart() {
+    }
+
     protected void saveAnswer(Integer id, String answer) {
         HashMap<Integer, String> map = (HashMap<Integer, String>) ACache.get(getContext()).getAsObject("answer");
         if (map == null) {
