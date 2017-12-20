@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -23,6 +24,7 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,11 @@ import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     private TextView tipText;
@@ -48,13 +54,21 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
 
     private Handler hd = new Handler();
     private boolean hasLoad = false;
+    private boolean hasJoin = false;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
             if (hasLoad) {
                 if (tipText != null) {
                     tipText.setText(R.string.you_have_quit_the_group);
-                    tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+                    if (team.isMyTeam()) {
+                        tipText.setVisibility(View.GONE);
+                    } else {
+                        tipText.setVisibility(View.VISIBLE);
+                        if (!hasJoin) {
+                            joinTeam();
+                        }
+                    }
                     hd.removeCallbacks(this);
                 } else {
                     hd.postDelayed(this, 200);
@@ -64,8 +78,38 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
             }
         }
     };
+
+    private void joinTeam() {
+        if (id != 0) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/join", null,
+                    new VolleyListener(getActivity()) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            hasJoin = true;
+                            hd.postDelayed(runnable, 200);
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
+    }
+
     private MessageListPanel messageListPanel;
     private View view;
+    private int id = 0;
 //    private String owner;
 
     @Nullable
@@ -257,7 +301,8 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     };
 
 
-    public void setSessionId(String sessionId) {
+    public void setSessionId(int id, String sessionId) {
+        this.id = id;
         this.sessionId = sessionId;
         requestTeamInfo();
         Container container = new Container(getActivity(), sessionId, this);

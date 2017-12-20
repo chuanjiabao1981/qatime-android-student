@@ -683,18 +683,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 iv.setId(position);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 Glide.with(getActivity()).load(listBanner.get(position).getLogo_url()).placeholder(R.mipmap.no_banner).into(iv);
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (StringUtils.isNullOrBlanK(listBanner.get(position).getLink()) || StringUtils.isGoodUrl(listBanner.get(position).getLink())) {
-                            Toast.makeText(getActivity(), "网址格式不正确", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        Intent intent = new Intent(getActivity(), WebActivity.class);
-                        intent.putExtra("url", listBanner.get(position).getLink());
-                        startActivity(intent);
-                    }
-                });
+//                iv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if (StringUtils.isNullOrBlanK(listBanner.get(position).getLink()) || StringUtils.isGoodUrl(listBanner.get(position).getLink())) {
+//                            Toast.makeText(getActivity(), "网址格式不正确", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        Intent intent = new Intent(getActivity(), WebActivity.class);
+//                        intent.putExtra("url", listBanner.get(position).getLink());
+//                        startActivity(intent);
+//                    }
+//                });
                 container.addView(iv);
                 return iv;
             }
