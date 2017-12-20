@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.qatime.player.flow.FlowExamExplainLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.qatime.player.flow.view.FlowExamExplainLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -43,4 +43,4 @@
         android:text="10秒后自动进入"
         android:textColor="@color/colorPrimary"
         android:textSize="13sp" />
-</cn.qatime.player.flow.FlowExamExplainLayout>
+</cn.qatime.player.flow.view.FlowExamExplainLayout>

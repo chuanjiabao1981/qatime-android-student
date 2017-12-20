@@ -386,10 +386,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
         bean.name = data.getData().getVideo_course().getName();
-        bean.subject = data.getData().getVideo_course().getSubject();
-        bean.grade = data.getData().getVideo_course().getGrade();
-        bean.classnumber = data.getData().getVideo_course().getVideo_lessons_count();
-        bean.teacher = data.getData().getVideo_course().getTeacher().getName();
         bean.current_price = Float.valueOf(data.getData().getVideo_course().getPrice());
 
         intent.putExtra("data", bean);

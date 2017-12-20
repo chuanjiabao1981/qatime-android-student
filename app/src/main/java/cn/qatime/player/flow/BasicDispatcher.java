@@ -8,7 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.ExaminationIngActivity;
+import cn.qatime.player.flow.screen.FlowAnswerScreen;
+import cn.qatime.player.flow.screen.FlowExplainScreen;
+import cn.qatime.player.flow.screen.FlowChooseScreen;
+import cn.qatime.player.flow.screen.FlowRePostScreen;
+import cn.qatime.player.flow.screen.FlowReadScreen;
+import cn.qatime.player.flow.screen.FlowRecordScreen;
 import flow.Dispatcher;
 import flow.Flow;
 import flow.Traversal;
@@ -35,7 +40,6 @@ public class BasicDispatcher implements Dispatcher {
         if (frame.getChildCount() > 0) {
             final View currentView = frame.getChildAt(0);
 
-            // Save the outgoing view state.
             if (traversal.origin != null) {
                 traversal.getState(traversal.origin.top()).save(currentView);
             }
@@ -52,8 +56,16 @@ public class BasicDispatcher implements Dispatcher {
         @LayoutRes final int layout;
         if (destKey instanceof FlowExplainScreen) {
             layout = R.layout.flow_exam_explain;
-        } else if (destKey instanceof FlowRadioScreen) {
-            layout = R.layout.flow_radio_screen;
+        } else if (destKey instanceof FlowChooseScreen) {
+            layout = R.layout.flow_choose_screen;
+        } else if (destKey instanceof FlowAnswerScreen) {
+            layout = R.layout.flow_answer_screen;
+        } else if (destKey instanceof FlowRecordScreen) {
+            layout = R.layout.flow_record_screen;
+        } else if (destKey instanceof FlowRePostScreen) {
+            layout = R.layout.flow_repost_screen;
+        } else if (destKey instanceof FlowReadScreen) {
+            layout = R.layout.flow_read_screen;
         } else {
             throw new AssertionError("Unrecognized screen " + destKey);
         }

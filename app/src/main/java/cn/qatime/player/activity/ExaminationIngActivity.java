@@ -2,13 +2,15 @@ package cn.qatime.player.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.WindowManager;
+
+import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.flow.BasicDispatcher;
 import cn.qatime.player.flow.BasicKeyParceler;
-import cn.qatime.player.flow.FlowExplainScreen;
-import cn.qatime.player.flow.FlowRadioScreen;
+import cn.qatime.player.flow.screen.FlowExplainScreen;
 import flow.Flow;
 
 /**
@@ -36,11 +38,18 @@ public class ExaminationIngActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examination_ing);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void initView() {
-//        viewPager= (ViewPager) findViewById(R.id.viewPager);
-//        adapter=new ExamFragmentStatePagerAdapter(getFragmentManager());
-//        viewPager.setAdapter(adapter);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }

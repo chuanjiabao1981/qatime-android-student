@@ -45,10 +45,6 @@ import libraryextra.utils.VolleyListener;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
-    TextView project;
-    TextView grade;
-    TextView teacher;
-    TextView classnumber;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -96,22 +92,21 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private void setValue(OrderPayBean data) {
         if (!StringUtils.isNullOrBlanK(courseType)) {
             if ("live".equals(courseType)) {
-                textCourseType.setText(R.string.live_courses);
+                textCourseType.setText("类型：" + getResourceString(R.string.live_courses));
             } else if ("interact".equals(courseType)) {
-                textCourseType.setText(R.string.interact_courses);
+                textCourseType.setText("类型：" + getResourceString(R.string.interact_courses));
             } else if ("video".equals(courseType)) {
-                textCourseType.setText(R.string.video_courses);
+                textCourseType.setText("类型：" + getResourceString(R.string.video_courses));
                 tip.inflate();
             } else if ("exclusive".equals(courseType)) {
-                textCourseType.setText("小班课");
+                textCourseType.setText("类型：小班课");
+            } else if ("exam".equals(courseType)) {
+                textCourseType.setText("类型：模拟考卷");
+                tip.inflate();
             }
         }
 
         name.setText(data.name);
-        project.setText(data.subject);
-        grade.setText(data.grade);
-        classnumber.setText("共" + data.classnumber + "课");
-        teacher.setText(data.teacher);
 
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
@@ -168,6 +163,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 url = UrlUtils.getUrl(UrlUtils.urlVideoCourses + id + "/orders", map);
             } else if ("exclusive".equals(courseType)) {
                 url = UrlUtils.getUrl(UrlUtils.urlExclusiveLesson + "/" + id + "/orders", map);
+            } else if ("exam".equals(courseType)) {
+                url = UrlUtils.getUrl(UrlUtils.urlExamPapers + id + "/orders", map);
             }
         } else return;
 
@@ -241,8 +238,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             }
         });
         addToRequestQueue(request);
-
-
     }
 
     protected void dialog() {
@@ -268,11 +263,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
-        project = (TextView) findViewById(R.id.project);
-        grade = (TextView) findViewById(R.id.grade);
-        teacher = (TextView) findViewById(R.id.teacher);
         textCourseType = (TextView) findViewById(R.id.course_type);
-        classnumber = (TextView) findViewById(R.id.class_number);
         View wechatLayout = findViewById(R.id.wechat_layout);
         View alipayLayout = findViewById(R.id.alipay_layout);
         View accountLayout = findViewById(R.id.account_layout);
@@ -363,7 +354,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (price.startsWith(".")) {
                             price = "0" + price;
                         }
-                        OrderConfirmActivity.this.price.setText(price+"元");
+                        OrderConfirmActivity.this.price.setText(price + "元");
                         payprice.setText(" " + price + " ");
 
                     }
@@ -383,21 +374,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         addToRequestQueue(request);
     }
 
-    private String getStatus(String status) {
-        if (status == null) {
-            return getString(R.string.recruiting);
-        }
-        if (status.equals("published")) {
-            return getString(R.string.recruiting);
-        } else if (status.equals("init")) {
-            return getString(R.string.recruiting);
-        } else if (status.equals("teaching")) {
-            return getString(R.string.teaching);
-        } else if (status.equals(Constant.CourseStatus.completed)) {//未开始
-            return getString(R.string.completed);
-        }
-        return getString(R.string.recruiting);
-    }
 
     @Subscribe
     public void onEvent(PayResultState code) {

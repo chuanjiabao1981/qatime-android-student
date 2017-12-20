@@ -46,6 +46,7 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/buy_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="已购人数0" />
@@ -70,16 +71,19 @@
                 app:columnCount="2">
 
                 <TextView
+                    android:id="@+id/exam_time"
                     android:text="考试时长:0分钟"
                     app:layout_columnWeight="1"
                     app:layout_rowWeight="1" />
 
                 <TextView
+                    android:id="@+id/topic_count"
                     android:text="考题数量:共0小题"
                     app:layout_columnWeight="1"
                     app:layout_rowWeight="1" />
 
                 <TextView
+                    android:id="@+id/exam_range"
                     android:text="适考范围"
                     app:layout_columnWeight="1"
                     app:layout_rowWeight="1" />
@@ -443,7 +447,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_widthPercent="50%w">
 
             <Button

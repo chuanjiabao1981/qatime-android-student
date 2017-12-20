@@ -1,7 +1,9 @@
-package cn.qatime.player.flow;
+package cn.qatime.player.flow.screen;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
  * @author luntify
@@ -9,10 +11,19 @@ import android.os.Parcelable;
  * @Description: 单选题页面
  */
 
-public class FlowExplainScreen implements Parcelable {
+public class FlowExplainScreen extends BaseScreen implements Parcelable {
     private int index;
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public FlowExplainScreen(int index) {
+        super();
         this.index = index;
     }
 

@@ -596,10 +596,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
         bean.name = data.getData().getCourse().getName();
-        bean.subject = data.getData().getCourse().getSubject();
-        bean.grade = data.getData().getCourse().getGrade();
-        bean.classnumber = data.getData().getCourse().getPreset_lesson_count();
-        bean.teacher = data.getData().getCourse().getTeacher().getName();
         bean.current_price = data.getData().getCourse().getCurrent_price();
 
         intent.putExtra("data", bean);

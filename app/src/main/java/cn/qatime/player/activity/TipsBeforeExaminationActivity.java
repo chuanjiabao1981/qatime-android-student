@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.ACache;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -79,7 +81,9 @@ public class TipsBeforeExaminationActivity extends BaseActivity implements View.
                             public void onComplete() {
                                 timer.setVisibility(View.GONE);
                                 TipsBeforeExaminationActivity.this.d = null;
-                                // TODO: 2017/12/5 转业面
+                                ACache.get(TipsBeforeExaminationActivity.this).put("exam", getIntent().getSerializableExtra("data"), 60 * 90);
+                                Intent intent = new Intent(TipsBeforeExaminationActivity.this, ExaminationIngActivity.class);
+                                startActivity(intent);
                             }
                         });
                 break;

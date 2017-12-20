@@ -26,9 +26,11 @@ public class UrlUtils {
     //课程base
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
     //小班课
-    public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
+    public static String urlExclusiveLesson = baseUrl + "api/v1/live_studio/customized_groups";
     //课程
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
+    //考试详情
+    public static String urlExamPapers = baseUrl + "api/v1/exam/papers/";
     //一对一
     public static String urlInteractCourses = baseUrl + "api/v1/live_studio/interactive_courses/";
     //视频课
@@ -55,6 +57,8 @@ public class UrlUtils {
     public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
     //直播课搜索
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
+    //考试列表
+    public static String urlExamSearch = baseUrl + "api/v1/exam/papers/search";
     //最新课程
     public static String urlLiveStudioLatest = baseUrl + "api/v2/live_studio/courses/latest";
     //免费课程

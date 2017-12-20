@@ -450,19 +450,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
         bean.name = data.getData().getInteractive_course().getName();
-        bean.subject = data.getData().getInteractive_course().getSubject();
-        bean.grade = data.getData().getInteractive_course().getGrade();
-        bean.classnumber = data.getData().getInteractive_course().getLessons_count();
-        List<TeacherBean> teachers = data.getData().getInteractive_course().getTeachers();
-//        StringBuffer teacherNames = new StringBuffer();
-//        for (int i = 0; i < teachers.size(); i++) {
-//            teacherNames.append(teachers.get(0).getName());
-//            if (i != teachers.size() - 1) {
-//                teacherNames.append("/");
-//            }
-//        }
-//        bean.teacher = teacherNames.toString();
-        bean.teacher = teachers.get(0).getName() + "...";
         bean.current_price = Float.valueOf(data.getData().getInteractive_course().getPrice());
 
         intent.putExtra("data", bean);

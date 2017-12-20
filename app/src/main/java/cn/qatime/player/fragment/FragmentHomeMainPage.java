@@ -50,7 +50,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
-import cn.qatime.player.activity.ExaminationIngActivity;
+import cn.qatime.player.activity.ExamListActivity;
 import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
@@ -60,7 +60,6 @@ import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
-import cn.qatime.player.activity.TipsBeforeExaminationActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.activity.WebActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -903,7 +902,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.online_exam:
-                intent = new Intent(getActivity(), ExaminationIngActivity.class);
+                intent = new Intent(getActivity(), ExamListActivity.class);
                 startActivity(intent);
                 break;
 

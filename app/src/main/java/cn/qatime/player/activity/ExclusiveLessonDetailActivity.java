@@ -489,10 +489,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
         bean.name = data.getData().getCustomized_group().getName();
-        bean.subject = data.getData().getCustomized_group().getSubject();
-        bean.grade = data.getData().getCustomized_group().getGrade();
-        bean.classnumber = data.getData().getCustomized_group().getView_tickets_count();
-        bean.teacher = data.getData().getCustomized_group().getTeacher().getName();
         bean.current_price = data.getData().getCustomized_group().getPrice();
 
         intent.putExtra("data", bean);
