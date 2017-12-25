@@ -3,8 +3,6 @@ package cn.qatime.player.flow.screen;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * @author luntify
  * @date 2017/12/11 11:22
@@ -22,9 +20,10 @@ public class FlowExplainScreen extends BaseScreen implements Parcelable {
         this.index = index;
     }
 
-    public FlowExplainScreen(int index) {
+    public FlowExplainScreen(int index, int passed) {
         super();
         this.index = index;
+        this.passed = passed;
     }
 
     @Override

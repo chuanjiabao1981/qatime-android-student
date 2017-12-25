@@ -35,23 +35,21 @@ public class Topics implements Serializable {
      */
 
     private int id;
-    private int paper_id;
-    private Object category_id;
-    private Object package_topic_id;
-    private int group_topic_id;
-    private String name;
-    private Object section_name;
+    //    private int paper_id;
+//    private Object category_id;
+//    private Object package_topic_id;
+//    private int group_topic_id;
+//    private String name;
+//    private Object section_name;
     private String title;
-    private Object attach;
+    private Attach attach;
     private int topics_count;
-    private Object duration;
-    private int score;
-    private Object answer;
-    private Object answer_attach;
+    //    private Object duration;
+//    private int score;
+//    private Object answer;
+//    private Object answer_attach;
     private String type;
     private String status;
-    private String created_at;
-    private String updated_at;
     private List<Topics> topics;
     private List<TopicOptions> topic_options;
 
@@ -63,53 +61,53 @@ public class Topics implements Serializable {
         this.id = id;
     }
 
-    public int getPaper_id() {
-        return paper_id;
-    }
+//    public int getPaper_id() {
+//        return paper_id;
+//    }
+//
+//    public void setPaper_id(int paper_id) {
+//        this.paper_id = paper_id;
+//    }
 
-    public void setPaper_id(int paper_id) {
-        this.paper_id = paper_id;
-    }
+//    public Object getCategory_id() {
+//        return category_id;
+//    }
+//
+//    public void setCategory_id(Object category_id) {
+//        this.category_id = category_id;
+//    }
+//
+//    public Object getPackage_topic_id() {
+//        return package_topic_id;
+//    }
+//
+//    public void setPackage_topic_id(Object package_topic_id) {
+//        this.package_topic_id = package_topic_id;
+//    }
 
-    public Object getCategory_id() {
-        return category_id;
-    }
+//    public int getGroup_topic_id() {
+//        return group_topic_id;
+//    }
+//
+//    public void setGroup_topic_id(int group_topic_id) {
+//        this.group_topic_id = group_topic_id;
+//    }
 
-    public void setCategory_id(Object category_id) {
-        this.category_id = category_id;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
-    public Object getPackage_topic_id() {
-        return package_topic_id;
-    }
-
-    public void setPackage_topic_id(Object package_topic_id) {
-        this.package_topic_id = package_topic_id;
-    }
-
-    public int getGroup_topic_id() {
-        return group_topic_id;
-    }
-
-    public void setGroup_topic_id(int group_topic_id) {
-        this.group_topic_id = group_topic_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getSection_name() {
-        return section_name;
-    }
-
-    public void setSection_name(Object section_name) {
-        this.section_name = section_name;
-    }
+//    public Object getSection_name() {
+//        return section_name;
+//    }
+//
+//    public void setSection_name(Object section_name) {
+//        this.section_name = section_name;
+//    }
 
     public String getTitle() {
         return title;
@@ -119,11 +117,11 @@ public class Topics implements Serializable {
         this.title = title;
     }
 
-    public Object getAttach() {
+    public Attach getAttach() {
         return attach;
     }
 
-    public void setAttach(Object attach) {
+    public void setAttach(Attach attach) {
         this.attach = attach;
     }
 
@@ -135,37 +133,37 @@ public class Topics implements Serializable {
         this.topics_count = topics_count;
     }
 
-    public Object getDuration() {
-        return duration;
-    }
+//    public Object getDuration() {
+//        return duration;
+//    }
+//
+//    public void setDuration(Object duration) {
+//        this.duration = duration;
+//    }
+//
+//    public int getScore() {
+//        return score;
+//    }
+//
+//    public void setScore(int score) {
+//        this.score = score;
+//    }
 
-    public void setDuration(Object duration) {
-        this.duration = duration;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public Object getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(Object answer) {
-        this.answer = answer;
-    }
-
-    public Object getAnswer_attach() {
-        return answer_attach;
-    }
-
-    public void setAnswer_attach(Object answer_attach) {
-        this.answer_attach = answer_attach;
-    }
+//    public Object getAnswer() {
+//        return answer;
+//    }
+//
+//    public void setAnswer(Object answer) {
+//        this.answer = answer;
+//    }
+//
+//    public Object getAnswer_attach() {
+//        return answer_attach;
+//    }
+//
+//    public void setAnswer_attach(Object answer_attach) {
+//        this.answer_attach = answer_attach;
+//    }
 
     public String getType() {
         return type;
@@ -181,22 +179,6 @@ public class Topics implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
     }
 
     public List<Topics> getTopics() {

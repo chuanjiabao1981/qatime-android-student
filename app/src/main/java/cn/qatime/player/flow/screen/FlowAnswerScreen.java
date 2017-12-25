@@ -7,4 +7,10 @@ package cn.qatime.player.flow.screen;
  */
 
 public class FlowAnswerScreen extends BaseScreen {
+    public int index;
+
+    public FlowAnswerScreen(int index, int passed) {
+        this.index = index;
+        this.passed = passed;
+    }
 }

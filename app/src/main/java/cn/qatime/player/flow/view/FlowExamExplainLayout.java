@@ -84,11 +84,11 @@ public class FlowExamExplainLayout extends LinearLayout {
                 if (screen.getIndex() == 0) {
                     Flow.get(FlowExamExplainLayout.this).set(new FlowChooseScreen(0, screen.passed));
                 } else if (screen.getIndex() == 1) {
-                    Flow.get(FlowExamExplainLayout.this).set(new FlowAnswerScreen());
+                    Flow.get(FlowExamExplainLayout.this).set(new FlowAnswerScreen(0, screen.passed));
                 } else if (screen.getIndex() == 2) {
-                    Flow.get(FlowExamExplainLayout.this).set(new FlowRecordScreen());
+                    Flow.get(FlowExamExplainLayout.this).set(new FlowRecordScreen(0, screen.passed));
                 } else if (screen.getIndex() == 3) {
-                    Flow.get(FlowExamExplainLayout.this).set(new FlowReadScreen());
+                    Flow.get(FlowExamExplainLayout.this).set(new FlowReadScreen(0, screen.passed));
                 }
             }
         });
@@ -122,11 +122,11 @@ public class FlowExamExplainLayout extends LinearLayout {
                         if (screen.getIndex() == 0) {
                             Flow.get(FlowExamExplainLayout.this).set(new FlowChooseScreen(0, screen.passed));
                         } else if (screen.getIndex() == 1) {
-                            Flow.get(FlowExamExplainLayout.this).set(new FlowAnswerScreen());
+                            Flow.get(FlowExamExplainLayout.this).set(new FlowAnswerScreen(0, screen.passed));
                         } else if (screen.getIndex() == 2) {
-                            Flow.get(FlowExamExplainLayout.this).set(new FlowRecordScreen());
+                            Flow.get(FlowExamExplainLayout.this).set(new FlowRecordScreen(0, screen.passed));
                         } else if (screen.getIndex() == 3) {
-                            Flow.get(FlowExamExplainLayout.this).set(new FlowReadScreen());
+                            Flow.get(FlowExamExplainLayout.this).set(new FlowReadScreen(0, screen.passed));
                         }
                     }
                 });

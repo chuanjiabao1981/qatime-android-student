@@ -597,7 +597,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
      */
     private void initRecentPublished() {
         Map<String, String> map = new HashMap<>();
-        map.put("count", "2");
+        map.put("playTime", "2");
         map.put("city_id", BaseApplication.getInstance().getCurrentCity().getId());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudioLatest, map), null,
                 new VolleyListener(getActivity()) {
@@ -634,7 +634,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
      */
     private void initFreeCourseData() {
         Map<String, String> map = new HashMap<>();
-        map.put("count", "2");
+        map.put("playTime", "2");
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudioFree, map), null,
                 new VolleyListener(getActivity()) {
                     @Override

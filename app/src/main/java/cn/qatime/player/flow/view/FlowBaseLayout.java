@@ -1,6 +1,7 @@
 package cn.qatime.player.flow.view;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -8,8 +9,8 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import cn.qatime.player.R;
@@ -19,7 +20,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.vov.vitamio.MediaPlayer;
 
 /**
  * @author luntify
@@ -31,6 +31,12 @@ public abstract class FlowBaseLayout extends LinearLayout {
     private Disposable d;
     private MediaPlayer player;
     private TextView countdown;
+    protected int playTime = 1;//播放第几次
+    protected int playTimes = 2;//一共播放几次
+    protected int readTime = 10;
+    protected int intervalTime = 3;
+    protected int waitingTime = 10;
+    protected String path = "";
 
     public FlowBaseLayout(Context context) {
         super(context);
@@ -55,14 +61,14 @@ public abstract class FlowBaseLayout extends LinearLayout {
 
     }
 
-    protected final void listenQuestion(final int count, final int total, final String path) {
+    protected final void listenQuestion() {
         countdown = findViewById(R.id.countdown);
         Observable.interval(0, 1, TimeUnit.SECONDS)
-                .take(11)
+                .take(playTime == 1 ? readTime + 1 : intervalTime + 1)
                 .map(new Function<Long, Long>() {
                     @Override
                     public Long apply(Long aLong) throws Exception {
-                        return 10 - aLong;
+                        return (playTime == 1 ? readTime : intervalTime) - aLong;
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -73,7 +79,7 @@ public abstract class FlowBaseLayout extends LinearLayout {
 
                     @Override
                     public void onNext(Long aLong) {
-                        countdown.setText(aLong + "秒后将自动播放语音（" + count + "/" + total + "）");
+                        countdown.setText(aLong + "秒后将自动播放语音（" + playTime + "/" + playTimes + "）");
                     }
 
                     @Override
@@ -84,47 +90,56 @@ public abstract class FlowBaseLayout extends LinearLayout {
                     @Override
                     public void onComplete() {
                         FlowBaseLayout.this.d = null;
-                        countdown.setText("正在播放语音...（" + count + "/" + total + "）");
-                        playMp3(count, total, path);
+                        countdown.setText("正在播放语音...（" + playTime + "/" + playTimes + "）");
+                        playMp3();
                     }
                 });
     }
 
-    private void playMp3(final int count, final int total, final String path) {
-//        player = new MediaPlayer(getContext());
-//        try {
-//            player.setDataSource(path);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        player.prepareAsync();
-//        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                mp.start();
-//            }
-//        });
-//        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                mp.release();
-//                player = null;
-        if (count < total) {
-            listenQuestion(count + 1, total, path);
-        } else {
-            answerQuestion();
+    private void playMp3() {
+        player = new MediaPlayer();
+        try {
+            player.setDataSource(path);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-//            }
-//        });
+        player.prepareAsync();
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+
+                player = null;
+                if (playTime < playTimes) {
+                    playTime += 1;
+                    listenQuestion();
+                } else {
+                    answerQuestion();
+                }
+            }
+        });
+    }
+
+    protected void stopTimer() {
+        if (d != null) {
+            d.dispose();
+            d = null;
+        }
     }
 
     protected void answerQuestion() {
         Observable.interval(0, 1, TimeUnit.SECONDS)
-                .take(11)
+                .take(waitingTime + 1)
                 .map(new Function<Long, Long>() {
                     @Override
                     public Long apply(Long aLong) throws Exception {
-                        return 10 - aLong;
+                        return waitingTime - aLong;
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -135,6 +150,9 @@ public abstract class FlowBaseLayout extends LinearLayout {
 
                     @Override
                     public void onNext(Long aLong) {
+                        if (aLong < waitingTime / 3) {
+                            showSubmitButton();
+                        }
                         countdown.setText(aLong + "秒后关闭当前答题");
                     }
 
@@ -149,6 +167,10 @@ public abstract class FlowBaseLayout extends LinearLayout {
                         nextScreen();
                     }
                 });
+    }
+
+    protected void showSubmitButton() {
+
     }
 
     protected abstract void nextScreen();
@@ -191,6 +213,7 @@ public abstract class FlowBaseLayout extends LinearLayout {
     }
 
     public void reStart() {
+
     }
 
     protected void saveAnswer(Integer id, String answer) {

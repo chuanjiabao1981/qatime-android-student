@@ -1,15 +1,23 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.ACache;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,7 +43,15 @@ public class TipsBeforeExaminationActivity extends BaseActivity implements View.
     }
 
     private void initView() {
+        TextView name = (TextView) findViewById(R.id.name);
+        TextView range = (TextView) findViewById(R.id.range);
+        TextView time = (TextView) findViewById(R.id.time);
         TextView describe = (TextView) findViewById(R.id.describe);
+        TextView count = (TextView) findViewById(R.id.count);
+        name.setText(getIntent().getStringExtra("name"));
+        range.setText("适考范围：" + getIntent().getStringExtra("category") + getIntent().getStringExtra("subject"));
+        time.setText("考试时长：" + (getIntent().getIntExtra("duration", 0) == 0 ? 0 : (getIntent().getIntExtra("duration", 0) / 60)) + "分钟");
+        count.setText("考题数量：共" + getIntent().getIntExtra("count", 0) + "题");
         describe.setText("考试说明：\n" +
                 "1. 模式考试下不能修改答案，请谨慎作答；\n" +
                 "2. 为保证考试评测准确，请勿使用其它辅助工具或进行作弊；\n" +
@@ -81,13 +97,45 @@ public class TipsBeforeExaminationActivity extends BaseActivity implements View.
                             public void onComplete() {
                                 timer.setVisibility(View.GONE);
                                 TipsBeforeExaminationActivity.this.d = null;
-                                ACache.get(TipsBeforeExaminationActivity.this).put("exam", getIntent().getSerializableExtra("data"), 60 * 90);
-                                Intent intent = new Intent(TipsBeforeExaminationActivity.this, ExaminationIngActivity.class);
-                                startActivity(intent);
+                                MPermission.with(TipsBeforeExaminationActivity.this)
+                                        .addRequestCode(200)
+                                        .permissions(new String[]{
+                                                Manifest.permission.RECORD_AUDIO})
+                                        .request();
+
                             }
                         });
                 break;
         }
+    }
+
+    @OnMPermissionGranted(200)
+    public void onLivePermissionGranted() {
+        ACache.get(TipsBeforeExaminationActivity.this).put("exam", getIntent().getSerializableExtra("data"), 60 * 90);
+        Intent intent = new Intent(TipsBeforeExaminationActivity.this, ExaminationIngActivity.class);
+        startActivity(intent);
+    }
+
+    @OnMPermissionDenied(200)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO});
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开始考试";
+        Toast.makeText(TipsBeforeExaminationActivity.this, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(200)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, new String[]{Manifest.permission.RECORD_AUDIO});
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO});
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开始考试，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(TipsBeforeExaminationActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override

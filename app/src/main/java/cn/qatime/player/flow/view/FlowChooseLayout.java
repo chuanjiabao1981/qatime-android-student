@@ -10,21 +10,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding2.widget.RxRadioGroup;
-import com.orhanobut.logger.Logger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.bean.exam.Categories;
 import cn.qatime.player.bean.exam.Topics;
-import cn.qatime.player.flow.screen.FlowAnswerScreen;
 import cn.qatime.player.flow.screen.FlowChooseScreen;
+import cn.qatime.player.flow.screen.FlowExplainScreen;
 import cn.qatime.player.utils.ACache;
 import flow.Flow;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author luntify
@@ -59,7 +54,24 @@ public class FlowChooseLayout extends FlowBaseLayout {
         Topics data = null;
         for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).getType().equals("Exam::ListenSelection")) {
+                screen.max = categories.get(i).getTopics().size();
+                if (categories.get(i).getRead_time() > 0) {
+                    readTime = categories.get(i).getRead_time();
+                }
+                if (categories.get(i).getPlay_times() > 0) {
+                    playTimes = categories.get(i).getPlay_times();
+                }
+                if (categories.get(i).getInterval_time() > 0) {
+                    intervalTime = categories.get(i).getInterval_time();
+                }
+                if (categories.get(i).getWaiting_time() > 0) {
+                    waitingTime = categories.get(i).getWaiting_time();
+                }
+
                 data = categories.get(i).getTopics().get(screen.index);
+                if (data.getAttach() != null) {
+                    path = data.getAttach().getUrl();
+                }
                 break;
             }
         }
@@ -69,13 +81,14 @@ public class FlowChooseLayout extends FlowBaseLayout {
         }
         if (data == null) return;
 
-        listenQuestion(1, 2, "");
+
+        listenQuestion();
         TextView name1 = findViewById(R.id.name1);
         TextView name2 = findViewById(R.id.name2);
         RadioGroup radioGroup1 = findViewById(R.id.radioGroup1);
         RadioGroup radioGroup2 = findViewById(R.id.radioGroup2);
-        name1.setText(data.getTopics().get(0).getName());
-        name2.setText(data.getTopics().get(1).getName());
+        name1.setText(data.getTopics().get(0).getTitle());
+        name2.setText(data.getTopics().get(1).getTitle());
 
         if (radioGroup1.getChildCount() > 0) radioGroup1.removeAllViews();
         radioGroup1.setOnCheckedChangeListener(null);
@@ -114,7 +127,7 @@ public class FlowChooseLayout extends FlowBaseLayout {
             public void onCheckedChanged(RadioGroup group, int i) {
                 if (i > 0) {
                     saveAnswer(finalData.getTopics().get(1).getTopic_options().get(group.indexOfChild(group.findViewById(i))).getTopic_id(), finalData.getTopics().get(1).getTopic_options().get(group.indexOfChild(group.findViewById(i))).getTitle());
-                    Logger.e(i + "选择" + finalData.getTopics().get(1).getTopic_options().get(group.indexOfChild(group.findViewById(i))).getTitle());
+//                    Logger.e(i + "选择" + finalData.getTopics().get(1).getTopic_options().get(group.indexOfChild(group.findViewById(i))).getTitle());
                 }
             }
         });
@@ -124,9 +137,9 @@ public class FlowChooseLayout extends FlowBaseLayout {
     @Override
     protected void nextScreen() {
         FlowChooseScreen screen = Flow.getKey(this);
-        if (screen.index < 4) {
+        if (screen.index < screen.max - 1) {
             Flow.get(this).set(new FlowChooseScreen(screen.index + 1, screen.passed + 2));
         } else
-            Flow.get(this).set(new FlowAnswerScreen());
+            Flow.get(this).set(new FlowExplainScreen(1, screen.passed + 2));
     }
 }

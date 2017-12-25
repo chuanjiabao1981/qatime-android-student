@@ -47,6 +47,8 @@ public class BaseFragmentActivity extends FragmentActivity {
             throw new IllegalArgumentException("text can not be a null object");
         }
         if (findViewById(R.id.right_text) != null) {
+            if (findViewById(R.id.right_text).getVisibility() == View.GONE)
+                findViewById(R.id.right_text).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.right_text)).setText(text);
             findViewById(R.id.right_text).setOnClickListener(listener);
         }

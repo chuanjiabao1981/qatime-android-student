@@ -14,6 +14,7 @@ import cn.qatime.player.flow.screen.FlowChooseScreen;
 import cn.qatime.player.flow.screen.FlowRePostScreen;
 import cn.qatime.player.flow.screen.FlowReadScreen;
 import cn.qatime.player.flow.screen.FlowRecordScreen;
+import cn.qatime.player.flow.view.FlowBaseLayout;
 import flow.Dispatcher;
 import flow.Flow;
 import flow.Traversal;
@@ -27,6 +28,8 @@ import flow.TraversalCallback;
 
 public class BasicDispatcher implements Dispatcher {
     private final Activity activity;
+    private Object destKey;
+    private View incomingView;
 
     public BasicDispatcher(Activity activity) {
         this.activity = activity;
@@ -73,9 +76,28 @@ public class BasicDispatcher implements Dispatcher {
         View incomingView = LayoutInflater.from(traversal.createContext(destKey, activity)) //
                 .inflate(layout, frame, false);
 
+        this.destKey = destKey;
+        this.incomingView = incomingView;
+
         frame.addView(incomingView);
         traversal.getState(traversal.destination.top()).restore(incomingView);
 
         callback.onTraversalCompleted();
+    }
+
+    public void pause() {
+        if (destKey instanceof FlowExplainScreen) {
+        } else {
+            FlowBaseLayout layout = incomingView.findViewById(R.id.base_layout);
+            layout.pause();
+        }
+    }
+
+    public void reStart() {
+        if (destKey instanceof FlowExplainScreen) {
+        } else {
+            FlowBaseLayout layout = incomingView.findViewById(R.id.base_layout);
+            layout.reStart();
+        }
     }
 }

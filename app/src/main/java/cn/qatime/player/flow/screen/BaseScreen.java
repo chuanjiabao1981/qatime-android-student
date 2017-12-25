@@ -14,7 +14,8 @@ import java.util.Map;
  */
 
 public class BaseScreen implements Parcelable {
-    public int passed;
+    public int passed;//已做题数量
+    public int max;//每类型的小题个数
 
 
     @Override
@@ -25,6 +26,7 @@ public class BaseScreen implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.passed);
+        dest.writeInt(this.max);
     }
 
     public BaseScreen() {
@@ -32,17 +34,7 @@ public class BaseScreen implements Parcelable {
 
     protected BaseScreen(Parcel in) {
         this.passed = in.readInt();
+        this.max = in.readInt();
     }
 
-    public static final Parcelable.Creator<BaseScreen> CREATOR = new Parcelable.Creator<BaseScreen>() {
-        @Override
-        public BaseScreen createFromParcel(Parcel source) {
-            return new BaseScreen(source);
-        }
-
-        @Override
-        public BaseScreen[] newArray(int size) {
-            return new BaseScreen[size];
-        }
-    };
 }

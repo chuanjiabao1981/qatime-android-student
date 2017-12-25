@@ -160,6 +160,12 @@ public class ExaminationActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.start_study:
                 Intent intent = new Intent(ExaminationActivity.this, TipsBeforeExaminationActivity.class);
+                intent.putExtra("name", data.getData().getPaper().getName());
+                intent.putExtra("category", data.getData().getPaper().getGrade_category());
+                intent.putExtra("subject", data.getData().getPaper().getSubject());
+                intent.putExtra("duration", data.getData().getPaper().getDuration());
+                intent.putExtra("count", data.getData().getPaper().getTopics_count());
+
                 intent.putExtra("data", (Serializable) data.getData().getPaper().getCategories());
                 startActivity(intent);
                 break;
