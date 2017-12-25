@@ -36,6 +36,7 @@ import cn.qatime.player.adapter.BaseFetchLoadAdapter;
 import cn.qatime.player.adapter.MsgAdapter;
 import cn.qatime.player.audio.MessageAudioControl;
 import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.VoiceTrans;
 import cn.qatime.player.view.loadmore.MsgListFetchLoadMoreView;
 import libraryextra.view.CustomAlertDialog;
@@ -239,6 +240,11 @@ public class MessageListPanel {
             @Override
             public void onResult(int code, List<IMMessage> messages, Throwable exception) {
                 if (code != ResponseCode.RES_SUCCESS || exception != null) {
+                    if (exception != null) {
+                        LogCatHelper.getInstance(null).log("sessionId" + container.account + "code" + code + "exception" + exception.getMessage());
+                    } else {
+                        LogCatHelper.getInstance(null).log("sessionId" + container.account + "code" + code);
+                    }
                     if (direction == QueryDirectionEnum.QUERY_OLD) {
                         adapter.fetchMoreFailed();
                     } else if (direction == QueryDirectionEnum.QUERY_NEW) {
