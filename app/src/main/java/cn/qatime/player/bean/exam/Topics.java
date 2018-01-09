@@ -50,6 +50,10 @@ public class Topics implements Serializable {
 //    private Object answer_attach;
     private String type;
     private String status;
+    private int read_time;
+    private int play_times;
+    private int interval_time;
+    private int waiting_time;
     private List<Topics> topics;
     private List<TopicOptions> topic_options;
 
@@ -61,6 +65,37 @@ public class Topics implements Serializable {
         this.id = id;
     }
 
+    public int getRead_time() {
+        return read_time;
+    }
+
+    public void setRead_time(int read_time) {
+        this.read_time = read_time;
+    }
+
+    public int getPlay_times() {
+        return play_times;
+    }
+
+    public void setPlay_times(int play_times) {
+        this.play_times = play_times;
+    }
+
+    public int getInterval_time() {
+        return interval_time;
+    }
+
+    public void setInterval_time(int interval_time) {
+        this.interval_time = interval_time;
+    }
+
+    public int getWaiting_time() {
+        return waiting_time;
+    }
+
+    public void setWaiting_time(int waiting_time) {
+        this.waiting_time = waiting_time;
+    }
 //    public int getPaper_id() {
 //        return paper_id;
 //    }

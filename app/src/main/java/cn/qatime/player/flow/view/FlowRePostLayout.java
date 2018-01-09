@@ -7,6 +7,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -16,6 +18,7 @@ import cn.qatime.player.flow.screen.FlowExplainScreen;
 import cn.qatime.player.flow.screen.FlowRePostScreen;
 import cn.qatime.player.utils.ACache;
 import flow.Flow;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -65,7 +68,7 @@ public class FlowRePostLayout extends FlowRecordBaseLayout {
                 if (categories.get(i).getWaiting_time() > 0) {
                     waitingTime = categories.get(i).getWaiting_time();
                 }
-                data = categories.get(i).getTopics().get(1).getTopics().get(screen.index);
+                data = categories.get(i).getTopics().get(0).getTopics().get(screen.index);
                 if (data.getAttach() != null) {
                     path = data.getAttach().getUrl();
                 }
@@ -76,6 +79,8 @@ public class FlowRePostLayout extends FlowRecordBaseLayout {
         for (int i = 0; i < categories.size(); i++) {
             total += categories.get(i).getTopics_count();
         }
+        Logger.e("readTime" + readTime + "    playTimes" + playTimes + "   intervalTime" + intervalTime + "  waitingTime" + waitingTime + "   path" + StringUtils.isNullOrBlanK(path));
+
         if (data == null) return;
 
         listenQuestion();

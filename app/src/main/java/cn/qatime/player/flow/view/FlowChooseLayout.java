@@ -11,6 +11,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
+import com.orhanobut.logger.Logger;
+
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -20,6 +22,7 @@ import cn.qatime.player.flow.screen.FlowChooseScreen;
 import cn.qatime.player.flow.screen.FlowExplainScreen;
 import cn.qatime.player.utils.ACache;
 import flow.Flow;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -79,8 +82,8 @@ public class FlowChooseLayout extends FlowBaseLayout {
         for (int i = 0; i < categories.size(); i++) {
             total += categories.get(i).getTopics_count();
         }
+//        Logger.e("readTime" + readTime + "    playTimes" + playTimes + "   intervalTime" + intervalTime + "  waitingTime" + waitingTime + "   path" + StringUtils.isNullOrBlanK(path));
         if (data == null) return;
-
 
         listenQuestion();
         TextView name1 = findViewById(R.id.name1);

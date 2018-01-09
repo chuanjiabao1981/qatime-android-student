@@ -33,6 +33,10 @@ import io.reactivex.functions.Function;
 
 public class FlowExamExplainLayout extends LinearLayout {
     private Disposable d;
+    private FlowExplainScreen screen;
+    private TextView timer;
+    private int defaultValue = 10;
+    private int currentTime = 0;
 
     public FlowExamExplainLayout(Context context) {
         super(context);
@@ -54,13 +58,13 @@ public class FlowExamExplainLayout extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        final FlowExplainScreen screen = Flow.getKey(this);
+        screen = Flow.getKey(this);
         if (screen == null) return;
 
         TextView name = findViewById(R.id.name);
         TextView describe = findViewById(R.id.describe);
         Button next = findViewById(R.id.next);
-        final TextView timer = findViewById(R.id.timer);
+        timer = findViewById(R.id.timer);
         if (screen.getIndex() == 0) {
             name.setText("Ⅰ.听后选择");
             describe.setText("听对话或独白，根据所听内容从每题A、B、C中选择最佳答案，并点击进行选择；听每段对话或独白前你有5s中时间阅读每小题，听完后你有5s时间作答，每段对话或独白你讲听两遍。");
@@ -92,12 +96,16 @@ public class FlowExamExplainLayout extends LinearLayout {
                 }
             }
         });
+        startTimer();
+    }
+
+    private void startTimer() {
         Observable.interval(0, 1, TimeUnit.SECONDS)
-                .take(11)
+                .take(defaultValue + 1)
                 .map(new Function<Long, Long>() {
                     @Override
                     public Long apply(Long aLong) throws Exception {
-                        return 10 - aLong;
+                        return defaultValue - aLong;
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -108,6 +116,7 @@ public class FlowExamExplainLayout extends LinearLayout {
 
                     @Override
                     public void onNext(Long aLong) {
+                        currentTime = aLong.intValue();
                         timer.setText(aLong + "秒后自动进入");
                     }
 
@@ -135,9 +144,18 @@ public class FlowExamExplainLayout extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        pause();
+    }
+
+    public void pause() {
         if (d != null) {
             d.dispose();
             d = null;
         }
+    }
+
+    public void reStart() {
+        defaultValue = currentTime;
+        startTimer();
     }
 }

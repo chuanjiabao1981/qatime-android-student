@@ -131,7 +131,14 @@ public abstract class FlowRecordBaseLayout extends FlowBaseLayout {
         isRecording = false;
 //        Toast.makeText(this, "停止录音", Toast.LENGTH_SHORT).show();
         status.setVisibility(GONE);
+        submit.setVisibility(GONE);
         recorderUtil.stopRawRecording();
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+        stopRecord();
     }
 
     @Override

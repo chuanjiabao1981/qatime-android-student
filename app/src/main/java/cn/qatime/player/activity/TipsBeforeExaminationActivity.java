@@ -7,14 +7,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.exam.ExamResult;
 import cn.qatime.player.utils.ACache;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
@@ -23,6 +27,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import libraryextra.rx.HttpManager;
+import libraryextra.rx.callback.SimpleCallBack;
 
 /**
  * @author luntify
@@ -111,9 +117,26 @@ public class TipsBeforeExaminationActivity extends BaseActivity implements View.
 
     @OnMPermissionGranted(200)
     public void onLivePermissionGranted() {
-        ACache.get(TipsBeforeExaminationActivity.this).put("exam", getIntent().getSerializableExtra("data"), 60 * 90);
-        Intent intent = new Intent(TipsBeforeExaminationActivity.this, ExaminationIngActivity.class);
-        startActivity(intent);
+        getResultId();
+
+    }
+
+    private void getResultId() {
+        HttpManager.post(UrlUtils.urlExamPapers + getIntent().getIntExtra("id", 0) + "/results")
+                .execute(new SimpleCallBack<ExamResult>() {
+                    @Override
+                    public void onSuccess(ExamResult o) {
+                        ACache.get(TipsBeforeExaminationActivity.this).put("exam", (Serializable) o.getPaper().getCategories(), 60 * 90);
+                        Intent intent = new Intent(TipsBeforeExaminationActivity.this, ExaminationIngActivity.class);
+                        intent.putExtra("id", o.getId());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onTokenOut() {
+                        tokenOut();
+                    }
+                });
     }
 
     @OnMPermissionDenied(200)

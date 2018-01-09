@@ -7,6 +7,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -16,6 +18,7 @@ import cn.qatime.player.flow.screen.FlowAnswerScreen;
 import cn.qatime.player.flow.screen.FlowExplainScreen;
 import cn.qatime.player.utils.ACache;
 import flow.Flow;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -54,19 +57,20 @@ public class FlowAnswerLayout extends FlowRecordBaseLayout {
         for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).getType().equals("Exam::ListenAnswer")) {
                 screen.max = categories.get(i).getTopics().size();
-                if (categories.get(i).getRead_time() > 0) {
-                    readTime = categories.get(i).getRead_time();
-                }
-                if (categories.get(i).getPlay_times() > 0) {
-                    playTimes = categories.get(i).getPlay_times();
-                }
-                if (categories.get(i).getInterval_time() > 0) {
-                    intervalTime = categories.get(i).getInterval_time();
-                }
-                if (categories.get(i).getWaiting_time() > 0) {
-                    waitingTime = categories.get(i).getWaiting_time();
-                }
+
                 data = categories.get(i).getTopics().get(screen.index);
+                if (data.getRead_time() > 0) {
+                    readTime = data.getRead_time();
+                }
+                if (data.getPlay_times() > 0) {
+                    playTimes = data.getPlay_times();
+                }
+                if (data.getInterval_time() > 0) {
+                    intervalTime = data.getInterval_time();
+                }
+                if (data.getWaiting_time() > 0) {
+                    waitingTime = data.getWaiting_time();
+                }
                 if (data.getAttach() != null) {
                     path = data.getAttach().getUrl();
                 }
@@ -77,6 +81,8 @@ public class FlowAnswerLayout extends FlowRecordBaseLayout {
         for (int i = 0; i < categories.size(); i++) {
             total += categories.get(i).getTopics_count();
         }
+//        Logger.e("readTime" + readTime + "    playTimes" + playTimes + "   intervalTime" + intervalTime + "  waitingTime" + waitingTime + "   path" + StringUtils.isNullOrBlanK(path));
+
         if (data == null) return;
 
         listenQuestion();

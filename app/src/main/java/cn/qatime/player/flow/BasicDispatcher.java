@@ -15,6 +15,7 @@ import cn.qatime.player.flow.screen.FlowRePostScreen;
 import cn.qatime.player.flow.screen.FlowReadScreen;
 import cn.qatime.player.flow.screen.FlowRecordScreen;
 import cn.qatime.player.flow.view.FlowBaseLayout;
+import cn.qatime.player.flow.view.FlowExamExplainLayout;
 import flow.Dispatcher;
 import flow.Flow;
 import flow.Traversal;
@@ -87,6 +88,8 @@ public class BasicDispatcher implements Dispatcher {
 
     public void pause() {
         if (destKey instanceof FlowExplainScreen) {
+            FlowExamExplainLayout layout = incomingView.findViewById(R.id.base_layout);
+            layout.pause();
         } else {
             FlowBaseLayout layout = incomingView.findViewById(R.id.base_layout);
             layout.pause();
@@ -95,9 +98,20 @@ public class BasicDispatcher implements Dispatcher {
 
     public void reStart() {
         if (destKey instanceof FlowExplainScreen) {
+            FlowExamExplainLayout layout = incomingView.findViewById(R.id.base_layout);
+            layout.reStart();
         } else {
             FlowBaseLayout layout = incomingView.findViewById(R.id.base_layout);
             layout.reStart();
+        }
+    }
+
+    public boolean isComplete() {
+        if (destKey instanceof FlowExplainScreen) {
+            return false;
+        } else {
+            FlowBaseLayout layout = incomingView.findViewById(R.id.base_layout);
+            return layout.isComplete();
         }
     }
 }

@@ -21,6 +21,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.exam.Examination;
+import cn.qatime.player.bean.exam.Paper;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.ShareUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -76,7 +77,7 @@ public class ExaminationActivity extends BaseActivity implements View.OnClickLis
                                 //未购买
                             }
                             if (data.getData().getPaper() != null) {
-                                Examination.DataBean.PaperBean bean = data.getData().getPaper();
+                                Paper bean = data.getData().getPaper();
                                 name.setText(bean.getName());
                                 price.setText("￥" + bean.getPrice());
                                 buyCount.setText("已购人数 " + bean.getUsers_count());
@@ -96,9 +97,7 @@ public class ExaminationActivity extends BaseActivity implements View.OnClickLis
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }
-
-                , new VolleyErrorListener() {
+                }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -160,6 +159,7 @@ public class ExaminationActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.start_study:
                 Intent intent = new Intent(ExaminationActivity.this, TipsBeforeExaminationActivity.class);
+                intent.putExtra("id", id);
                 intent.putExtra("name", data.getData().getPaper().getName());
                 intent.putExtra("category", data.getData().getPaper().getGrade_category());
                 intent.putExtra("subject", data.getData().getPaper().getSubject());

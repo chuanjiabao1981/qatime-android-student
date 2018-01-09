@@ -7,6 +7,10 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -15,6 +19,7 @@ import cn.qatime.player.bean.exam.Topics;
 import cn.qatime.player.flow.screen.FlowReadScreen;
 import cn.qatime.player.utils.ACache;
 import flow.Flow;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -52,22 +57,13 @@ public class FlowReadLayout extends FlowRecordBaseLayout {
 
         for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).getType().equals("Exam::ListenSpeak")) {
-//                if (categories.get(i).getRead_time() > 0) {
-//                    readTime = categories.get(i).getRead_time();
-//                }
-//                if (categories.get(i).getPlay_times() > 0) {
-//                    playTimes = categories.get(i).getPlay_times();
-//                }
-//                if (categories.get(i).getInterval_time() > 0) {
-//                    intervalTime = categories.get(i).getInterval_time();
-//                }
+                if (categories.get(i).getRead_time() > 0) {
+                    readTime = categories.get(i).getRead_time();
+                }
                 if (categories.get(i).getWaiting_time() > 0) {
                     waitingTime = categories.get(i).getWaiting_time();
                 }
                 data = categories.get(i).getTopics().get(screen.index);
-//                if (data.getAttach() != null) {
-//                    path = data.getAttach().getUrl();
-//                }
                 break;
             }
         }
@@ -75,10 +71,11 @@ public class FlowReadLayout extends FlowRecordBaseLayout {
         for (int i = 0; i < categories.size(); i++) {
             total += categories.get(i).getTopics_count();
         }
+        Logger.e("readTime" + readTime + "    playTimes" + playTimes + "   intervalTime" + intervalTime + "  waitingTime" + waitingTime + "   path" + StringUtils.isNullOrBlanK(path));
+
         if (data == null) return;
 
-//        listenQuestion();
-        answerQuestion();
+        listenQuestion();
         TextView name = findViewById(R.id.name);
         name.setText(data.getTitle());
 
@@ -88,16 +85,17 @@ public class FlowReadLayout extends FlowRecordBaseLayout {
     @Override
     protected void nextScreen() {
         stopRecord();
-//        FlowReadScreen screen = Flow.getKey(this);
-//        if (screen.index < screen.max - 1) {
-//            Flow.get(this).set(new FlowAnswerScreen(screen.index + 1, screen.passed + 1));
-//        } else
-//        Flow.get(this).set(new FlowExplainScreen(3, screen.passed + 1));
+        EventBus.getDefault().post("exam_complete");
     }
 
     @Override
     protected void stopRecord() {
         super.stopRecord();
         saveAnswer(data.getId(), audioFileName);
+    }
+
+    @Override
+    protected boolean needPlay() {
+        return false;
     }
 }
