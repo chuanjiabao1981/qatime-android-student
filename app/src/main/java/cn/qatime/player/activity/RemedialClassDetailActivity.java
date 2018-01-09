@@ -23,7 +23,6 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -34,7 +33,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -569,6 +567,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
 //                        startStudy.setText("开始学习");
                         initData();
+                        loginYunXin(false);
                     }
 
                     @Override
@@ -615,7 +614,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         //已加入试听
 //                        data.getData().getEssenceCourse().setTastable(true);
                         auditionStart.setVisibility(View.VISIBLE);
-                        loginYunXin();
+                        loginYunXin(false);
                     }
 
                     @Override
@@ -639,7 +638,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         addToRequestQueue(request);
     }
 
-    private void loginYunXin() {
+    private void loginYunXin(final boolean needFinish) {
         if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
                     new VolleyListener(RemedialClassDetailActivity.this) {
@@ -673,6 +672,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                             UserInfoCache.getInstance().registerObservers(true);
                                             TeamDataCache.getInstance().registerObservers(true);
+                                            if (needFinish) {
+                                                finish();
+                                            }
                                         }
 
                                         @Override
@@ -681,12 +683,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                             Profile profile = BaseApplication.getInstance().getProfile();
                                             profile.getData().setRemember_token("");
                                             BaseApplication.getInstance().setProfile(profile);
+                                            if (needFinish) {
+                                                finish();
+                                            }
                                         }
 
                                         @Override
                                         public void onException(Throwable throwable) {
                                             Logger.e(throwable.getMessage());
                                             BaseApplication.getInstance().clearToken();
+                                            if (needFinish) {
+                                                finish();
+                                            }
                                         }
                                     });
                                 }
@@ -695,7 +703,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                         @Override
                         protected void onError(JSONObject response) {
-
+                            if (needFinish) {
+                                finish();
+                            }
                         }
 
                         @Override
@@ -730,12 +740,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //
 //            finish();
 //        }
-        finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
+            loginYunXin(true);
+        } else
+            finish();
     }
 
     @Override

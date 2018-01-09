@@ -384,7 +384,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
 
-        fragment2.setSessionId(sessionId);
+        fragment2.setSessionId(id, sessionId);
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
