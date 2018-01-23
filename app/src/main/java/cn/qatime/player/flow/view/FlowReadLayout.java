@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -91,7 +92,9 @@ public class FlowReadLayout extends FlowRecordBaseLayout {
     @Override
     protected void stopRecord() {
         super.stopRecord();
-        saveAnswer(data.getId(), audioFileName);
+        if (new File(audioFileName).isFile()) {
+            saveAnswer(data.getId(), audioFileName);
+        }
     }
 
     @Override

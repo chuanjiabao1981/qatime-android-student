@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -105,6 +106,7 @@ public class FlowAnswerLayout extends FlowRecordBaseLayout {
     @Override
     protected void stopRecord() {
         super.stopRecord();
-        saveAnswer(data.getId(), audioFileName);
+        if (new File(audioFileName).isFile())
+            saveAnswer(data.getId(), audioFileName);
     }
 }
